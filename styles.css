@@ -1,0 +1,153 @@
+body {
+    margin: 0px;
+    height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 2fr 2fr 2fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    grid-gap: 0px; 
+    height: 100vh;
+}
+
+header {
+    grid-column: 1/4;
+    grid-row: 1/2;
+    background-color: lightblue;
+    text-align: center;
+    font-size: 20px;
+}
+
+footer {
+    grid-column: 1/4;
+    grid-row: 5/6;
+    background-color: lightblue;
+}
+
+.sidebar1 {
+    grid-column: 1/2;
+    grid-row: 2/5;
+    background-color: yellow;
+}
+
+.sidebar2 {
+    grid-column: 3/4;
+    grid-row: 2/5;
+    background-color: green;
+}
+
+.sidebar3 {
+    grid-column: 2/3;
+    grid-row: 2/3;
+    background-color: red;
+}
+
+.sidebar4 {
+    grid-column: 2/3;
+    grid-row: 4/5;
+    background-color: blue;
+}
+
+
+ul{
+    display: flex;
+    float: right;
+    list-style-type: none;
+    margin: 0;
+}
+
+li {
+    font-size: 20px;
+    float: right;
+    margin-right: 10px;
+    position: relative;
+    top: 60%;
+
+}
+
+nav > img {
+    /* height: 1%; */
+}
+
+
+
+
+.main-content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    height: 50vh;
+}
+
+
+.section1 {
+    grid-column: 1/ 2;
+    grid-row: 1/2;
+    border: 5px solid gray;
+    border-top: none;
+    border-left: none;
+}
+
+.section2 {
+    grid-column: 2/ 3;
+    grid-row: 1/2;
+    border: 5px solid gray;
+    border-top: none;
+}
+
+.section3 {
+    grid-column: 3/4;
+    grid-row: 1/2;
+    border: 5px solid gray;
+    border-top: none;
+    border-right: none;
+}
+
+.section4 {
+    grid-column: 1/2;
+    grid-row: 2/3;
+    border: 5px solid gray;
+    border-left: none;
+}
+
+.section5 {
+    grid-column: 2/3;
+    grid-row: 2/3;
+    border: 5px solid gray;
+}
+
+.section6 {
+    grid-column: 3/4;
+    grid-row: 2/3;
+    border: 5px solid gray;
+    border-right: none;
+}
+
+.section7 {
+    grid-column: 1/2;
+    grid-row: 3/4;
+    border: 5px solid gray;
+    border-left: none;
+    border-bottom: none;
+}
+
+.section8 {
+    grid-column: 2/3;
+    grid-row: 3/4;
+    border: 5px solid gray;
+    border-bottom: none;
+}
+
+.section9 {
+    grid-column: 3/4;
+    grid-row: 3/4;
+    border: 5px solid gray;
+    border-right: none;
+    border-bottom: none;
+}
+
+
+
+
