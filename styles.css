@@ -1,12 +1,209 @@
+
 body {
     margin: 0px;
     height: 100vh;
     font-family: Arial, Helvetica, sans-serif;
+    
+    
 }
+
+.btnChar {
+    position: absolute;
+    text-align: center;
+    cursor: pointer;
+    background-color: white;
+    font-size: 4vh;
+    padding: 15px;
+    border-radius: 12px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9;
+
+}
+.startScreen {
+    visibility: visible;
+    position: absolute;
+    background-color: lightgray;
+    opacity: 0.3;
+    text-align: center;
+    height: 80vh;
+    width: 80vh;
+    z-index: 8;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* border: 3px solid black;
+    outline: 3px solid black;   */
+    outline-offset: 0.5em;  
+}
+
+
+.startScreen.congrats {
+    visibility: visible;
+    opacity: 1;
+    border: 3px solid black;
+    outline: 3px solid black; 
+
+
+}
+
+
+
+
+.congratsBG {
+    visibility: hidden;
+    background-color: black;
+    margin: 0 6vw 0 6vw;
+    max-height: 40vh;
+    ;
+}
+
+.congratsText {
+    font-size: 10vh;
+    color: white;
+}
+
+.rematch {
+    font-size: 7vh;
+    color: white;
+}
+
+span {
+    color: red;
+}
+
+span:hover {
+    cursor: pointer;
+    color: yellow;
+}
+
+/* .congratsText span { 
+    background-color: black; 
+    padding: 2vh 3vh 2vh 3vh;
+}
+
+.rematch span { 
+    background-color: black; 
+    padding: 2vh 3vh 2vh 3vh;
+} */
+
+.charContainer {
+    position: fixed;
+    display: grid;
+    visibility: hidden;
+    opacity: 0;
+    grid-template-columns: 1fr 1fr 1fr 1fr 4fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    background-color: lightgray;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    grid-gap: 3px;
+    padding: 10px;
+    z-index: 9;
+}
+
+.charContainer.change {
+    opacity: 1;
+    transition: all 1s;
+  }
+
+
+
+
+
+
+.players {
+    text-align: center;
+    position: relative; 
+    text-align: center;
+}
+
+.players > img {
+    height: 400px;
+    width: 265px;
+    padding: 40px 0 40px 0;
+    filter:grayscale();
+    
+}
+
+.sidebar1 > .player {
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.preview {
+    position:relative;
+    grid-column: 4/6;
+    grid-row:1/5;
+    background: url('');
+    background-size:cover;
+    font-size: 0;
+    margin : 0 0 0 5px;
+    border: 5px solid white;
+}
+
+.btnClose {
+    position:absolute;
+    font-size: 5vh;
+    color: white;
+    text-shadow: black 2px 0px 3px;
+    top: 5;
+    left: 90%;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    line-height: 7vh;
+}
+
+
+.character {
+    width: 100%;
+    display:flex; 
+    filter:grayscale(100%);
+}
+
+.character:hover
+{
+     cursor: pointer;
+     filter: brightness();
+}
+
+
+
+
+
+
+
+
+
+
 
 .container {
     display: grid;
-    grid-template-columns: 2fr 2fr 2fr;
+    
+    grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 0px; 
     height: 100vh;
@@ -15,7 +212,6 @@ body {
 header {
     grid-column: 1/4;
     grid-row: 1/2;
-    background-color: lightblue;
     text-align: center;
     font-size: 20px;
 }
@@ -23,36 +219,42 @@ header {
 footer {
     grid-column: 1/4;
     grid-row: 5/6;
-    background-color: lightblue;
+    height: 2vh;
 }
 
 .sidebar1 {
     grid-column: 1/2;
-    grid-row: 2/5;
-    background-color: yellow;
+    grid-row: 2/5; 
+    
 }
 
 .sidebar2 {
     grid-column: 3/4;
     grid-row: 2/5;
-    background-color: green;
 }
+
+
 
 .sidebar3 {
     grid-column: 2/3;
     grid-row: 2/3;
-    background-color: red;
+    display:flex;
+    justify-content:space-between;
 }
 
 .sidebar4 {
     grid-column: 2/3;
     grid-row: 4/5;
-    background-color: blue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 10%;
 }
 
 
+
+
 ul{
-    display: flex;
     float: right;
     list-style-type: none;
     margin: 0;
@@ -62,92 +264,91 @@ li {
     font-size: 20px;
     float: right;
     margin-right: 10px;
-    position: relative;
     top: 60%;
 
 }
 
-nav > img {
-    /* height: 1%; */
-}
+
 
 
 
 
 .main-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
     height: 50vh;
+    background-color: gray;
+    grid-gap: 10px;
+    min-width: 350px;
+    min-height: 400px;
 }
 
 
-.section1 {
-    grid-column: 1/ 2;
-    grid-row: 1/2;
-    border: 5px solid gray;
-    border-top: none;
-    border-left: none;
-}
-
-.section2 {
-    grid-column: 2/ 3;
-    grid-row: 1/2;
-    border: 5px solid gray;
-    border-top: none;
-}
-
-.section3 {
-    grid-column: 3/4;
-    grid-row: 1/2;
-    border: 5px solid gray;
-    border-top: none;
-    border-right: none;
-}
-
-.section4 {
-    grid-column: 1/2;
-    grid-row: 2/3;
-    border: 5px solid gray;
-    border-left: none;
-}
-
-.section5 {
-    grid-column: 2/3;
-    grid-row: 2/3;
-    border: 5px solid gray;
-}
-
-.section6 {
-    grid-column: 3/4;
-    grid-row: 2/3;
-    border: 5px solid gray;
-    border-right: none;
-}
-
-.section7 {
-    grid-column: 1/2;
-    grid-row: 3/4;
-    border: 5px solid gray;
-    border-left: none;
-    border-bottom: none;
-}
-
-.section8 {
-    grid-column: 2/3;
-    grid-row: 3/4;
-    border: 5px solid gray;
-    border-bottom: none;
-}
-
-.section9 {
-    grid-column: 3/4;
-    grid-row: 3/4;
-    border: 5px solid gray;
-    border-right: none;
-    border-bottom: none;
+.cell {
+    background-color: white;
+    color: white;
+    display: flex;
+    justify-content: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 0;
 }
 
 
 
+
+.cell:hover
+{
+    background-color: lightblue;
+    color: gray;
+    cursor: pointer;
+    font-size: 7vh;
+    align-items: center;
+    line-height: 3vh;
+    margin: 0;
+    padding: 0
+}
+
+.markX {
+    background-color: white;
+    color: blue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    line-height: 3vh;
+    font-size: 7vh;
+}
+
+.markO {
+    background-color: white;
+    color: red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 7vh;
+    line-height: 3vh;
+}
+
+
+
+
+.cell2:hover
+{
+    background-color: lightpink;
+    color: gray;
+    cursor: pointer;
+    font-size: 7vh;
+}
+
+@media screen and (max-width: 600px) {
+	.sidebar > img {
+	  display: none;
+	}
+  }
 
