@@ -92,11 +92,11 @@ span:active {
 .restarting {
     z-index: 9;
     position: absolute;
-    top: 40%;
+    top: 35%;
     left: 50%;
     transform: translate(-50%, -50%);
     opacity: 1;
-    transition: opacity 4s;
+    transition: opacity 3s;
 }
 
 .restarting > h1 {

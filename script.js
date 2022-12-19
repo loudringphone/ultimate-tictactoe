@@ -70,7 +70,7 @@ characters.forEach(target => {
         })
     })
 }
-CharSel()
+
 
 
 
@@ -123,7 +123,7 @@ congratsBGs.forEach(target =>
 )
 
 
-
+let victor = "";
 
 const winningText = function(winner) {
     if (winner === 'Lone Wolf and Cub') {
@@ -132,6 +132,9 @@ const winningText = function(winner) {
 }
 
 //Tic Tac Toe
+
+cells.forEach(target =>
+    target.textContent = 'X')
 let player1 = []
 let player2 = []
 let checkP1 = "";
@@ -146,7 +149,7 @@ for (let cell of cells) {
 
         markXs = document.querySelectorAll('.markX');
         markOs = document.querySelectorAll('.markO');
-        if (markXs.length === markOs.length) {
+        if (cell.textContent === 'X') {
             cell.classList.add('markX');
             cell.classList.remove('cell');
             empties = document.querySelectorAll('.cell');
@@ -190,7 +193,7 @@ for (let cell of cells) {
                         players[1].style.filter = "grayscale(100%)";
                         congrats()
                         
-
+                        victor = playerNames[0].textContent
 
                         return
 
@@ -205,10 +208,13 @@ for (let cell of cells) {
                             target.classList.add('markO');
                             target.classList.remove('cell');
                         });
-                        winner = playerNames[1];
+                        victor = playerNames[1];
                         congratsText.textContent = winningText(playerNames[1].textContent)
                         players[0].style.filter = "grayscale(100%)";
                         congrats()
+
+                        victor = playerNames[1].textContent
+
                         return
                     }
                 }
@@ -218,12 +224,13 @@ for (let cell of cells) {
 }
 }
 
-tictactoe()
-
 
 //Rematch
 
 const rematch = function() {
+    for (let i of players) {
+        i.style.filter = "brightness()";
+    }
     markXs = document.querySelectorAll('.markX');
     markOs = document.querySelectorAll('.markO');
     markXs.forEach(target =>
@@ -234,12 +241,12 @@ const rematch = function() {
     congratsBGs.forEach(target => {
         target.style.visibility = 'hidden';
     })
-
+    mainContent.style.visibility = 'hidden';
 
     let div = document.createElement('div');
     let h1 = document.createElement('h1');
     div.classList.add('restarting');
-    if (winner === playerNames[0].textContent) {
+    if (victor === playerNames[0].textContent) {
         div.style.backgroundColor = 'red';
         div.style.border = "thick solid blue";
         div.style.outline = "thick solid black";
@@ -255,10 +262,10 @@ const rematch = function() {
 
     setTimeout(function(){
         div.style.opacity = '0'
-    }, 2000)
+    }, 1000)
     setTimeout(function(){
         div.remove()
-    }, 5000)
+    }, 3000)
 
     setTimeout(function(){
         checkP1 = "";
@@ -266,30 +273,34 @@ const rematch = function() {
         player1 = [];
         player2 = [];
 
-
-
-
-
-    winner = "";
-    
-    markXs.forEach(target =>
-        target.classList.add('cell'));
-    markXs.forEach(target =>
-        target.textContent = "X")
-    markOs.forEach(target =>
-        target.classList.add('cell'));
-    markOs.forEach(target =>
-        target.textContent = "X");
-    cells = document.querySelectorAll('.cell');
-    cells.forEach(target =>
-        target.classList.remove('markX'))
+        markXs.forEach(target =>
+            target.classList.add('cell'));
+        markOs.forEach(target =>
+            target.classList.add('cell'));
+        cells = document.querySelectorAll('.cell');
         cells.forEach(target =>
-            target.classList.remove('markO'))
-    }, 4500)
+            target.classList.remove('markX'));
+        cells.forEach(target =>
+            target.classList.remove('markO'));
+
+        if (victor === playerNames[0].textContent) {
+            cells.forEach(target =>
+                target.textContent = '〇')
+            cells.forEach(target =>
+                target.classList.toggle('cell2'))    
+        } else {
+            cells.forEach(target =>
+                target.textContent = 'X')
+        }
+
+        victor = "";
+        mainContent.style.visibility = 'visible';
+    }, 3000)
 }
 
+CharSel()
 
-
+tictactoe()
 
 const btnRematch = document.querySelector('.btnRematch')
 btnRematch.addEventListener('click', rematch)
