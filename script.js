@@ -3,6 +3,23 @@ let markXs = document.querySelectorAll('.markX');
 let markOs = document.querySelectorAll('.markO');
 const body = document.querySelector('body')
 const timer = document.querySelector('.timer')
+const opponents = document.querySelectorAll('.opponent');
+let timeLimit = 5;
+
+//Settings
+const settings = document.querySelector('.settings');
+const options = document.querySelector('.options');
+const btnCloseOptions = document.querySelector('.btnCloseOptions');
+settings.addEventListener('click', function() {
+    options.style.visibility = 'visible';
+})
+btnCloseOptions.addEventListener('click', function() { 
+    options.style.visibility = 'hidden';
+})
+
+
+
+
 
 
 let cons2Win = [
@@ -136,8 +153,43 @@ const winningText = function(winner) {
     } else {return `${winner} wins!`}
 }
 
-//Tic Tac Toe
+// Timer
+const countDown = function() {
+    if (playerNames[0].id === 'gameStarted') {
+        timer.textContent = parseInt(timer.textContent) - 1}
+}
 
+let countDownInt = setInterval(countDown , 1000);
+
+
+//Fixed the issue on winning the game on turn 9
+const drawCheck = function() {
+    cells = document.querySelectorAll('.cell');
+    if (cells.length === 0) {
+        setTimeout(function() {if (cells.length === 0 && victor!= playerNames[0].textContent && victor != playerNames[1].textContent) {
+            congratsText.textContent = 'Draw!'
+            players[0].style.filter = "grayscale(100%)";
+            players[1].style.filter = "grayscale(100%)";
+            congrats()
+            victor = playerNames[Math.floor(Math.random()*2)].textContent
+            clearInterval(countDownInt)
+            clearInterval(timeCheckInt)
+            clearInterval(AIplayerInterval)   
+            
+        }},300)
+    }
+}
+
+
+
+
+
+
+
+
+
+
+//Tic Tac Toe
 cells.forEach(target =>
     target.textContent = 'X')
 let p1played = []
@@ -146,14 +198,11 @@ let checkP1 = "";
 let checkP2 = "";
 const scores = document.querySelectorAll('.score')
 const tictactoe = function() {
-for (let cell of cells) {
-    cell.addEventListener('click', function() {
-        if (cell.className === 'markX' || cell.className === 'markO') {
-            return
-        }
-
-        timer.textContent = 5;
-
+    for (let cell of cells) {
+        cell.addEventListener('click', function() {
+            if (cell.className === 'markX' || cell.className === 'markO') {
+                return
+            }
         markXs = document.querySelectorAll('.markX');
         markOs = document.querySelectorAll('.markO');
         if (cell.textContent === 'X') {
@@ -165,8 +214,9 @@ for (let cell of cells) {
                 empty.classList.toggle('cell2')
             }
             p1played.push(parseInt(cell.id))
-
- 
+            clearInterval(countDownInt)
+            timer.textContent = timeLimit;
+            countDownInt = setInterval(countDown , 1000);
         }
         else {
             cell.classList.add('markO')
@@ -178,51 +228,27 @@ for (let cell of cells) {
                 empty.classList.toggle('cell2')
             }
             p2played.push(parseInt(cell.id))
+            clearInterval(countDownInt)
+            timer.textContent = timeLimit;
+            countDownInt = setInterval(countDown , 1000);
         }
 
-
-
-    cells = document.querySelectorAll('.cell');
-    if (cells.length === 0) {
-            setTimeout(function() {if (cells.length === 0 && victor!= playerNames[0].textContent && victor != playerNames[1].textContent) {
-                congratsText.textContent = 'Draw!'
-                players[0].style.filter = "grayscale(100%)";
-                players[1].style.filter = "grayscale(100%)";
-                congrats()
-                victor = playerNames[Math.floor(Math.random()*2)].textContent
-                clearInterval(winCheckInt)
-                clearInterval(countDownInt)
-                clearInterval(timeCheckInt)}},500)}
-
-
-
-
-
-
-
-    
+        winCheck()
+        drawCheck()
     });
 }
 }
 
 
 
-// Timer
-const countDown = function() {
-    if (playerNames[0].id === 'gameStarted') {
-        timer.textContent = parseInt(timer.textContent) - 1}
-}
 
-
-
-let countDownInt = setInterval(countDown , 1000);
 
 
 
 //A random move is made when time is up
 const timeCheck = function() {
     if (parseInt(timer.textContent) < 0 && victor != playerNames[0].textContent && victor != playerNames[1].textContent) {
-        timer.textContent = 5;
+        timer.textContent = timeLimit;
         cells = document.querySelectorAll('.cell');
         let i = Math.floor(Math.random() * cells.length);
         try {
@@ -247,13 +273,15 @@ const timeCheck = function() {
                 }
                 p2played.push(parseInt(cells[i].id));
         
-            console.log(p2played);
+           
             }
+            winCheck()
+            drawCheck()
         }
         catch {};
     }
 }
-let timeCheckInt = setInterval(timeCheck, 500);
+let timeCheckInt = setInterval(timeCheck, 300);
 
 
 
@@ -278,9 +306,9 @@ const winCheck = function() {
                     congrats()
                     
                     victor = playerNames[0].textContent
-                    clearInterval(winCheckInt)
                     clearInterval(countDownInt)
                     clearInterval(timeCheckInt)
+                    clearInterval(AIplayerInterval)
                 }
             }
             if (p2played.includes(j)) {
@@ -298,48 +326,15 @@ const winCheck = function() {
                     congrats()
     
                     victor = playerNames[1].textContent
-                    clearInterval(winCheckInt)
                     clearInterval(countDownInt)
-                    clearInterval(timeCheckInt)                  
+                    clearInterval(timeCheckInt)
+                    clearInterval(AIplayerInterval)               
                 }
             }      
         }
     }
 
-
- 
-
-
-
-
-
-
 }
-
-
-let winCheckInt = setInterval(winCheck, 100);
-
-
-// const drawCheck = function() {
-//     cells = document.querySelectorAll('.cell');
-//     setTimeout(function() {if (cells.length === 0 && victor!= playerNames[0].textContent && victor != playerNames[1].textContent) {
-//         congratsText.textContent = 'Draw!'
-//         players[0].style.filter = "grayscale(100%)";
-//         players[1].style.filter = "grayscale(100%)";
-//         congrats()
-//         victor = playerNames[Math.floor(Math.random()*2)].textContent
-//         clearInterval(winCheckInt)
-//         clearInterval(countDownInt)
-//         clearInterval(timeCheckInt)}},500)
-//     }
-    
-
-
-// let drawCheckInt = setInterval(drawCheck, 500);
-
-    
-
-
 
 
 
@@ -415,19 +410,107 @@ const rematch = function() {
 
         victor = "";
         mainContent.style.visibility = 'visible';
-        playerNames[0].id = 'gameStarted'
+        playerNames[0].id = 'gameStarted';
         countDownInt = setInterval(countDown , 1000);
         timeCheckInt = setInterval(timeCheck, 500);
-        winCheckInt = setInterval(winCheck, 500);
-        drawCheckInt = setInterval(drawCheck, 500);
-    }, 3000)
+        AIplayerInterval = setInterval(AIplayer, 300)
+    }, 3000);
 }
 
 
-CharSel()
+CharSel();
 
-tictactoe()
+tictactoe();
 
-const btnRematch = document.querySelector('.btnRematch')
-btnRematch.addEventListener('click', rematch)
+const btnRematch = document.querySelector('.btnRematch');
+btnRematch.addEventListener('click', rematch);
+
+
+
+//A.I.
+for (let opponent of opponents) {
+    opponent.addEventListener('click', function() {
+        for (let i = 0; i < opponents.length; i++) {
+            if (opponents[i] != opponent && opponents[i].getAttribute('class') === 'opponent selected') {
+                opponents[i].classList.remove('selected')
+            }}   
+        opponent.classList.toggle('selected')})       
+}
+
+const AIplayer = function() {
+    if (opponents[0].getAttribute('class') === 'opponent selected') {
+        players[1].src = "./images/terminator.jpeg";
+        playerNames[1].textContent = 'The Terminator'
+        players[1].style.filter = "brightness()";
+
+
+
+        cells = document.querySelectorAll('.cell');
+
+
+
+        ////better AI on blue//////////////////
+        for (let i = 0; i < cons2Win.length; i++) {
+            checkP1 = "";
+
+            for (let j = 0; j < cons2Win[i].length; j++){
+                if (p1played.includes(cons2Win[i][j])) {
+                    checkP1 = checkP1 + 'W';
+                }
+                if (checkP1.length === 2 && j === 2) {
+                    let targetCell = document.getElementById(`${cons2Win[i][j-2]}`)
+                    if (targetCell.getAttribute('class') === 'cell cell2') {
+                        targetCell.classList.add('markO')
+                        targetCell.classList.remove('cell')
+                        targetCell.classList.remove('cell2')
+                        return
+                    } else {targetCell = document.getElementById(`${cons2Win[i][j-1]}`)}
+                    if (targetCell.getAttribute('class') === 'cell cell2') {
+                        targetCell.classList.add('markO')
+                        targetCell.classList.remove('cell')
+                        targetCell.classList.remove('cell2')
+                        return
+                    } else {targetCell = document.getElementById(`${cons2Win[i][j]}`)}
+                    if (targetCell.getAttribute('class') === 'cell cell2') {
+                        targetCell.classList.add('markO')
+                        targetCell.classList.remove('cell')
+                        targetCell.classList.remove('cell2')
+                        return
+                    }
+                }
+            }
+        }
+        /////////////////////////
+
+
+
+
+
+
+
+        let i = Math.floor(Math.random() * cells.length);
+        try {
+            if (cells[i].textContent === '〇') {
+                cells[i].classList.add('markO')
+                cells[i].classList.remove('cell');
+                cells[i].classList.remove('cell2');
+                empties = document.querySelectorAll('.cell');
+                for (let empty of empties) {
+                    empty.textContent = "X";
+                    empty.classList.toggle('cell2');
+                }
+                p2played.push(parseInt(cells[i].id));
+                timer.textContent = timeLimit;
+            }
+        } catch {}
+        winCheck()
+        drawCheck()
+}}
+let AIplayerInterval = setInterval(AIplayer, 500)
+
+
+
+
+
+
 

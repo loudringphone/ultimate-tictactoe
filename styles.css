@@ -220,7 +220,7 @@ span:active {
     display: grid;
     
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
     grid-gap: 0px; 
     height: 100vh;
 }
@@ -228,15 +228,93 @@ span:active {
 header {
     grid-column: 1/4;
     grid-row: 1/2;
+    display: flex;
+    justify-content: space-between;
     text-align: center;
     font-size: 20px;
+    
 }
 
-footer {
-    grid-column: 1/4;
-    grid-row: 5/6;
-    height: 2vh;
+
+
+
+
+.settings > img {
+    position: absolute;
+    height: 50px;
+    left: 95%;
+    top: 2%;
+    border-radius: 50%;
+    
+    
 }
+
+.settings > img:hover {
+    cursor: pointer;
+    filter: drop-shadow(0 0 0 black); 
+}
+
+.settings > img:active {
+    cursor: pointer;
+    filter: drop-shadow(0 0 0 orange);
+}
+
+
+.options {
+    visibility: hidden;
+    position: absolute;
+    text-align: center;
+    color: black;
+    background-color: darkgray;
+    font-size: 4vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9;  
+    font-weight: bold;
+}
+
+.options > ul > li > span {
+    color: White;
+    font-weight:normal;
+}
+
+.options > div {
+    float: right;
+    padding: 0.5vw 0.5vw 0 0;
+    cursor: pointer;
+    color: white;
+}
+
+.options > div:hover {
+    color: red;
+}
+
+.options > div:focus {
+    color: blue;
+}
+
+
+.options > ul > li > span.selected {
+    color: Blue;
+    font-weight: bold;
+}
+
+.options > ul > li > span:hover {
+    color: red;
+    font-weight: bold;
+}
+
+
+
+ul{
+    list-style-type: none;
+    padding: 0 3vw 0 3vw;
+    text-align: left;
+    line-height: 12vh;
+}
+
+
 
 .sidebar1 {
     grid-column: 1/2;
@@ -257,6 +335,8 @@ footer {
     grid-row: 2/3;
     display:flex;
     justify-content:space-between;
+    padding: 0 0 10vw 0;
+
 }
 
 .timer {
@@ -271,31 +351,12 @@ footer {
 
 
 
-.sidebar4 {
-    grid-column: 2/3;
-    grid-row: 4/5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-top: 10%;
-}
 
 
 
 
-ul{
-    float: right;
-    list-style-type: none;
-    margin: 0;
-}
 
-li {
-    font-size: 20px;
-    float: right;
-    margin-right: 10px;
-    top: 60%;
 
-}
 
 
 
