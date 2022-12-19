@@ -179,6 +179,28 @@ for (let cell of cells) {
             }
             p2played.push(parseInt(cell.id))
         }
+
+
+
+    cells = document.querySelectorAll('.cell');
+    if (cells.length === 0) {
+            setTimeout(function() {if (cells.length === 0 && victor!= playerNames[0].textContent && victor != playerNames[1].textContent) {
+                congratsText.textContent = 'Draw!'
+                players[0].style.filter = "grayscale(100%)";
+                players[1].style.filter = "grayscale(100%)";
+                congrats()
+                victor = playerNames[Math.floor(Math.random()*2)].textContent
+                clearInterval(winCheckInt)
+                clearInterval(countDownInt)
+                clearInterval(timeCheckInt)}},500)}
+
+
+
+
+
+
+
+    
     });
 }
 }
@@ -198,9 +220,6 @@ let countDownInt = setInterval(countDown , 1000);
 
 
 //A random move is made when time is up
-
-
-
 const timeCheck = function() {
     if (parseInt(timer.textContent) < 0 && victor != playerNames[0].textContent && victor != playerNames[1].textContent) {
         timer.textContent = 5;
@@ -234,9 +253,7 @@ const timeCheck = function() {
         catch {};
     }
 }
-
-
-let timeCheckInt = setInterval(timeCheck, 100);
+let timeCheckInt = setInterval(timeCheck, 500);
 
 
 
@@ -283,28 +300,14 @@ const winCheck = function() {
                     victor = playerNames[1].textContent
                     clearInterval(winCheckInt)
                     clearInterval(countDownInt)
-                    clearInterval(timeCheckInt)
+                    clearInterval(timeCheckInt)                  
                 }
-            }
+            }      
         }
     }
 
 
-
-    // console.log(player1.length)
-    // console.log(player2.length)  total:9
-    if (p1played.length + p2played.length === 9 && checkP1.length != 3 && checkP2.length != 3) {
-        congratsText.textContent = 'Draw!'
-        players[0].style.filter = "grayscale(100%)";
-        players[1].style.filter = "grayscale(100%)";
-        congrats()
-        victor = playerNames[Math.floor(Math.random())*2].textContent
-        clearInterval(winCheckInt)
-        clearInterval(countDownInt)
-        clearInterval(timeCheckInt)
-
-
-    }
+ 
 
 
 
@@ -315,6 +318,27 @@ const winCheck = function() {
 
 
 let winCheckInt = setInterval(winCheck, 100);
+
+
+// const drawCheck = function() {
+//     cells = document.querySelectorAll('.cell');
+//     setTimeout(function() {if (cells.length === 0 && victor!= playerNames[0].textContent && victor != playerNames[1].textContent) {
+//         congratsText.textContent = 'Draw!'
+//         players[0].style.filter = "grayscale(100%)";
+//         players[1].style.filter = "grayscale(100%)";
+//         congrats()
+//         victor = playerNames[Math.floor(Math.random()*2)].textContent
+//         clearInterval(winCheckInt)
+//         clearInterval(countDownInt)
+//         clearInterval(timeCheckInt)}},500)
+//     }
+    
+
+
+// let drawCheckInt = setInterval(drawCheck, 500);
+
+    
+
 
 
 
@@ -393,8 +417,9 @@ const rematch = function() {
         mainContent.style.visibility = 'visible';
         playerNames[0].id = 'gameStarted'
         countDownInt = setInterval(countDown , 1000);
-        timeCheckInt = setInterval(timeCheck, 100);
-        winCheckInt = setInterval(winCheck, 100);
+        timeCheckInt = setInterval(timeCheck, 500);
+        winCheckInt = setInterval(winCheck, 500);
+        drawCheckInt = setInterval(drawCheck, 500);
     }, 3000)
 }
 
