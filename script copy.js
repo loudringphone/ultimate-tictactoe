@@ -2,7 +2,9 @@ let  cells = document.querySelectorAll('.cell');
 let markXs = document.querySelectorAll('.markX');
 let markOs = document.querySelectorAll('.markO');
 const body = document.querySelector('body')
-let timer = document.querySelector('.timer')
+const timer = document.querySelector('.timer')
+const opponents = document.querySelectorAll('.opponent');
+let timeLimit = 150;
 
 //Settings
 const settings = document.querySelector('.settings');
@@ -16,20 +18,7 @@ btnCloseOptions.addEventListener('click', function() {
 })
 
 
-//Timer
-let timeLimit = 150;
-// const times = document.querySelectorAll('.time')
 
-// for (let time of times) {
-//     time.addEventListener('click', function() {
-//         for (let i = 0; i < times.length; i++) {
-//             if (times[i] != time && time[i].getAttribute('class') === 'time selected') {
-//                 opponents[i].classList.remove('selected')
-//             }}   
-//         time.classList.toggle('selected')})
-//         timer = document.querySelector('.timer')
-//         timer.textContent = time.textContent
-// }
 
 
 
@@ -303,26 +292,24 @@ let timeCheckInt = setInterval(timeCheck, 300);
 // p2played
 
 
-let AIdefenceP2played = []
 let AIdefenceP1played = []
-
+let AIdefenceP2played = []
 
 
 const winCheck = function() {
     try{
-
-    markOs = document.querySelectorAll('.markO');
-    markXs = document.querySelectorAll('.markX');
     
-    for (let i = 0; i < markOs.length; i++) {
-        if (AIdefenceP2played.includes(parseInt(markOs[i].id))) {
-        } else {
-        AIdefenceP2played.push(parseInt(markOs[i].id))
-    }}
+    markXs = document.querySelectorAll('.markX');
+    markOs = document.querySelectorAll('.markO');
     for (let i = 0; i < markXs.length; i++) {
         if (AIdefenceP1played.includes(parseInt(markXs[i].id))) {
         } else {
         AIdefenceP1played.push(parseInt(markXs[i].id))
+    }}
+    for (let i = 0; i < markOs.length; i++) {
+        if (AIdefenceP2played.includes(parseInt(markOs[i].id))) {
+        } else {
+        AIdefenceP2played.push(parseInt(markOs[i].id))
     }}
     }catch {}
 
@@ -330,28 +317,6 @@ const winCheck = function() {
         checkP1 = ""
         checkP2 = ""
         for (let j of cons2Win[i]){
-            
-            if (AIdefenceP2played.includes(j)) {
-                checkP2 = checkP2 + 'W'
-                if (checkP2.length === 3) {
-                    empties = document.querySelectorAll('.cell');
-                    empties.forEach(target => {
-                        target.textContent = "";
-                        target.classList.add('markO');
-                        target.classList.remove('cell');
-                    });
-                    victor = playerNames[1];
-                    congratsText.textContent = winningText(playerNames[1].textContent)
-                    players[0].style.filter = "grayscale(100%)";
-                    congrats()
-    
-                    victor = playerNames[1].textContent
-                    clearInterval(countDownInt)
-                    clearInterval(timeCheckInt)
-                    clearInterval(AIplayerInt)
-                    clearInterval(winCheckInt)              
-                }
-            }      
             if (AIdefenceP1played.includes(j)) {
                 checkP1 = checkP1 + 'W'
                 if (checkP1.length === 3) {
@@ -374,6 +339,27 @@ const winCheck = function() {
                     clearInterval(winCheckInt)
                 }
             }
+            if (AIdefenceP2played.includes(j)) {
+                checkP2 = checkP2 + 'W'
+                if (checkP2.length === 3) {
+                    empties = document.querySelectorAll('.cell');
+                    empties.forEach(target => {
+                        target.textContent = "";
+                        target.classList.add('markO');
+                        target.classList.remove('cell');
+                    });
+                    victor = playerNames[1];
+                    congratsText.textContent = winningText(playerNames[1].textContent)
+                    players[0].style.filter = "grayscale(100%)";
+                    congrats()
+    
+                    victor = playerNames[1].textContent
+                    clearInterval(countDownInt)
+                    clearInterval(timeCheckInt)
+                    clearInterval(AIplayerInt)
+                    clearInterval(winCheckInt)              
+                }
+            }      
         }
     }
 
@@ -477,7 +463,6 @@ btnRematch.addEventListener('click', rematch);
 
 
 //A.I.
-const opponents = document.querySelectorAll('.opponent');
 for (let opponent of opponents) {
     opponent.addEventListener('click', function() {
         for (let i = 0; i < opponents.length; i++) {
@@ -500,23 +485,18 @@ const AIplayer = function() {
 
 
 
-        ////better AI on attack and defense//////////////////
+        ////better AI on blue//////////////////
         try {
         if (cells[0].textContent === '〇') {
             AIdefenceActivated = false
         for (let i = 0; i < cons2Win.length; i++) {
             checkP1 = "";
-            checkP2 = "";
+            
             for (let j = 0; j < cons2Win[i].length; j++){
-                if (AIdefenceP2played.includes(cons2Win[i][j])) {
-                    checkP2 = checkP2 + 'W';
-                }
-                if (AIdefenceP1played.includes(cons2Win[i][j])) {
+                if (p1played.includes(cons2Win[i][j])) {
                     checkP1 = checkP1 + 'W';
                 }
-
-
-                if (checkP2.length === 2 && j === 2) {
+                if (checkP1.length === 2 && j === 2) {
                     let targetCell = document.getElementById(`${cons2Win[i][j-2]}`)
                     if (targetCell.getAttribute('class') === 'cell cell2') {
                         targetCell.classList.add('markO')
@@ -530,11 +510,10 @@ const AIplayer = function() {
                         }
                         winCheck()
                         drawCheck()
-                        p2played.push(parseInt(targetCell.id));
+                        p2played.push(parseInt(cells[i].id));
                         timer.textContent = timeLimit;
                         AIdefenceActivated = true;
-                        console.log('WinningConditions[i][0]Attack')
-                        //[6,7,8] AI does know to play on 6
+                        console.log('ons2Win[i][0]H')
                         
                         return
                     } else {targetCell = document.getElementById(`${cons2Win[i][j-1]}`)}
@@ -550,11 +529,11 @@ const AIplayer = function() {
                         }
                         winCheck()
                         drawCheck()
-                        p2played.push(parseInt(targetCell.id));
+                        p2played.push(parseInt(cells[i].id));
                         timer.textContent = timeLimit;
                         AIdefenceActivated = true;
-                        console.log('WinningConditions[i][1]Attack')
-                        //worked
+                        console.log('ons2Win[i][1]H')
+
                         return
                     } else {targetCell = document.getElementById(`${cons2Win[i][j]}`)}
                     if (targetCell.getAttribute('class') === 'cell cell2') {
@@ -569,85 +548,18 @@ const AIplayer = function() {
                         }
                         winCheck()
                         drawCheck()
-                        p2played.push(parseInt(targetCell.id));
+                        p2played.push(parseInt(cells[i].id));
                         timer.textContent = timeLimit;
                        
                         AIdefenceActivated = true;
                        
                         
-                        console.log('WinningConditions[i][2]Attack')
-                        //worked
-                        return
-                    }
-                }
-
-
-                else if (checkP1.length === 2 && j === 2) {
-                   
-                    let targetCell = document.getElementById(`${cons2Win[i][j-2]}`)
-                    if (targetCell.getAttribute('class') === 'cell cell2') {
-                        targetCell.classList.add('markO')
-                        targetCell.classList.remove('cell')
-                        targetCell.classList.remove('cell2')
-
-                        empties = document.querySelectorAll('.cell');
-                        for (let empty of empties) {
-                            empty.textContent = "X";
-                            empty.classList.toggle('cell2');
-                        }
-                        winCheck()
-                        drawCheck()
-                        p2played.push(parseInt(targetCell.id));
-                        timer.textContent = timeLimit;
-                        AIdefenceActivated = true;
-                        console.log('WinningConditions[i][0]Defence')
-                        //worked     
-                        return
-                    } else {targetCell = document.getElementById(`${cons2Win[i][j-1]}`)}
-                    if (targetCell.getAttribute('class') === 'cell cell2') {
-                        targetCell.classList.add('markO')
-                        targetCell.classList.remove('cell')
-                        targetCell.classList.remove('cell2')
-
-                        empties = document.querySelectorAll('.cell');
-                        for (let empty of empties) {
-                            empty.textContent = "X";
-                            empty.classList.toggle('cell2');
-                        }
-                        winCheck()
-                        drawCheck()
-                        p2played.push(parseInt(targetCell.id));
-                        timer.textContent = timeLimit;
-                        AIdefenceActivated = true;
-                        console.log('WinningConditions[i][1]Defence')
-                        //worked
-                        return
-                    } else {targetCell = document.getElementById(`${cons2Win[i][j]}`)}
-                    if (targetCell.getAttribute('class') === 'cell cell2') {
-                        targetCell.classList.add('markO')
-                        targetCell.classList.remove('cell')
-                        targetCell.classList.remove('cell2')
-
-                        empties = document.querySelectorAll('.cell');
-                        for (let empty of empties) {
-                            empty.textContent = "X";
-                            empty.classList.toggle('cell2');
-                        }
-                        winCheck()
-                        drawCheck()
-                        p2played.push(parseInt(targetCell.id));
-                        timer.textContent = timeLimit;
-                       
-                        AIdefenceActivated = true;
-                       
-                        
-                        console.log('WinningConditions[i][2]Defence')
-                        //worked
+                        console.log('ons2Win[i][2]H')
 
                         return
                     }
                 }
-            }
+            }setTimeout(console.log(AIdefenceActivated),250)
         }
         winCheck()
         drawCheck()
@@ -674,7 +586,6 @@ const AIplayer = function() {
                 }
                 p2played.push(parseInt(cells[i].id));
                 timer.textContent = timeLimit;
-                console.log('simpleAI')
             }
         } catch {}
         }
