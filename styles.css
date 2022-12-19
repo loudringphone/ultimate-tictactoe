@@ -18,7 +18,7 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 9;
+    z-index: 7;
 
 }
 .startScreen {
@@ -29,7 +29,7 @@ body {
     text-align: center;
     height: 80vh;
     width: 80vh;
-    z-index: 8;
+    z-index: 6;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -39,15 +39,10 @@ body {
 }
 
 
-.startScreen.congrats {
-    visibility: visible;
-    opacity: 1;
-    border: 3px solid black;
-    outline: 3px solid black; 
 
-
+.congratsBG:hover {
+    opacity: 0.5; 
 }
-
 
 
 
@@ -56,6 +51,7 @@ body {
     background-color: black;
     margin: 0 6vw 0 6vw;
     max-height: 40vh;
+    opacity: 1;
     ;
 }
 
@@ -64,7 +60,7 @@ body {
     color: white;
 }
 
-.rematch {
+.btnRematch {
     font-size: 7vh;
     color: white;
 }
@@ -78,15 +74,37 @@ span:hover {
     color: yellow;
 }
 
-/* .congratsText span { 
-    background-color: black; 
-    padding: 2vh 3vh 2vh 3vh;
+span:active {
+    cursor: pointer;
+    color: blue;
 }
 
-.rematch span { 
-    background-color: black; 
-    padding: 2vh 3vh 2vh 3vh;
+
+/* .congratsBG {
+    visibility: hidden;
+    background-color: black;
+    margin: 0 6vw 0 6vw;
+    max-height: 40vh;
+    opacity: 1;
+    ;
 } */
+
+.restarting {
+    z-index: 9;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+    transition: opacity 4s;
+}
+
+.restarting > h1 {
+    color: white;
+    padding: 0 1vw 0 1vw;
+    font-size: 5vh;
+}
+
 
 .charContainer {
     position: fixed;
@@ -351,4 +369,3 @@ li {
 	  display: none;
 	}
   }
-

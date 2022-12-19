@@ -1,7 +1,7 @@
-const cells = document.querySelectorAll('.cell');
-let Xs = document.querySelectorAll('.markX');
-let Ys = document.querySelectorAll('.markO');
-
+let  cells = document.querySelectorAll('.cell');
+let markXs = document.querySelectorAll('.markX');
+let markOs = document.querySelectorAll('.markO');
+const body = document.querySelector('body')
 
 let cons2Win = [
 [0, 1, 2],
@@ -101,30 +101,27 @@ btnClose.addEventListener('click', function() {
 //WInning screen
 const congratsText = document.querySelector('.congratsText')
 const congrats = function() {
-    // startScreen.classList.toggle('congrats')
-    // startScreen.style.visibility = 'visible';
-    // startScreen.style.opacity = 1;
-    // startScreen.style.border = '3px solid black';
-    // startScreen.style.outline = "3px solid black"; 
     congratsBGs.forEach(target => {
         target.style.visibility = 'visible';
     })
-
-    
-
-    
+    startScreen.style.top = '60%';
+    startScreen.style.opacity = 1;
+}
  
 
+congratsBGs.forEach(target =>
+    target.addEventListener('mouseover', function() {
+        congratsBGs[0].style.opacity = 1;
+        congratsBGs[1].style.opacity = 1;
+    })
+)
+    congratsBGs.forEach(target =>  
+    target.addEventListener('mouseout', function() {
+        congratsBGs[0].style.opacity = 0.08;
+        congratsBGs[1].style.opacity = 0.25;
+    })
+)
 
-    setInterval(function() {
-        startScreen.style.opacity = 0.3;
-        startScreen.style.transition = "all 0.3s";
-    }, 1000)
-    setInterval(function() {
-        startScreen.style.opacity = 1;
-        startScreen.style.transition = "all 0.5s";
-    }, 1500)
-}
 
 
 
@@ -147,9 +144,9 @@ for (let cell of cells) {
             return
         }
 
-        Xs = document.querySelectorAll('.markX');
-        Ys = document.querySelectorAll('.markO');
-        if (Xs.length === Ys.length) {
+        markXs = document.querySelectorAll('.markX');
+        markOs = document.querySelectorAll('.markO');
+        if (markXs.length === markOs.length) {
             cell.classList.add('markX');
             cell.classList.remove('cell');
             empties = document.querySelectorAll('.cell');
@@ -188,7 +185,6 @@ for (let cell of cells) {
                             target.classList.remove('cell');
                             target.classList.remove('cell2');
                         });
-                        alert(winningText(playerNames[0].textContent));
                         congratsText.textContent = winningText(playerNames[0].textContent)
                         scores[0].textContent = `Wins: ${parseInt(scores[0].textContent.split(" ")[1]) + 1}`
                         players[1].style.filter = "grayscale(100%)";
@@ -210,7 +206,6 @@ for (let cell of cells) {
                             target.classList.remove('cell');
                         });
                         winner = playerNames[1];
-                        alert(winningText(playerNames[1].textContent));
                         congratsText.textContent = winningText(playerNames[1].textContent)
                         players[0].style.filter = "grayscale(100%)";
                         congrats()
@@ -224,4 +219,78 @@ for (let cell of cells) {
 }
 
 tictactoe()
+
+
+//Rematch
+
+const rematch = function() {
+    markXs = document.querySelectorAll('.markX');
+    markOs = document.querySelectorAll('.markO');
+    markXs.forEach(target =>
+        target.textContent = "")
+    markOs.forEach(target =>
+        target.textContent = "");
+
+    congratsBGs.forEach(target => {
+        target.style.visibility = 'hidden';
+    })
+
+
+    let div = document.createElement('div');
+    let h1 = document.createElement('h1');
+    div.classList.add('restarting');
+    if (winner === playerNames[0].textContent) {
+        div.style.backgroundColor = 'red';
+        div.style.border = "thick solid blue";
+        div.style.outline = "thick solid black";
+        h1.textContent = `${playerNames[1].textContent} will start first!`;
+    } else {
+        div.style.backgroundColor = 'blue';
+        div.style.border = "thick solid red";
+        div.style.outline = "thick solid black";
+        h1.textContent = `${playerNames[0].textContent} will start first!`;
+    }
+    div.appendChild(h1);
+    body.appendChild(div);
+
+    setTimeout(function(){
+        div.style.opacity = '0'
+    }, 2000)
+    setTimeout(function(){
+        div.remove()
+    }, 5000)
+
+    setTimeout(function(){
+        checkP1 = "";
+        checkP2 = "";
+        player1 = [];
+        player2 = [];
+
+
+
+
+
+    winner = "";
+    
+    markXs.forEach(target =>
+        target.classList.add('cell'));
+    markXs.forEach(target =>
+        target.textContent = "X")
+    markOs.forEach(target =>
+        target.classList.add('cell'));
+    markOs.forEach(target =>
+        target.textContent = "X");
+    cells = document.querySelectorAll('.cell');
+    cells.forEach(target =>
+        target.classList.remove('markX'))
+        cells.forEach(target =>
+            target.classList.remove('markO'))
+    }, 4500)
+}
+
+
+
+
+const btnRematch = document.querySelector('.btnRematch')
+btnRematch.addEventListener('click', rematch)
 
