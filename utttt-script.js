@@ -1,4 +1,5 @@
 let cells = document.querySelectorAll('.cell');
+let cell2s = document.querySelectorAll('.cell2');
 let markXs = document.querySelectorAll('.markX');
 let markOs = document.querySelectorAll('.markO');
 let cellnas = document.querySelectorAll('.cellna')
@@ -234,9 +235,12 @@ const rematch = function() {
     for (let i of players) {
         i.style.filter = "brightness()";
     }
+    cell2s = document.querySelectorAll('.cell2');
     markXs = document.querySelectorAll('.markX');
     markOs = document.querySelectorAll('.markO');
-    cellnas = document.querySelectorAll('.cellNA')
+    cellnas = document.querySelectorAll('.cellNA');
+    cell2s.forEach(target =>
+        target.textContent = "")
     markXs.forEach(target =>
         target.textContent = "")
     markOs.forEach(target =>
@@ -281,6 +285,9 @@ const rematch = function() {
         p1played = [];
         p2played = [];
 
+
+        cell2s.forEach(target =>
+            target.classList.add('cell'));
         markXs.forEach(target =>
             target.classList.add('cell'));
         markOs.forEach(target =>
@@ -288,6 +295,8 @@ const rematch = function() {
         cellnas.forEach(target =>
             target.classList.add('cell'));
         cells = document.querySelectorAll('.cell');
+        cells.forEach(target =>
+            target.classList.remove('cell2'));
         cells.forEach(target =>
             target.classList.remove('markX'));
         cells.forEach(target =>
@@ -310,13 +319,23 @@ const rematch = function() {
         victor = "";
         mainContent.style.visibility = 'visible';
         playerNames[0].id = 'gameStarted';
+
+        clearInterval(countDownInt)
+        clearInterval(timeCheckInt)
+        clearInterval(ultiWinCheckInt)
+        clearInterval(AIplayerInt)
+
+
+
         countDownInt = setInterval(countDown , 1000);
         timeCheckInt = setInterval(timeCheck, 300);
         ultiWinCheckInt = setInterval(ultiWinCheck, 200)
         AIplayerInt = setInterval(AIplayer, 200);
-        AIdefenceActivated = false;
+        AdvAI = false;
         P1played = []
         P2played = []
+        gridNext = ""
+        gridIndex = ""
     }, 1000);
 }
 
@@ -398,7 +417,10 @@ const withdraw = document.querySelector('.withdraw')
 withdraw.addEventListener('click', function() {
     if (playerNames[0].id === 'gameStarted') {
         mainContent.style.visibility = 'visible';
-
+        p1played = []
+        p2played = []
+        gridNext = ""
+        gridIndex = ""
         markXs = document.querySelectorAll('.markX')
         markOs = document.querySelectorAll('.markO')
         let cell2s = document.querySelectorAll('.cell2')
@@ -813,7 +835,7 @@ let timeCheckInt = setInterval(timeCheck, 300);
 
 
 //Basic A.I.
-let AIdefenceActivated = false
+let AdvAI = false
 const AIplayer = function() {
     if (opponents[0].getAttribute('class') === 'opponent selected') {
         players[1].src = "./images/terminator.jpeg";
@@ -825,52 +847,52 @@ const AIplayer = function() {
 
 
 
-        if (AIdefenceActivated === false) {
+        if (AdvAI === false) {
             let i = Math.floor(Math.random() * cells.length);
-            try {
+            
+
+            if (cells[i].textContent === '〇') {
+                cells[i].classList.add('markO')
+                cells[i].classList.remove('cell');
+                cells[i].classList.remove('cell2');
                 
+                lastMove = document.querySelector('#lastMove');
+                try{
+                if (lastMove.id != null) {
+                    lastMove.id = ''
+                }} catch {}
+                cells[i].id = 'lastMove'
 
-                if (cells[i].textContent === '〇') {
-                    cells[i].classList.add('markO')
-                    cells[i].classList.remove('cell');
-                    cells[i].classList.remove('cell2');
+
+                empties = document.querySelectorAll('.cell');
+                for (let empty of empties) {
+                    empty.textContent = "X";
+                    empty.classList.toggle('cell2');
+                }
+                empties = document.querySelectorAll('.cellNA');
+                for (let empty of empties) {
+                    empty.classList.remove('cellNA');
+                    empty.textContent = "X";
+                    empty.classList.add('cell');
+                }
+                p2played.push(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])))
+                let gridNext = String(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])) + 1).substring(1)
+
+                cells = document.querySelectorAll('.cell')
+                for (let cell of cells) {
                     
-                        lastMove = document.querySelector('#lastMove');
-                    if (lastMove.id != null) {
-                        lastMove.id = ''
+                    let gridIndex = String(Array.from(document.querySelectorAll('div')).indexOf(cell)).charAt(0)
+                    if (gridIndex != gridNext) {
+                        cell.classList.add('cellNA')
+                        cell.classList.remove('cell')
                     }
-                    cells[i].id = 'lastMove'
+                }    
 
-
-                    empties = document.querySelectorAll('.cell');
-                    for (let empty of empties) {
-                        empty.textContent = "X";
-                        empty.classList.toggle('cell2');
-                    }
-                    empties = document.querySelectorAll('.cellNA');
-                    for (let empty of empties) {
-                        empty.classList.remove('cellNA');
-                        empty.textContent = "X";
-                        empty.classList.add('cell');
-                    }
-                    p2played.push(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])))
-                    let gridNext = String(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])) + 1).substring(1)
-
-                    cells = document.querySelectorAll('.cell')
-                    for (let cell of cells) {
-                        
-                        let gridIndex = String(Array.from(document.querySelectorAll('div')).indexOf(cell)).charAt(0)
-                        if (gridIndex != gridNext) {
-                            cell.classList.add('cellNA')
-                            cell.classList.remove('cell')
-                        }
-                    }    
-
-                } 
+            } 
 
                 
                     
-            } catch{}
+            
             drawCheck()
        
         }
