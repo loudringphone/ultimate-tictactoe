@@ -8,9 +8,8 @@ The webpage is divided into 2 part. The 1st half contains the title and settings
 The Tic Tac Toe game was made on a 9 by 9 grid and players can choose their favourite characters out of the 12 choices to represent themselves. There are score counters on top of each player's section to record their wins. It is 5 sec per turn and if a move is not made with the timeframe, a random move would be made for the player 
 
 
-Better AI on both attack and defence; however it doesn't know how to create opportunity.
-
-
+Better A.I. on both attack and defence; but it takes defense as priority over attack.
+Better A.I. means if there is two in a row for the human player, A.I. will make a move to stop it becoming three.
 
 
 Some ideas: Ultimate Tic-Tac-Toe 

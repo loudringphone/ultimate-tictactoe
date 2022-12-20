@@ -467,3 +467,14 @@ ul{
     }
 }
 
+@media screen and (max-height: 800px) {
+
+
+    .timer {
+        font-size: 8vh;
+        z-index: 6;
+        position: absolute;
+        top: 5%;
+        left: 35%;     
+    }
+}

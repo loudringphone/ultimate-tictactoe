@@ -1,35 +1,12 @@
 let  cells = document.querySelectorAll('.cell');
 let markXs = document.querySelectorAll('.markX');
 let markOs = document.querySelectorAll('.markO');
-const body = document.querySelector('body')
-let timer = document.querySelector('.timer')
+const body = document.querySelector('body');
+let timer = document.querySelector('.timer');
+const players = document.querySelectorAll('.player');
+const scoreInfo = document.querySelector('.scoreInfo');
+const mainContent = document.querySelector('.main-content');
 
-//Settings
-const settings = document.querySelector('.settings');
-const options = document.querySelector('.options');
-const btnCloseOptions = document.querySelector('.btnCloseOptions');
-settings.addEventListener('click', function() {
-    options.style.visibility = 'visible';
-})
-btnCloseOptions.addEventListener('click', function() { 
-    options.style.visibility = 'hidden';
-})
-
-
-//Timer
-let timeLimit = 150;
-// const times = document.querySelectorAll('.time')
-
-// for (let time of times) {
-//     time.addEventListener('click', function() {
-//         for (let i = 0; i < times.length; i++) {
-//             if (times[i] != time && time[i].getAttribute('class') === 'time selected') {
-//                 opponents[i].classList.remove('selected')
-//             }}   
-//         time.classList.toggle('selected')})
-//         timer = document.querySelector('.timer')
-//         timer.textContent = time.textContent
-// }
 
 
 
@@ -54,8 +31,6 @@ const preview = document.querySelector('.preview');
 const btnClose = document.querySelector('.btnClose');
 const btnChar = document.querySelector('.btnChar');
 const charContainer = document.querySelector('.charContainer')
-const mainContent = document.querySelector('.main-content')
-const players = document.querySelectorAll('.player')
 const playerNames = document.querySelectorAll('.playerName')
 
 let player = players[0]
@@ -90,13 +65,31 @@ characters.forEach(target => {
         player.src = target.currentSrc;
         player.style.filter = "brightness()";
         playerName.textContent = target.getAttribute('alt');
+        
+        for (let character of characters) {
+            if (player === players[0] && character.getAttribute('alt') === target.getAttribute('alt') ) {
+                character.style.filter = "brightness()";
+                character.style.outline = "solid 5px blue";
+                character.style.outlineOffset = '-5px'}
+            else if (player === players[1] && character.getAttribute('alt') === target.getAttribute('alt') ) {
+                character.style.filter = "brightness()";
+                character.style.outline = "solid 5px red";
+                character.style.outlineOffset = '-5px';
+            }
+        }
+
+
         player = players[1];
         playerName = playerNames[1]
         if (!playerName.textContent.includes('Player')) {
+            setTimeout(function() {
             charContainer.classList.toggle('change');
-            charContainer.style.visibility = 'hidden';    
-            mainContent.style.visibility = 'visible';
-            playerNames[0].id = 'gameStarted'
+            
+                charContainer.style.visibility = 'hidden';    
+                mainContent.style.visibility = 'visible';
+                playerNames[0].id = 'gameStarted'
+            }, 800)
+            
         }
         })
     })
@@ -164,7 +157,7 @@ const winningText = function(winner) {
     } else {return `${winner} wins!`}
 }
 
-// Timer
+// Countdown
 const countDown = function() {
     if (playerNames[0].id === 'gameStarted') {
         timer.textContent = parseInt(timer.textContent) - 1}
@@ -419,13 +412,13 @@ const rematch = function() {
     }
     div.appendChild(h1);
     body.appendChild(div);
-
+//Durration of msg shown up about which player's gonna play first in the next game
     setTimeout(function(){
         div.style.opacity = '0'
-    }, 1000)
+    }, 500)
     setTimeout(function(){
         div.remove()
-    }, 3000)
+    }, 1000)
 
     setTimeout(function(){
         checkP1 = "";
@@ -463,7 +456,7 @@ const rematch = function() {
         AIdefenceActivated = false;
         AIdefenceP1played = []
         AIdefenceP2played = []
-    }, 3000);
+    }, 1000);
 }
 
 
@@ -476,17 +469,93 @@ btnRematch.addEventListener('click', rematch);
 
 
 
-//A.I.
+
+
+
+
+
+
+//Settings
+
+const UIopacity = function (num) {
+    mainContent.style.opacity = num;
+    scoreInfo.style.opacity = num;
+    players.forEach(target =>
+        target.style.opacity = num);
+}
+
+
+
+
+const settings = document.querySelector('.settings');
+const options = document.querySelector('.options');
+const btnCloseOptions = document.querySelector('.btnCloseOptions');
+settings.addEventListener('click', function() {
+    options.style.visibility = 'visible';
+    clearInterval(countDownInt)
+    UIopacity(0.3);
+    
+
+
+})
+btnCloseOptions.addEventListener('click', function() { 
+    options.style.visibility = 'hidden';
+    UIopacity(1);
+    countDownInt = setInterval(countDown , 1000);
+})
+
+
+//Timer
+const times = document.querySelectorAll('.time')
+let timeLimit = parseInt(timer.textContent)
+for (let time of times) {
+    time.addEventListener('click', function() {
+        for (let i = 0; i < times.length; i++) {
+            if (times[i].getAttribute('class') === 'time selected') {
+                times[i].classList.remove('selected')
+            }}   
+        time.classList.toggle('selected')
+        timeLimit = parseInt(time.textContent)
+        timer.textContent = time.textContent
+        if (parseInt(time.textContent) > 0) {
+            timer.style.visibility = 'visible'
+        } else {timer.style.visibility = 'hidden'}
+        UIopacity(1);
+        countDownInt = setInterval(countDown , 1000);
+        options.style.visibility = 'hidden';
+        
+        
+    })
+        
+}
+
+
+//Opponent selector
 const opponents = document.querySelectorAll('.opponent');
 for (let opponent of opponents) {
     opponent.addEventListener('click', function() {
         for (let i = 0; i < opponents.length; i++) {
-            if (opponents[i] != opponent && opponents[i].getAttribute('class') === 'opponent selected') {
+            if (opponents[i].getAttribute('class') === 'opponent selected') {
                 opponents[i].classList.remove('selected')
             }}   
-        opponent.classList.toggle('selected')})       
+        opponent.classList.toggle('selected')
+        UIopacity(1);
+        countDownInt = setInterval(countDown , 1000);
+        let opponentType = opponent.textContent;
+        // if (opponentType === 'A.I.' && charContainer.style.visibility === 'visible' && !playerNames[0].textContent.includes('Player')) {
+        //     charContainer.classList.toggle('change');
+        //     charContainer.style.visibility === 'hidden'
+        //     mainContent.style.visibility = 'visible';
+        //     playerNames[0].id = 'gameStarted'
+
+
+        // }
+        options.style.visibility = 'hidden';}
+        )       
 }
 
+
+//A.I.
 let AIdefenceActivated = false;
 const AIplayer = function() {
     if (opponents[0].getAttribute('class') === 'opponent selected') {
@@ -682,8 +751,3 @@ const AIplayer = function() {
         drawCheck()
 }}
 let AIplayerInt = setInterval(AIplayer, 200)
-
-
-
-
-
