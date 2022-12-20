@@ -7,6 +7,12 @@ body {
     
 }
 
+
+a {
+    color: inherit; 
+    text-decoration: inherit;
+  }
+
 .btnChar {
     position: absolute;
     text-align: center;
@@ -379,7 +385,7 @@ ul{
     
 }
 
-.tictactoe {
+.TTT {
     display: grid;
     background-color: lightgray;
     grid-gap: 10px;

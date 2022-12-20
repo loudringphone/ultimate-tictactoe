@@ -1,6 +1,7 @@
 let  cells = document.querySelectorAll('.cell');
 let markXs = document.querySelectorAll('.markX');
 let markOs = document.querySelectorAll('.markO');
+let cell2 = document.querySelectorAll(".cell2")
 const body = document.querySelector('body');
 let timer = document.querySelector('.timer');
 const players = document.querySelectorAll('.player');
@@ -46,6 +47,7 @@ btnChar.addEventListener('click', function() {
 
 })
 
+//Character selection
 const CharSel = function(){
 characters.forEach(target => {
     target.addEventListener('mouseover', function() {
@@ -266,7 +268,6 @@ const timeCheck = function() {
                     empty.classList.toggle('cell2');
                 }
             p1played.push(parseInt(cells[i].id));
-            console.log(p1played);
             } else {
                 cells[i].classList.add('markO')
                 cells[i].classList.remove('cell');
@@ -296,8 +297,8 @@ let timeCheckInt = setInterval(timeCheck, 300);
 // p2played
 
 
-let AIdefenceP2played = []
-let AIdefenceP1played = []
+let intervalMoveTrackingP1 = []
+let intervalMoveTrackingP2 = []
 
 
 
@@ -308,14 +309,14 @@ const winCheck = function() {
     markXs = document.querySelectorAll('.markX');
     
     for (let i = 0; i < markOs.length; i++) {
-        if (AIdefenceP2played.includes(parseInt(markOs[i].id))) {
+        if (intervalMoveTrackingP1.includes(parseInt(markOs[i].id))) {
         } else {
-        AIdefenceP2played.push(parseInt(markOs[i].id))
+        intervalMoveTrackingP1.push(parseInt(markOs[i].id))
     }}
     for (let i = 0; i < markXs.length; i++) {
-        if (AIdefenceP1played.includes(parseInt(markXs[i].id))) {
+        if (intervalMoveTrackingP2.includes(parseInt(markXs[i].id))) {
         } else {
-        AIdefenceP1played.push(parseInt(markXs[i].id))
+        intervalMoveTrackingP2.push(parseInt(markXs[i].id))
     }}
     }catch {}
 
@@ -324,7 +325,7 @@ const winCheck = function() {
         checkP2 = ""
         for (let j of cons2Win[i]){
             
-            if (AIdefenceP2played.includes(j)) {
+            if (intervalMoveTrackingP1.includes(j)) {
                 checkP2 = checkP2 + 'W'
                 if (checkP2.length === 3) {
                     empties = document.querySelectorAll('.cell');
@@ -345,7 +346,7 @@ const winCheck = function() {
                     clearInterval(winCheckInt)              
                 }
             }      
-            if (AIdefenceP1played.includes(j)) {
+            if (intervalMoveTrackingP2.includes(j)) {
                 checkP1 = checkP1 + 'W'
                 if (checkP1.length === 3) {
                     empties = document.querySelectorAll('.cell2');
@@ -453,9 +454,9 @@ const rematch = function() {
         timeCheckInt = setInterval(timeCheck, 300);
         winCheckInt = setInterval(winCheck, 200)
         AIplayerInt = setInterval(AIplayer, 200);
-        AIdefenceActivated = false;
-        AIdefenceP1played = []
-        AIdefenceP2played = []
+        advAI = false;
+        intervalMoveTrackingP2 = []
+        intervalMoveTrackingP1 = []
     }, 1000);
 }
 
@@ -557,7 +558,10 @@ withdraw.addEventListener('click', function() {
         cells = document.querySelectorAll('.cell')
         cells.forEach(target =>
             target.textContent = 'X')
-
+        p1played = []
+        p2played = []
+        intervalMoveTrackingP1 = []
+        intervalMoveTrackingP2 = []
 
         
         congratsText.textContent = 'Withdraw!'
@@ -603,7 +607,8 @@ for (let opponent of opponents) {
 
 
 //A.I.
-let AIdefenceActivated = false;
+let advAI = false;
+let targetCell = "";
 const AIplayer = function() {
     if (opponents[0].getAttribute('class') === 'opponent selected') {
         players[1].src = "./images/terminator.jpeg";
@@ -619,22 +624,27 @@ const AIplayer = function() {
         ////better AI on attack and defense//////////////////
         try {
         if (cells[0].textContent === '〇') {
-            AIdefenceActivated = false
+            advAI = false
         for (let i = 0; i < cons2Win.length; i++) {
             checkP1 = "";
             checkP2 = "";
             for (let j = 0; j < cons2Win[i].length; j++){
-                if (AIdefenceP2played.includes(cons2Win[i][j])) {
+                if (intervalMoveTrackingP1.includes(cons2Win[i][j])) {
                     checkP2 = checkP2 + 'W';
                 }
-                if (AIdefenceP1played.includes(cons2Win[i][j])) {
+                if (intervalMoveTrackingP2.includes(cons2Win[i][j])) {
                     checkP1 = checkP1 + 'W';
                 }
 
 
                 if (checkP2.length === 2 && j === 2) {
-                    let targetCell = document.getElementById(`${cons2Win[i][j-2]}`)
-                    if (targetCell.getAttribute('class') === 'cell cell2') {
+                    
+                    if (document.getElementById(`${cons2Win[i][j-2]}`).getAttribute('class') === 'cell cell2') {
+
+                    
+                        targetCell = document.getElementById(`${cons2Win[i][j-2]}`)
+
+                        /////////////////
                         targetCell.classList.add('markO')
                         targetCell.classList.remove('cell')
                         targetCell.classList.remove('cell2')
@@ -648,13 +658,25 @@ const AIplayer = function() {
                         drawCheck()
                         p2played.push(parseInt(targetCell.id));
                         timer.textContent = timeLimit;
-                        AIdefenceActivated = true;
+                        advAI = true;
                         console.log('WinningConditions[i][0]Attack')
-                        //[6,7,8] AI does know to play on 6
+                        //worked
                         
                         return
-                    } else {targetCell = document.getElementById(`${cons2Win[i][j-1]}`)}
-                    if (targetCell.getAttribute('class') === 'cell cell2') {
+
+                        ///////////////////////////////////////////////
+
+
+
+
+                    } else if (document.getElementById(`${cons2Win[i][j-1]}`).getAttribute('class') === 'cell cell2') {
+
+
+                        targetCell = document.getElementById(`${cons2Win[i][j-1]}`)
+
+
+                     
+                        /////////////////////////
                         targetCell.classList.add('markO')
                         targetCell.classList.remove('cell')
                         targetCell.classList.remove('cell2')
@@ -668,12 +690,23 @@ const AIplayer = function() {
                         drawCheck()
                         p2played.push(parseInt(targetCell.id));
                         timer.textContent = timeLimit;
-                        AIdefenceActivated = true;
+                        advAI = true;
                         console.log('WinningConditions[i][1]Attack')
                         //worked
                         return
-                    } else {targetCell = document.getElementById(`${cons2Win[i][j]}`)}
-                    if (targetCell.getAttribute('class') === 'cell cell2') {
+                        //////////////////////////////////
+
+
+                    } 
+                    else if (document.getElementById(`${cons2Win[i][j]}`).getAttribute('class') === 'cell cell2') {
+
+                        targetCell = document.getElementById(`${cons2Win[i][j]}`)
+
+                        cellAttack = targetCell
+                        console.log(`Attack ${cellAttack}`)
+
+
+                        //////////////////////////////
                         targetCell.classList.add('markO')
                         targetCell.classList.remove('cell')
                         targetCell.classList.remove('cell2')
@@ -688,20 +721,22 @@ const AIplayer = function() {
                         p2played.push(parseInt(targetCell.id));
                         timer.textContent = timeLimit;
                        
-                        AIdefenceActivated = true;
+                        advAI = true;
                        
                         
                         console.log('WinningConditions[i][2]Attack')
                         //worked
                         return
+                        ////////////////////////////////////////
                     }
-                }
-
-
-                else if (checkP1.length === 2 && j === 2) {
+                } else if (checkP1.length === 2 && j === 2) {
                    
-                    let targetCell = document.getElementById(`${cons2Win[i][j-2]}`)
-                    if (targetCell.getAttribute('class') === 'cell cell2') {
+                    if (document.getElementById(`${cons2Win[i][j-2]}`).getAttribute('class') === 'cell cell2') {
+
+                        targetCell = document.getElementById(`${cons2Win[i][j-2]}`)
+
+
+                        ///////////////////////////////////
                         targetCell.classList.add('markO')
                         targetCell.classList.remove('cell')
                         targetCell.classList.remove('cell2')
@@ -715,12 +750,24 @@ const AIplayer = function() {
                         drawCheck()
                         p2played.push(parseInt(targetCell.id));
                         timer.textContent = timeLimit;
-                        AIdefenceActivated = true;
+                        advAI = true;
                         console.log('WinningConditions[i][0]Defence')
                         //worked     
                         return
-                    } else {targetCell = document.getElementById(`${cons2Win[i][j-1]}`)}
-                    if (targetCell.getAttribute('class') === 'cell cell2') {
+                        ///////////////////////////////////////
+
+
+
+                    } else if (document.getElementById(`${cons2Win[i][j-1]}`).getAttribute('class') === 'cell cell2') {
+
+                        targetCell = document.getElementById(`${cons2Win[i][j-1]}`)
+
+
+
+                        cellDefence = targetCell
+                        console.log(`Defence ${cellDefence}`)
+
+                        ///////////////////////////////////////
                         targetCell.classList.add('markO')
                         targetCell.classList.remove('cell')
                         targetCell.classList.remove('cell2')
@@ -734,12 +781,23 @@ const AIplayer = function() {
                         drawCheck()
                         p2played.push(parseInt(targetCell.id));
                         timer.textContent = timeLimit;
-                        AIdefenceActivated = true;
+                        advAI = true;
                         console.log('WinningConditions[i][1]Defence')
                         //worked
                         return
-                    } else {targetCell = document.getElementById(`${cons2Win[i][j]}`)}
-                    if (targetCell.getAttribute('class') === 'cell cell2') {
+                        ///////////////////////////////////////
+
+
+
+
+                    } else if (document.getElementById(`${cons2Win[i][j]}`).getAttribute('class') === 'cell cell2') {
+
+                        targetCell = document.getElementById(`${cons2Win[i][j]}`)
+
+                        cellDefence = targetCell
+                        console.log(`Defence ${cellDefence}`)
+
+                        ///////////////////////////////////////
                         targetCell.classList.add('markO')
                         targetCell.classList.remove('cell')
                         targetCell.classList.remove('cell2')
@@ -754,13 +812,17 @@ const AIplayer = function() {
                         p2played.push(parseInt(targetCell.id));
                         timer.textContent = timeLimit;
                        
-                        AIdefenceActivated = true;
+                        advAI = true;
                        
                         
                         console.log('WinningConditions[i][2]Defence')
                         //worked
 
                         return
+
+                        ///////////////////////////////////////
+
+
                     }
                 }
             }
@@ -776,7 +838,7 @@ const AIplayer = function() {
 
 
 
-        if (AIdefenceActivated === false) {
+        if (advAI === false) {
         let i = Math.floor(Math.random() * cells.length);
         try {
             if (cells[i].textContent === '〇') {
@@ -806,3 +868,99 @@ let AIplayerInt = setInterval(AIplayer, 200)
 
 
 /////////////////////////////////////////////////////////
+
+
+
+///localStorage move1 to move9  eg window.localStorage.getItem('move3');
+let storageCount = 1;
+cells = document.querySelectorAll('.cell');
+for (let cell of cells) {
+    cell.addEventListener('click',function() {
+        
+        window.localStorage.setItem(`move${storageCount}`, cell.id);
+        storageCount = storageCount + 1
+    })
+    
+}
+
+let localStorage = []
+const reload = document.querySelector('.reload')
+reload.addEventListener('click', function() {
+    btnChar.style.visibility = 'hidden';
+    options.style.visibility = 'hidden';
+    startScreen.style.visibility = 'hidden';
+    UIopacity(1)
+
+    players.forEach(target =>
+        target.style.filter = "brightness()");
+    mainContent.style.visibility = 'visible';
+    playerNames[0].id = 'gameStarted';
+
+    p1played = []
+    p2played = []
+    intervalMoveTrackingP1 = []
+    intervalMoveTrackingP2 = []
+    victor = ""
+    advAI = false
+    
+    
+    markXs = document.querySelectorAll('.markX');
+    markOs = document.querySelectorAll('.markO');
+    cell2s = document.querySelectorAll(".cell2")
+
+
+    markXs.forEach(target =>
+        target.classList.add('cell'))
+    markXs.forEach(target =>
+        target.classList.remove('markX'))
+    markOs.forEach(target =>
+        target.classList.add('cell'))
+    markOs.forEach(target =>
+        target.classList.remove('markO'))
+    cell2s.forEach(target =>
+        target.classList.remove('cell2'))
+    cells = document.querySelectorAll('.cell')
+    cells.forEach(target =>
+        target.textContent = 'X')
+    
+    congratsBGs.forEach(target => {
+        target.style.visibility = 'hidden';
+    })
+    
+
+
+
+
+
+
+
+    for (let i = 1; i <= 9; i++) {
+        if (window.localStorage.getItem(`move${i}`) != null) {
+            console.log(typeof +window.localStorage.getItem(`move${i}`))
+            localStorage.push(+window.localStorage.getItem(`move${i}`))
+        }
+    }
+    if (localStorage.length % 2 != 0) {
+
+
+    }
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+})
+// countDownInt = setInterval(countDown , 1000);
+    // timeCheckInt = setInterval(timeCheck, 300);
+    // winCheckInt = setInterval(winCheck, 200)
+    // AIplayerInt = setInterval(AIplayer, 200);
