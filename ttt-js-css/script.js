@@ -88,7 +88,7 @@ characters.forEach(target => {
                 charContainer.style.visibility = 'hidden';    
                 mainContent.style.visibility = 'visible';
                 playerNames[0].id = 'gameStarted'
-            }, 800)
+            }, 500)
             
         }
         })
@@ -390,7 +390,7 @@ const rematch = function() {
         target.textContent = "")
     markOs.forEach(target =>
         target.textContent = "");
-
+    timer.textContent = timeLimit;
     congratsBGs.forEach(target => {
         target.style.visibility = 'hidden';
     })
@@ -482,6 +482,8 @@ const UIopacity = function (num) {
     scoreInfo.style.opacity = num;
     players.forEach(target =>
         target.style.opacity = num);
+    playerNames.forEach(target =>
+        target.style.opacity = num);
 }
 
 
@@ -530,6 +532,51 @@ for (let time of times) {
 }
 
 
+//Withdraw game
+const withdraw = document.querySelector('.withdraw')
+withdraw.addEventListener('click', function() {
+    if (playerNames[0].id === 'gameStarted') {
+        mainContent.style.visibility = 'visible';
+
+        markXs = document.querySelectorAll('.markX')
+        markOs = document.querySelectorAll('.markO')
+        let cell2s = document.querySelectorAll('.cell2')
+
+        for (let markX of markXs) {
+            markX.classList.remove('markX')
+            markX.classList.add('cell')
+        }
+        for (let markO of markOs) {
+            markO.classList.remove('markO')
+            markO.classList.add('cell')
+        }
+        for (let cell2 of cell2s) {
+            cell2.classList.remove('cell2')
+        }
+
+        cells = document.querySelectorAll('.cell')
+        cells.forEach(target =>
+            target.textContent = 'X')
+
+
+        
+        congratsText.textContent = 'Withdraw!'
+        players[0].style.filter = "brightness()";
+        players[1].style.filter = "brightness()";
+        UIopacity(1);
+        options.style.visibility = 'hidden';
+        congrats()
+
+    }
+
+
+})
+
+
+
+
+
+
 //Opponent selector
 const opponents = document.querySelectorAll('.opponent');
 for (let opponent of opponents) {
@@ -542,14 +589,14 @@ for (let opponent of opponents) {
         UIopacity(1);
         countDownInt = setInterval(countDown , 1000);
         let opponentType = opponent.textContent;
-        // if (opponentType === 'A.I.' && charContainer.style.visibility === 'visible' && !playerNames[0].textContent.includes('Player')) {
-        //     charContainer.classList.toggle('change');
-        //     charContainer.style.visibility === 'hidden'
-        //     mainContent.style.visibility = 'visible';
-        //     playerNames[0].id = 'gameStarted'
 
 
-        // }
+        if (opponentType === 'A.I.' && charContainer.style.visibility === 'visible' && !playerNames[0].textContent.includes('Player')) {
+            charContainer.classList.toggle('change');
+            charContainer.style.visibility = 'hidden'
+            mainContent.style.visibility = 'visible';
+            playerNames[0].id = 'gameStarted'
+        }
         options.style.visibility = 'hidden';}
         )       
 }
@@ -751,3 +798,11 @@ const AIplayer = function() {
         drawCheck()
 }}
 let AIplayerInt = setInterval(AIplayer, 200)
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////

@@ -376,8 +376,18 @@ ul{
     grid-gap: 10px;
     min-width: 350px;
     min-height: 400px;
+    
 }
 
+.tictactoe {
+    display: grid;
+    background-color: lightgray;
+    grid-gap: 10px;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    grid-column: 1/4;
+    grid-row: 1/4;
+}
 
 .cell {
     background-color: white;
