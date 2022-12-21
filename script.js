@@ -198,6 +198,14 @@ const countDown = function() {
         }
         catch {};
     }
+    setTimeout(() => {
+            winCheck()
+    }, 100);
+    setTimeout(() => {
+        if (opponents[0].getAttribute('class') === 'opponent selected') {
+            AIplayer()
+        }  
+    }, 150);
 }
 
 let countDownInt = setInterval(countDown , 1000);
@@ -214,9 +222,8 @@ const drawCheck = function() {
             congrats()
             victor = playerNames[Math.floor(Math.random()*2)].textContent
             playerNames[0].id = ''
-            clearInterval(timeCheckInt)
-            clearInterval(AIplayerInt)
-            clearInterval(winCheckInt)
+    
+
             
         }},300)
     }
@@ -256,13 +263,21 @@ const tictactoe = function() {
                 empty.classList.toggle('cell2')
             }
             p1played.push(parseInt(cell.id))
+            if (victor === "") {
+                clearInterval(countDownInt)
+                timer.textContent = timeLimit;
+                countDownInt = setInterval(countDown , 1000);
+            }
+
             setTimeout(() => {
-                if (victor === "") {
-                    clearInterval(countDownInt)
-                    timer.textContent = timeLimit;
-                    countDownInt = setInterval(countDown , 1000);
-                }
-            }, 400);
+                winCheck()
+            }, 100);
+            setTimeout(() => {
+
+                if (opponents[0].getAttribute('class') === 'opponent selected') {
+                    AIplayer()      
+                }  
+            }, 150);
         }
         else {
             cell.classList.add('markO')
@@ -274,13 +289,17 @@ const tictactoe = function() {
                 empty.classList.toggle('cell2')
             }
             p2played.push(parseInt(cell.id))
+
+            if (victor === "") {
+                clearInterval(countDownInt)
+                timer.textContent = timeLimit;
+                countDownInt = setInterval(countDown , 1000);
+            }
+
             setTimeout(() => {
-                    if (victor === "") {
-                        clearInterval(countDownInt)
-                        timer.textContent = timeLimit;
-                        countDownInt = setInterval(countDown , 1000);
-                    }
-                }, 400);
+                    winCheck()
+            }, 100);
+
         }
 
         winCheck()
@@ -298,11 +317,6 @@ const tictactoe = function() {
 
 
 //A random move is made when time is up
-const timeCheck = function() {
-    
-    
-}
-let timeCheckInt = setInterval(timeCheck, 300);
 
 
 
@@ -356,9 +370,6 @@ const winCheck = function() {
     
                     victor = playerNames[1].textContent
                     playerNames[0].id = ''
-                    clearInterval(timeCheckInt)
-                    clearInterval(AIplayerInt)
-                    clearInterval(winCheckInt)              
                 }
             }      
             if (intervalMoveTrackingP2.includes(j)) {
@@ -377,21 +388,15 @@ const winCheck = function() {
                     congrats()
                     
                     victor = playerNames[0].textContent
-                    playerNames[0].id = ''
-                    clearInterval(timeCheckInt)
-                    clearInterval(AIplayerInt)
-                    clearInterval(winCheckInt)
+                    playerNames[0].id = ''  
                 }
             }
         }
     }
-
-    clearInterval(winCheckInt)
-
 }
 
 
-let winCheckInt = setInterval(winCheck, 300)
+
 
 
 //Rematch
@@ -468,9 +473,6 @@ const rematch = function() {
         mainContent.style.visibility = 'visible';
         playerNames[0].id = 'gameStarted';
         countDownInt = setInterval(countDown , 1000);
-        timeCheckInt = setInterval(timeCheck, 300);
-        winCheckInt = setInterval(winCheck, 200)
-        AIplayerInt = setInterval(AIplayer, 200);
         advAI = false;
         intervalMoveTrackingP2 = []
         intervalMoveTrackingP1 = []
@@ -619,7 +621,15 @@ for (let opponent of opponents) {
             mainContent.style.visibility = 'visible';
             playerNames[0].id = 'gameStarted'
         }
-        options.style.visibility = 'hidden';}
+        options.style.visibility = 'hidden';
+
+        if (opponents[0].getAttribute('class') === 'opponent selected') {
+            players[1].src = "./images/terminator.jpeg";
+            playerNames[1].textContent = 'The Terminator'
+            players[1].style.filter = "brightness()";
+        }
+    
+    }
         )       
 }
 
@@ -627,7 +637,6 @@ for (let opponent of opponents) {
 //A.I.
 let advAI = false;
 let targetCell = "";
-let AIattack = true
 const AImove = function(target, msg) {
     try {
             target.classList.add('markO')
@@ -643,14 +652,14 @@ const AImove = function(target, msg) {
     console.log(msg)
 }
 const AIplayer = function() {
-    if (opponents[0].getAttribute('class') === 'opponent selected') {
-        players[1].src = "./images/terminator.jpeg";
-        playerNames[1].textContent = 'The Terminator'
-        players[1].style.filter = "brightness()";
+    if (opponents[1].getAttribute('class') === 'opponent selected') {
+        return
+    }
+    
 
 
 
-        cells = document.querySelectorAll('.cell');
+    cells = document.querySelectorAll('.cell');
 
 
 
@@ -658,7 +667,7 @@ const AIplayer = function() {
         try {
         if (cells[0].textContent === '〇') {
             advAI = false
-            AIattack = true
+  
         
         for (let i = 0; i < cons2Win.length; i++) {
             checkP1 = "";
@@ -823,8 +832,8 @@ const AIplayer = function() {
         }
        
         
-}}
-let AIplayerInt = setInterval(AIplayer, 200)
+}
+
 
 
 
@@ -926,6 +935,5 @@ reload.addEventListener('click', function() {
 
 })
 // countDownInt = setInterval(countDown , 1000);
-    // timeCheckInt = setInterval(timeCheck, 300);
-    // winCheckInt = setInterval(winCheck, 200)
-    // AIplayerInt = setInterval(AIplayer, 200);
+
+    
