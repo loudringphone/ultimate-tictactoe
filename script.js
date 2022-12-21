@@ -69,6 +69,7 @@ characters.forEach(target => {
         player.src = target.currentSrc;
         player.style.filter = "brightness()";
         playerName.textContent = target.getAttribute('alt');
+        window.localStorage.setItem(`storedP1name`, playerNames[0].textContent);
         
         for (let character of characters) {
             if (player === players[0] && character.getAttribute('alt') === target.getAttribute('alt') ) {
@@ -86,6 +87,7 @@ characters.forEach(target => {
         player = players[1];
         playerName = playerNames[1]
         if (!playerName.textContent.includes('Player')) {
+            window.localStorage.setItem(`storedP2name`, playerNames[1].textContent);
             setTimeout(function() {
             charContainer.classList.toggle('change');
             
@@ -180,6 +182,7 @@ const countDown = function() {
                     empty.classList.toggle('cell2');
                 }
             p1played.push(parseInt(cells[i].id));
+            window.localStorage.setItem(`storedXs`, p1played);
             } else {
                 cells[i].classList.add('markO')
                 cells[i].classList.remove('cell');
@@ -190,6 +193,7 @@ const countDown = function() {
                     empty.classList.toggle('cell2');
                 }
                 p2played.push(parseInt(cells[i].id));
+                window.localStorage.setItem(`storedOs`, p2played);
         
            
             }
@@ -197,15 +201,16 @@ const countDown = function() {
             drawCheck()
         }
         catch {};
-    }
-    setTimeout(() => {
-            winCheck()
-    }, 100);
-    setTimeout(() => {
         if (opponents[0].getAttribute('class') === 'opponent selected') {
-            AIplayer()
-        }  
-    }, 150);
+            if (victor === "") {
+                setTimeout(() => {
+                    AIplayer()
+                }, 200); 
+            }
+            
+            
+        }
+    }
 }
 
 let countDownInt = setInterval(countDown , 1000);
@@ -222,8 +227,8 @@ const drawCheck = function() {
             congrats()
             victor = playerNames[Math.floor(Math.random()*2)].textContent
             playerNames[0].id = ''
-    
-
+            clearInterval(timeCheckInt)
+            clearInterval(winCheckInt)
             
         }},300)
     }
@@ -263,21 +268,19 @@ const tictactoe = function() {
                 empty.classList.toggle('cell2')
             }
             p1played.push(parseInt(cell.id))
-            if (victor === "") {
-                clearInterval(countDownInt)
-                timer.textContent = timeLimit;
-                countDownInt = setInterval(countDown , 1000);
-            }
-
+            window.localStorage.setItem(`storedXs`, p1played);
             setTimeout(() => {
-                winCheck()
+                if (victor === "") {
+                    clearInterval(countDownInt)
+                    timer.textContent = timeLimit;
+                    countDownInt = setInterval(countDown , 1000);
+                }
             }, 100);
             setTimeout(() => {
-
-                if (opponents[0].getAttribute('class') === 'opponent selected') {
-                    AIplayer()      
-                }  
-            }, 150);
+                if (victor === "") {
+                    AIplayer()
+                }
+            }, 200);
         }
         else {
             cell.classList.add('markO')
@@ -289,17 +292,14 @@ const tictactoe = function() {
                 empty.classList.toggle('cell2')
             }
             p2played.push(parseInt(cell.id))
-
-            if (victor === "") {
-                clearInterval(countDownInt)
-                timer.textContent = timeLimit;
-                countDownInt = setInterval(countDown , 1000);
-            }
-
+            window.localStorage.setItem(`storedOs`, p2played);
             setTimeout(() => {
-                    winCheck()
-            }, 100);
-
+                    if (victor === "") {
+                        clearInterval(countDownInt)
+                        timer.textContent = timeLimit;
+                        countDownInt = setInterval(countDown , 1000);
+                    }
+                }, 400);
         }
 
         winCheck()
@@ -317,6 +317,11 @@ const tictactoe = function() {
 
 
 //A random move is made when time is up
+const timeCheck = function() {
+    
+    
+}
+let timeCheckInt = setInterval(timeCheck, 300);
 
 
 
@@ -365,11 +370,15 @@ const winCheck = function() {
                     });
                     victor = playerNames[1];
                     congratsText.textContent = winningText(playerNames[1].textContent)
+                    scores[1].textContent = `Wins: ${parseInt(scores[1].textContent.split(" ")[1]) + 1}`
+                    window.localStorage.setItem(`storedP2scores`, parseInt(scores[1].textContent.split(" ")[1]));
                     players[0].style.filter = "grayscale(100%)";
                     congrats()
     
                     victor = playerNames[1].textContent
                     playerNames[0].id = ''
+                    clearInterval(timeCheckInt)
+                    clearInterval(winCheckInt)              
                 }
             }      
             if (intervalMoveTrackingP2.includes(j)) {
@@ -384,19 +393,25 @@ const winCheck = function() {
                     });
                     congratsText.textContent = winningText(playerNames[0].textContent)
                     scores[0].textContent = `Wins: ${parseInt(scores[0].textContent.split(" ")[1]) + 1}`
+                    window.localStorage.setItem(`storedP1scores`, parseInt(scores[0].textContent.split(" ")[1]));
                     players[1].style.filter = "grayscale(100%)";
                     congrats()
                     
                     victor = playerNames[0].textContent
-                    playerNames[0].id = ''  
+                    playerNames[0].id = ''
+                    clearInterval(timeCheckInt)
+                    clearInterval(winCheckInt)
                 }
             }
         }
     }
+
+    clearInterval(winCheckInt)
+
 }
 
 
-
+let winCheckInt = setInterval(winCheck, 300)
 
 
 //Rematch
@@ -473,9 +488,16 @@ const rematch = function() {
         mainContent.style.visibility = 'visible';
         playerNames[0].id = 'gameStarted';
         countDownInt = setInterval(countDown , 1000);
+        timeCheckInt = setInterval(timeCheck, 300);
+        winCheckInt = setInterval(winCheck, 200)
         advAI = false;
         intervalMoveTrackingP2 = []
         intervalMoveTrackingP1 = []
+        if (opponents[0].getAttribute('class') === 'opponent selected') {
+            setTimeout(() => {
+                AIplayer()
+            }, 200); 
+        }
     }, 1000);
 }
 
@@ -626,8 +648,28 @@ for (let opponent of opponents) {
         if (opponents[0].getAttribute('class') === 'opponent selected') {
             players[1].src = "./images/terminator.jpeg";
             playerNames[1].textContent = 'The Terminator'
+            window.localStorage.setItem(`storedP2name`, playerNames[1].textContent);
             players[1].style.filter = "brightness()";
+
+
+            if (playerNames[0].id === 'gameStarted' && victor === "") {
+                setTimeout(()=> {
+                    AIplayer()
+                },150)
+            }
+            
+
+
+
+
         }
+
+        
+
+        
+    
+    
+
     
     }
         )       
@@ -646,20 +688,20 @@ const AImove = function(target, msg) {
             winCheck()
             drawCheck()
             p2played.push(parseInt(target.id));
+            window.localStorage.setItem(`storedOs`, p2played);
             
         } catch {}
     timer.textContent = timeLimit;
     console.log(msg)
 }
 const AIplayer = function() {
-    if (opponents[1].getAttribute('class') === 'opponent selected') {
-        return
-    }
-    
+        if (opponents[1].getAttribute('class') === 'opponent selected') {
+            return
+        }
 
 
 
-    cells = document.querySelectorAll('.cell');
+        cells = document.querySelectorAll('.cell');
 
 
 
@@ -845,17 +887,12 @@ const AIplayer = function() {
 
 
 
-///localStorage move1 to move9  eg window.localStorage.getItem('move3');
-let storageCount = 1;
-cells = document.querySelectorAll('.cell');
-for (let cell of cells) {
-    cell.addEventListener('click',function() {
-        
-        window.localStorage.setItem(`move${storageCount}`, cell.id);
-        storageCount = storageCount + 1
-    })
-    
-}
+///localStorage move1 to move9  eg window.localStorage.getItem('storedOs');
+
+
+   
+
+
 
 let localStorage = []
 const reload = document.querySelector('.reload')
@@ -876,7 +913,7 @@ reload.addEventListener('click', function() {
     intervalMoveTrackingP2 = []
     victor = ""
     advAI = false
-    
+    timer.textContent = timeLimit
     
     markXs = document.querySelectorAll('.markX');
     markOs = document.querySelectorAll('.markO');
@@ -902,22 +939,73 @@ reload.addEventListener('click', function() {
     })
     
 
+    
 
+    let storedP1name = window.localStorage.getItem(`storedP1name`)
+    playerNames[0].textContent = storedP1name
 
-
-
-
-
-    for (let i = 1; i <= 9; i++) {
-        if (window.localStorage.getItem(`move${i}`) != null) {
-            console.log(typeof +window.localStorage.getItem(`move${i}`))
-            localStorage.push(+window.localStorage.getItem(`move${i}`))
+    for (let i of characters) {
+        if (i.alt === storedP1name) {
+            players[0].src = i.src
         }
     }
-    if (localStorage.length % 2 != 0) {
+
+
+
+
+
+    let storedP2name = window.localStorage.getItem(`storedP2name`)
+    playerNames[1].textContent = storedP2name
+
+    for (let i of characters) {
+        if (i.alt === storedP2name) {
+            players[1].src = i.src
+        }
+    }
+     
+    let storedP1scores = window.localStorage.getItem('storedP1scores')
+    scores[0].textContent = `Wins: ${parseInt(storedP1scores)}`
+
+    let storedP2scores = window.localStorage.getItem('storedP2scores')
+    scores[1].textContent = `Wins: ${parseInt(storedP2scores)}`
+  
+    let arrXs = window.localStorage.getItem('storedXs').split(',');
+    let arrOs = window.localStorage.getItem('storedOs').split(',');
+    cells = document.querySelectorAll('.cell');
+    for (let i of arrXs) {
+        cells[parseInt(i)].textContent = 'X';
+        cells[parseInt(i)].classList.add('markX');
+        cells[parseInt(i)].classList.remove('cell');
+    }
+    for (let i of arrOs) {
+        cells[parseInt(i)].textContent = '〇'
+        cells[parseInt(i)].classList.add('markO');
+        cells[parseInt(i)].classList.remove('cell');
+    }
+    if (arrOs.length < arrXs.length) {
+        cells = document.querySelectorAll('.cell');
+        cells.forEach(target =>
+            target.classList.toggle('cell2'));
+        cells.forEach(target =>
+            target.textContent = '〇');
+    
+    if (opponents[0].getAttribute('class') === 'opponent selected') {
+        setTimeout(() => {
+            AIplayer() 
+        }, 250);
+        
+    }
+
+
 
 
     }
+
+        
+       
+
+    
+    
 
 
 
@@ -935,5 +1023,5 @@ reload.addEventListener('click', function() {
 
 })
 // countDownInt = setInterval(countDown , 1000);
-
-    
+    // timeCheckInt = setInterval(timeCheck, 300);
+    // winCheckInt = setInterval(winCheck, 200)

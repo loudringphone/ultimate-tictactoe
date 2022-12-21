@@ -272,11 +272,14 @@ const countDown = function() {
             ultiWinCheck()
         }, 100);
         
-        setTimeout(() => {
-            if (opponents[0].getAttribute('class') === 'opponent selected') {
+        
+        if (opponents[0].getAttribute('class') === 'opponent selected')
+            {setTimeout(() => {
+                if (playerNames[0].id === 'gameStarted') {
                 AIplayer()
-            }
-        }, 150);
+                }
+            }, 150);
+        };
 
         
 
@@ -312,7 +315,7 @@ const drawCheck = function() {
 
 
     cells = document.querySelectorAll('.cell');
-    if (cells.length === 0) {
+   
         setTimeout(function() {if (cells.length === 0 && victor!= playerNames[0].textContent && victor != playerNames[1].textContent) {
             congratsText.textContent = 'Draw!'
             players[0].style.filter = "grayscale(100%)";
@@ -323,8 +326,8 @@ const drawCheck = function() {
             
 
             
-        }},300)
-    }
+        }},200)
+    
 }
 
 
@@ -421,15 +424,24 @@ const rematch = function() {
         }
 
         lastMove = document.querySelector('#lastMove');
-        lastMove.id = ""
+        if (lastMove != null) {
+            lastMove.id = ""
+        }
+       
         victor = "";
         mainContent.style.visibility = 'visible';
         playerNames[0].id = 'gameStarted';
 
         clearInterval(countDownInt)
      
-
-
+        if (opponents[0].getAttribute('class') === 'opponent selected')
+            {setTimeout(() => {
+                if (playerNames[0].id === 'gameStarted') {
+                AIplayer()
+                }
+            }, 150);
+        };
+        
 
 
         countDownInt = setInterval(countDown , 1000);
