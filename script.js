@@ -950,10 +950,6 @@ reload.addEventListener('click', function() {
         }
     }
 
-
-
-
-
     let storedP2name = window.localStorage.getItem(`storedP2name`)
     playerNames[1].textContent = storedP2name
 
@@ -963,11 +959,13 @@ reload.addEventListener('click', function() {
         }
     }
      
-    let storedP1scores = window.localStorage.getItem('storedP1scores')
-    scores[0].textContent = `Wins: ${parseInt(storedP1scores)}`
+    let storedP1scores = window.localStorage.getItem('storedP1scores');
+    if (storedP1scores === null) {storedP1scores = 0};
+    scores[0].textContent = `Wins: ${parseInt(storedP1scores)}`;
 
-    let storedP2scores = window.localStorage.getItem('storedP2scores')
-    scores[1].textContent = `Wins: ${parseInt(storedP2scores)}`
+    let storedP2scores = window.localStorage.getItem('storedP2scores');
+    if (storedP2scores === null) {storedP2scores = 0};
+    scores[1].textContent = `Wins: ${parseInt(storedP2scores)}`;
   
     let arrXs = window.localStorage.getItem('storedXs').split(',');
     let arrOs = window.localStorage.getItem('storedOs').split(',');
