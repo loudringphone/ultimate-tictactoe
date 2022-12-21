@@ -11,6 +11,9 @@ const mainContent = document.querySelector('.main-content');
 const games = document.querySelectorAll('.game')
 const scores = document.querySelectorAll('.score')
 
+if (document.querySelector('.time.selected').textContent > 0) {
+    timer.textContent = document.querySelector('.time.selected').textContent
+}
 
 //Opponent selector
 const opponents = document.querySelectorAll('.opponent');
@@ -176,6 +179,87 @@ const winningText = function(winner) {
 const countDown = function() {
     if (playerNames[0].id === 'gameStarted') {
         timer.textContent = parseInt(timer.textContent) - 1}
+        if (parseInt(timer.textContent) < 0 && victor != playerNames[0].textContent && victor != playerNames[1].textContent) {
+            timer.textContent = timeLimit;
+            cells = document.querySelectorAll('.cell');
+            let i = Math.floor(Math.random() * cells.length);
+            try {
+                lastMove = document.querySelector('#lastMove');
+                try {if (lastMove.id != null) {
+                    lastMove.id = ''
+                }}catch{}
+    
+                cells[i].id = 'lastMove'
+    
+    
+    
+    
+                if (cells[i].textContent === 'X') {
+                    cells[i].classList.add('markX');
+                    cells[i].classList.remove('cell');
+                    empties = document.querySelectorAll('.cellNA');
+                    for (let empty of empties) {
+                        empty.classList.remove('cellNA');
+                        empty.classList.add('cell');     
+                    }
+                    empties = document.querySelectorAll('.cell');
+                    for (let empty of empties) {
+                        empty.textContent = "〇";
+                        empty.classList.toggle('cell2');
+                    }
+                    
+                p1played.push(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])))
+                let gridNext = String(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])) + 1).substring(1)
+    
+                cells = document.querySelectorAll('.cell')
+                for (let cell of cells) {
+                        
+                    let gridIndex = String(Array.from(document.querySelectorAll('div')).indexOf(cell)).charAt(0)
+                    if (gridIndex != gridNext) {
+                        cell.classList.add('cellNA')
+                        cell.classList.remove('cell')
+                        cell.classList.toggle('cell2')
+                    }
+    
+                }
+                
+    
+    
+    
+                } else {
+                    cells[i].classList.add('markO')
+                    cells[i].classList.remove('cell');
+                    cells[i].classList.remove('cell2');
+                    empties = document.querySelectorAll('.cell');
+                    for (let empty of empties) {
+                        empty.textContent = "X";
+                        empty.classList.toggle('cell2');
+                    }
+                    empties = document.querySelectorAll('.cellNA');
+                    for (let empty of empties) {
+                        empty.classList.remove('cellNA');
+                        empty.textContent = "X";
+                        empty.classList.add('cell');
+                    }
+                    p2played.push(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])))
+                    let gridNext = String(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])) + 1).substring(1)
+    
+                    cells = document.querySelectorAll('.cell')
+                    for (let cell of cells) {
+                        
+                        let gridIndex = String(Array.from(document.querySelectorAll('div')).indexOf(cell)).charAt(0)
+                        if (gridIndex != gridNext) {
+                            cell.classList.add('cellNA')
+                            cell.classList.remove('cell')
+                        }
+                    }    
+                }
+            }
+            catch {};
+            timer.textContent = timeLimit;
+            drawCheck()
+            
+        }
 }
 
 let countDownInt = setInterval(countDown , 1000);
@@ -213,7 +297,6 @@ const drawCheck = function() {
             congrats()
             victor = playerNames[Math.floor(Math.random()*2)].textContent
             clearInterval(countDownInt)
-            clearInterval(timeCheckInt)
             clearInterval(ultiWinCheckInt)
             clearInterval(AIplayerInt)
             
@@ -321,14 +404,12 @@ const rematch = function() {
         playerNames[0].id = 'gameStarted';
 
         clearInterval(countDownInt)
-        clearInterval(timeCheckInt)
         clearInterval(ultiWinCheckInt)
         clearInterval(AIplayerInt)
 
 
 
         countDownInt = setInterval(countDown , 1000);
-        timeCheckInt = setInterval(timeCheck, 300);
         ultiWinCheckInt = setInterval(ultiWinCheck, 200)
         AIplayerInt = setInterval(AIplayer, 200);
         AdvAI = false;
@@ -607,7 +688,6 @@ const ultiWinCheck = function() {
                     
                     victor = playerNames[0].textContent
                     clearInterval(countDownInt)
-                    clearInterval(timeCheckInt)
                     clearInterval(ultiWinCheckInt)
                     clearInterval(AIplayerInt)
                     
@@ -624,7 +704,7 @@ const ultiWinCheck = function() {
                     
                     victor = playerNames[1].textContent
                     clearInterval(countDownInt)
-                    clearInterval(timeCheckInt)
+                
                     clearInterval(ultiWinCheckInt)
                     clearInterval(AIplayerInt)
                 }
@@ -743,93 +823,6 @@ ultimateTTT()
 
 
 //A random move is made when time is up
-const timeCheck = function() {
-    if (parseInt(timer.textContent) < 0 && victor != playerNames[0].textContent && victor != playerNames[1].textContent) {
-        timer.textContent = timeLimit;
-        cells = document.querySelectorAll('.cell');
-        let i = Math.floor(Math.random() * cells.length);
-        try {
-            lastMove = document.querySelector('#lastMove');
-            try {if (lastMove.id != null) {
-                lastMove.id = ''
-            }}catch{}
-
-            cells[i].id = 'lastMove'
-
-
-
-
-            if (cells[i].textContent === 'X') {
-                cells[i].classList.add('markX');
-                cells[i].classList.remove('cell');
-                empties = document.querySelectorAll('.cellNA');
-                for (let empty of empties) {
-                    empty.classList.remove('cellNA');
-                    empty.classList.add('cell');     
-                }
-                empties = document.querySelectorAll('.cell');
-                for (let empty of empties) {
-                    empty.textContent = "〇";
-                    empty.classList.toggle('cell2');
-                }
-                
-            p1played.push(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])))
-            let gridNext = String(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])) + 1).substring(1)
-
-            cells = document.querySelectorAll('.cell')
-            for (let cell of cells) {
-                    
-                let gridIndex = String(Array.from(document.querySelectorAll('div')).indexOf(cell)).charAt(0)
-                if (gridIndex != gridNext) {
-                    cell.classList.add('cellNA')
-                    cell.classList.remove('cell')
-                    cell.classList.toggle('cell2')
-                }
-
-            }
-            
-
-
-
-            } else {
-                cells[i].classList.add('markO')
-                cells[i].classList.remove('cell');
-                cells[i].classList.remove('cell2');
-                empties = document.querySelectorAll('.cell');
-                for (let empty of empties) {
-                    empty.textContent = "X";
-                    empty.classList.toggle('cell2');
-                }
-                empties = document.querySelectorAll('.cellNA');
-                for (let empty of empties) {
-                    empty.classList.remove('cellNA');
-                    empty.textContent = "X";
-                    empty.classList.add('cell');
-                }
-                p2played.push(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])))
-                let gridNext = String(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])) + 1).substring(1)
-
-                cells = document.querySelectorAll('.cell')
-                for (let cell of cells) {
-                    
-                    let gridIndex = String(Array.from(document.querySelectorAll('div')).indexOf(cell)).charAt(0)
-                    if (gridIndex != gridNext) {
-                        cell.classList.add('cellNA')
-                        cell.classList.remove('cell')
-                    }
-                }    
-            }
-        }
-        catch {};
-        drawCheck()
-        clearInterval(countDownInt)
-        timer.textContent = timeLimit;
-        countDownInt = setInterval(countDown , 1000);
-    }
-}
-
-
-let timeCheckInt = setInterval(timeCheck, 300);
 
 
 
