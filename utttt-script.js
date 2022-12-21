@@ -10,6 +10,13 @@ const scoreInfo = document.querySelector('.scoreInfo');
 const mainContent = document.querySelector('.main-content');
 const games = document.querySelectorAll('.game')
 const scores = document.querySelectorAll('.score')
+const characters = document.querySelectorAll('.character');
+
+for (let player of players) {
+    let i = Math.floor(Math.random() * characters.length);
+            player.src = characters[i].src;
+}
+
 
 if (document.querySelector('.time.selected').textContent > 0) {
     timer.textContent = document.querySelector('.time.selected').textContent
@@ -37,12 +44,12 @@ for (let opponent of opponents) {
         }
         options.style.visibility = 'hidden';
 
-        if (opponents[0].getAttribute('class') === 'opponent selected') {
-            players[1].src = "./images/terminator.jpeg";
-            playerNames[1].textContent = 'The Terminator'
-            players[1].style.filter = "brightness()";
-        }
-    
+        let num;
+        do {
+                num = Math.floor(Math.random() * characters.length);
+                players[1].src = characters[num].src;
+            playerNames[1].textContent = characters[num].alt
+        } while(playerNames[1].textContent === playerNames[0].textContent);
     }
         )       
 }
@@ -52,7 +59,6 @@ const congratsBGs = document.querySelectorAll('.congratsBG')
 
 
 //Character selector
-let characters = document.querySelectorAll('.character');
 const preview = document.querySelector('.preview');
 const btnClose = document.querySelector('.btnClose');
 const btnChar = document.querySelector('.btnChar');
@@ -73,53 +79,57 @@ btnChar.addEventListener('click', function() {
 })
 
 const CharSel = function(){
-characters.forEach(target => {
-    target.addEventListener('mouseover', function() {
-        if (playerName.textContent.includes('Player')) {
-            player.src = target.currentSrc;
-            preview.style.backgroundImage = `url(${target.currentSrc})`;
-            preview.style.filter = "brightness()";
-            player.style.filter = "brightness()";
-            }
+    characters.forEach(target => {
+        target.addEventListener('mouseover', function() {
+            if (playerName.textContent.includes('Player')) {
+                player.src = target.currentSrc;
+                preview.style.backgroundImage = `url(${target.currentSrc})`;
+                preview.style.filter = "brightness()";
+                player.style.filter = "brightness()";
+                }
+            })
+        target.addEventListener('mouseout', function() {
+            if (playerName.textContent.includes('Player')) {
+                preview.style.filter = "grayscale(100%)";
+                player.style.filter = "grayscale(100%)";
+            }})
+        target.addEventListener('click', function() {
+           
+                player.src = target.currentSrc;
+                player.style.filter = "brightness()";
+                playerName.textContent = target.getAttribute('alt');
+                window.localStorage.setItem(`storedP1name`, playerNames[0].textContent);
+                target.classList.toggle('selected')
+                
+                for (let character of characters) {
+                    if (player === players[0] && character.getAttribute('alt') === target.getAttribute('alt') ) {
+                        character.style.filter = "brightness()";
+                        character.style.outline = "solid 5px blue";
+                        character.style.outlineOffset = '-5px'}
+                    else if (player === players[1] && character.getAttribute('alt') === target.getAttribute('alt') ) {
+                        character.style.filter = "brightness()";
+                        character.style.outline = "solid 5px red";
+                        character.style.outlineOffset = '-5px';
+                    }
+                }
+    
+    
+                player = players[1];
+                playerName = playerNames[1]
+                if (!playerName.textContent.includes('Player')) {
+                    window.localStorage.setItem(`storedP2name`, playerNames[1].textContent);
+                    setTimeout(function() {
+                    charContainer.classList.toggle('change');
+                    
+                        charContainer.style.visibility = 'hidden';    
+                        mainContent.style.visibility = 'visible';
+                        playerNames[0].id = 'gameStarted'
+                        return
+                    }, 500)   
+                }   
+            })
         })
-    target.addEventListener('mouseout', function() {
-        if (playerName.textContent.includes('Player')) {
-            preview.style.filter = "grayscale(100%)";
-            player.style.filter = "grayscale(100%)";
-        }})
-    target.addEventListener('click', function() {
-        player.src = target.currentSrc;
-        player.style.filter = "brightness()";
-        playerName.textContent = target.getAttribute('alt');
-        
-        for (let character of characters) {
-            if (player === players[0] && character.getAttribute('alt') === target.getAttribute('alt') ) {
-                character.style.filter = "brightness()";
-                character.style.outline = "solid 5px blue";
-                character.style.outlineOffset = '-5px'}
-            else if (player === players[1] && character.getAttribute('alt') === target.getAttribute('alt') ) {
-                character.style.filter = "brightness()";
-                character.style.outline = "solid 5px red";
-                character.style.outlineOffset = '-5px';
-            }
-        }
-
-
-        player = players[1];
-        playerName = playerNames[1]
-        if (!playerName.textContent.includes('Player')) {
-            setTimeout(function() {
-            charContainer.classList.toggle('change');
-            
-                charContainer.style.visibility = 'hidden';    
-                mainContent.style.visibility = 'visible';
-                playerNames[0].id = 'gameStarted'
-            }, 500)
-            
-        }
-        })
-    })
-}
+    }
 
 
 
@@ -273,7 +283,7 @@ const countDown = function() {
         }, 100);
         
         
-        if (opponents[0].getAttribute('class') === 'opponent selected')
+        if (opponents[1].getAttribute('class') === 'opponent selected')
             {setTimeout(() => {
                 if (playerNames[0].id === 'gameStarted') {
                 AIplayer()
@@ -434,7 +444,7 @@ const rematch = function() {
 
         clearInterval(countDownInt)
      
-        if (opponents[0].getAttribute('class') === 'opponent selected')
+        if (opponents[1].getAttribute('class') === 'opponent selected')
             {setTimeout(() => {
                 if (playerNames[0].id === 'gameStarted') {
                 AIplayer()
@@ -805,7 +815,7 @@ const ultimateTTT = function() {
                     clearInterval(countDownInt)
                     timer.textContent = timeLimit;
                     countDownInt = setInterval(countDown , 1000);
-                    if (opponents[0].getAttribute('class') === 'opponent selected') {
+                    if (opponents[1].getAttribute('class') === 'opponent selected') {
                         AIplayer()
                     }
                 }, 150);
@@ -865,7 +875,7 @@ ultimateTTT()
 //Basic A.I.
 let AdvAI = false
 const AIplayer = function() {
-    if (opponents[1].getAttribute('class') === 'opponent selected') {
+    if (opponents[0].getAttribute('class') === 'opponent selected') {
         return
     }  
     cells = document.querySelectorAll('.cell');

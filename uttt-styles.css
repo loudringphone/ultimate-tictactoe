@@ -212,7 +212,9 @@ span:active {
      filter: brightness();
 }
 
-
+.character.selected {
+    pointer-events: none;
+}
 
 
 

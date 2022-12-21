@@ -132,7 +132,9 @@ span:active {
   }
 
 
-
+.character.selected {
+    pointer-events: none;
+}
 
 
 
@@ -273,6 +275,7 @@ header {
     color: black;
     background-color: darkgray;
     font-size: 4vh;
+    width: 45vw;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);

@@ -1,12 +1,23 @@
-let  cells = document.querySelectorAll('.cell');
+let cells = document.querySelectorAll('.cell');
 let markXs = document.querySelectorAll('.markX');
 let markOs = document.querySelectorAll('.markO');
-let cell2 = document.querySelectorAll(".cell2")
+let cell2s = document.querySelectorAll(".cell2")
 const body = document.querySelector('body');
 let timer = document.querySelector('.timer');
 const players = document.querySelectorAll('.player');
 const scoreInfo = document.querySelector('.scoreInfo');
 const mainContent = document.querySelector('.main-content');
+const characters = document.querySelectorAll('.character');
+
+for (let player of players) {
+    let i = Math.floor(Math.random() * characters.length);
+            player.src = characters[i].src;
+}
+
+
+
+
+
 
 if (document.querySelector('.time.selected').textContent > 0) {
     timer.textContent = document.querySelector('.time.selected').textContent
@@ -29,7 +40,6 @@ const congratsBGs = document.querySelectorAll('.congratsBG')
 
 
 //Character selector
-let characters = document.querySelectorAll('.character');
 const preview = document.querySelector('.preview');
 const btnClose = document.querySelector('.btnClose');
 const btnChar = document.querySelector('.btnChar');
@@ -66,37 +76,39 @@ characters.forEach(target => {
             player.style.filter = "grayscale(100%)";
         }})
     target.addEventListener('click', function() {
-        player.src = target.currentSrc;
-        player.style.filter = "brightness()";
-        playerName.textContent = target.getAttribute('alt');
-        window.localStorage.setItem(`storedP1name`, playerNames[0].textContent);
-        
-        for (let character of characters) {
-            if (player === players[0] && character.getAttribute('alt') === target.getAttribute('alt') ) {
-                character.style.filter = "brightness()";
-                character.style.outline = "solid 5px blue";
-                character.style.outlineOffset = '-5px'}
-            else if (player === players[1] && character.getAttribute('alt') === target.getAttribute('alt') ) {
-                character.style.filter = "brightness()";
-                character.style.outline = "solid 5px red";
-                character.style.outlineOffset = '-5px';
+       
+            player.src = target.currentSrc;
+            player.style.filter = "brightness()";
+            playerName.textContent = target.getAttribute('alt');
+            window.localStorage.setItem(`storedP1name`, playerNames[0].textContent);
+            target.classList.toggle('selected')
+            
+            for (let character of characters) {
+                if (player === players[0] && character.getAttribute('alt') === target.getAttribute('alt') ) {
+                    character.style.filter = "brightness()";
+                    character.style.outline = "solid 5px blue";
+                    character.style.outlineOffset = '-5px'}
+                else if (player === players[1] && character.getAttribute('alt') === target.getAttribute('alt') ) {
+                    character.style.filter = "brightness()";
+                    character.style.outline = "solid 5px red";
+                    character.style.outlineOffset = '-5px';
+                }
             }
-        }
 
 
-        player = players[1];
-        playerName = playerNames[1]
-        if (!playerName.textContent.includes('Player')) {
-            window.localStorage.setItem(`storedP2name`, playerNames[1].textContent);
-            setTimeout(function() {
-            charContainer.classList.toggle('change');
-            
-                charContainer.style.visibility = 'hidden';    
-                mainContent.style.visibility = 'visible';
-                playerNames[0].id = 'gameStarted'
-            }, 500)
-            
-        }
+            player = players[1];
+            playerName = playerNames[1]
+            if (!playerName.textContent.includes('Player')) {
+                window.localStorage.setItem(`storedP2name`, playerNames[1].textContent);
+                setTimeout(function() {
+                charContainer.classList.toggle('change');
+                
+                    charContainer.style.visibility = 'hidden';    
+                    mainContent.style.visibility = 'visible';
+                    playerNames[0].id = 'gameStarted'
+                    return
+                }, 500)   
+            }   
         })
     })
 }
@@ -201,7 +213,7 @@ const countDown = function() {
             drawCheck()
         }
         catch {};
-        if (opponents[0].getAttribute('class') === 'opponent selected') {
+        if (opponents[0].getAttribute('class') != 'opponent selected') {
             if (victor === "") {
                 setTimeout(() => {
                     AIplayer()
@@ -224,6 +236,8 @@ const drawCheck = function() {
             congratsText.textContent = 'Draw!'
             players[0].style.filter = "grayscale(100%)";
             players[1].style.filter = "grayscale(100%)";
+            window.localStorage.setItem(`storedP1scores`, parseInt(scores[0].textContent.split(" ")[1]));
+            window.localStorage.setItem(`storedP2scores`, parseInt(scores[1].textContent.split(" ")[1]));
             congrats()
             victor = playerNames[Math.floor(Math.random()*2)].textContent
             playerNames[0].id = ''
@@ -331,35 +345,20 @@ let timeCheckInt = setInterval(timeCheck, 300);
 // p2played
 
 
-let intervalMoveTrackingP1 = []
 let intervalMoveTrackingP2 = []
+let intervalMoveTrackingP1 = []
 
 
 
 const winCheck = function() {
-    try{
-
-    markOs = document.querySelectorAll('.markO');
-    markXs = document.querySelectorAll('.markX');
     
-    for (let i = 0; i < markOs.length; i++) {
-        if (intervalMoveTrackingP1.includes(parseInt(markOs[i].id))) {
-        } else {
-        intervalMoveTrackingP1.push(parseInt(markOs[i].id))
-    }}
-    for (let i = 0; i < markXs.length; i++) {
-        if (intervalMoveTrackingP2.includes(parseInt(markXs[i].id))) {
-        } else {
-        intervalMoveTrackingP2.push(parseInt(markXs[i].id))
-    }}
-    }catch {}
 
     for (let i = 0; i < cons2Win.length; i++) {
         checkP1 = ""
         checkP2 = ""
         for (let j of cons2Win[i]){
             
-            if (intervalMoveTrackingP1.includes(j)) {
+            if (p2played.includes(j)) {
                 checkP2 = checkP2 + 'W'
                 if (checkP2.length === 3) {
                     empties = document.querySelectorAll('.cell');
@@ -371,7 +370,6 @@ const winCheck = function() {
                     victor = playerNames[1];
                     congratsText.textContent = winningText(playerNames[1].textContent)
                     scores[1].textContent = `Wins: ${parseInt(scores[1].textContent.split(" ")[1]) + 1}`
-                    window.localStorage.setItem(`storedP2scores`, parseInt(scores[1].textContent.split(" ")[1]));
                     players[0].style.filter = "grayscale(100%)";
                     congrats()
     
@@ -381,7 +379,7 @@ const winCheck = function() {
                     clearInterval(winCheckInt)              
                 }
             }      
-            if (intervalMoveTrackingP2.includes(j)) {
+            if (p1played.includes(j)) {
                 checkP1 = checkP1 + 'W'
                 if (checkP1.length === 3) {
                     empties = document.querySelectorAll('.cell2');
@@ -393,8 +391,9 @@ const winCheck = function() {
                     });
                     congratsText.textContent = winningText(playerNames[0].textContent)
                     scores[0].textContent = `Wins: ${parseInt(scores[0].textContent.split(" ")[1]) + 1}`
-                    window.localStorage.setItem(`storedP1scores`, parseInt(scores[0].textContent.split(" ")[1]));
                     players[1].style.filter = "grayscale(100%)";
+                    window.localStorage.setItem(`storedP1scores`, parseInt(scores[0].textContent.split(" ")[1]));
+                    window.localStorage.setItem(`storedP2scores`, parseInt(scores[1].textContent.split(" ")[1]));
                     congrats()
                     
                     victor = playerNames[0].textContent
@@ -463,7 +462,11 @@ const rematch = function() {
         checkP2 = "";
         p1played = [];
         p2played = [];
-
+        cell2s = document.querySelectorAll('.cell2')
+        try{
+            cell2s.forEach(target =>
+                target.classList.remove('cell2'))
+        } catch{}
         markXs.forEach(target =>
             target.classList.add('cell'));
         markOs.forEach(target =>
@@ -491,9 +494,9 @@ const rematch = function() {
         timeCheckInt = setInterval(timeCheck, 300);
         winCheckInt = setInterval(winCheck, 200)
         advAI = false;
-        intervalMoveTrackingP2 = []
         intervalMoveTrackingP1 = []
-        if (opponents[0].getAttribute('class') === 'opponent selected') {
+        intervalMoveTrackingP2 = []
+        if (opponents[0].getAttribute('class') != 'opponent selected') {
             setTimeout(() => {
                 AIplayer()
             }, 200); 
@@ -601,8 +604,8 @@ withdraw.addEventListener('click', function() {
             target.textContent = 'X')
         p1played = []
         p2played = []
-        intervalMoveTrackingP1 = []
         intervalMoveTrackingP2 = []
+        intervalMoveTrackingP1 = []
         playerNames[0].id = ''
 
         
@@ -637,18 +640,42 @@ for (let opponent of opponents) {
         let opponentType = opponent.textContent;
 
 
-        if (opponentType === 'A.I.' && charContainer.style.visibility === 'visible' && !playerNames[0].textContent.includes('Player')) {
+        if (opponentType != 'Human' && charContainer.style.visibility === 'visible' && !playerNames[0].textContent.includes('Player')) {
             charContainer.classList.toggle('change');
-            charContainer.style.visibility = 'hidden'
+            charContainer.style.visibility = 'hidden';
             mainContent.style.visibility = 'visible';
-            playerNames[0].id = 'gameStarted'
+            playerNames[0].id = 'gameStarted';
         }
         options.style.visibility = 'hidden';
 
-        if (opponents[0].getAttribute('class') === 'opponent selected') {
+        if (opponents[2].getAttribute('class') === 'opponent selected') {
             players[1].src = "./images/terminator.jpeg";
-            playerNames[1].textContent = 'The Terminator'
+            playerNames[1].textContent = 'The Terminator';
             window.localStorage.setItem(`storedP2name`, playerNames[1].textContent);
+            console.log('Hasta la vista');
+        }
+
+
+        
+
+        if (opponents[1].getAttribute('class') === 'opponent selected') {
+
+            let num;
+            do {
+                    num = Math.floor(Math.random() * characters.length);
+                    players[1].src = characters[num].src;
+                playerNames[1].textContent = characters[num].alt
+            } while(playerNames[1].textContent === playerNames[0].textContent);
+
+            window.localStorage.setItem(`storedP2name`, playerNames[1].textContent);
+        }
+
+
+
+
+
+
+        if (opponents[0].getAttribute('class') != 'opponent selected') {
             players[1].style.filter = "brightness()";
 
 
@@ -684,42 +711,77 @@ const AImove = function(target, msg) {
             target.classList.add('markO')
             target.classList.remove('cell');
             target.classList.remove('cell2');
-           
-            winCheck()
-            drawCheck()
             p2played.push(parseInt(target.id));
             window.localStorage.setItem(`storedOs`, p2played);
-            
+            winCheck()
+            drawCheck()
         } catch {}
     timer.textContent = timeLimit;
     console.log(msg)
 }
 const AIplayer = function() {
-        if (opponents[1].getAttribute('class') === 'opponent selected') {
+        if (opponents[0].getAttribute('class') === 'opponent selected' || cells.length === 0) {
             return
         }
 
-
-
         cells = document.querySelectorAll('.cell');
-
-
-
-        ////better AI on attack and defense//////////////////
-        try {
+        
+        
         if (cells[0].textContent === '〇') {
             advAI = false
-  
+        
+
+        ////Hasta la vista!//////////////////
+        if (opponents[2].getAttribute('class') === 'opponent selected') {
+            if (document.getElementById('4').getAttribute('class') === 'cell cell2'){
+                targetCell = document.getElementById('4')
+                ////////////////////////////////////
+                AImove(targetCell, 'AI taking center')
+                empties = document.querySelectorAll('.cell');
+                for (let empty of empties) {
+                empty.textContent = "X";
+                }
+                for (let empty of empties) {
+                    empty.classList.toggle('cell2');
+                }
+                advAI = true;
+                return
+                ///////////////////////////////////////////////
+
+            }
+
+            if (p1played[0] === 4 && p1played.length === 1) {
+                corner = Math.floor( Math.random() * 10 / 2 ) * 2;
+                targetCell = document.getElementById(String(corner))
+                ////////////////////////////////////
+                AImove(targetCell, 'AI taking corner')
+                empties = document.querySelectorAll('.cell');
+                for (let empty of empties) {
+                empty.textContent = "X";
+                }
+                for (let empty of empties) {
+                    empty.classList.toggle('cell2');
+                }
+                advAI = true;
+                return
+                ///////////////////////////////////////////////
+
+            }
+        }
+
+        
+
+        
+
+
+
+
         
         for (let i = 0; i < cons2Win.length; i++) {
-            checkP1 = "";
             checkP2 = "";
             for (let j = 0; j < cons2Win[i].length; j++){
-                if (intervalMoveTrackingP1.includes(cons2Win[i][j])) {
+                if (p2played.includes(cons2Win[i][j])) {
                     checkP2 = checkP2 + 'W';
-                }
-                if (intervalMoveTrackingP2.includes(cons2Win[i][j])) {
-                    checkP1 = checkP1 + 'W';
                 }
 
 
@@ -731,9 +793,12 @@ const AIplayer = function() {
                         targetCell = document.getElementById(`${cons2Win[i][j-2]}`)
 
                         /////////////////
+                        ////////////////////////////////////
                         AImove(targetCell, 'WinningConditions[i][0]Attack')
                         empties = document.querySelectorAll('.cell');
+                        for (let empty of empties) {
                         empty.textContent = "X";
+                        }
                         for (let empty of empties) {
                             empty.classList.toggle('cell2');
                         }
@@ -756,6 +821,8 @@ const AIplayer = function() {
                         empties = document.querySelectorAll('.cell');
                         for (let empty of empties) {
                             empty.textContent = "X";
+                            }
+                        for (let empty of empties) {
                             empty.classList.toggle('cell2');
                         }
                         advAI = true;
@@ -776,13 +843,29 @@ const AIplayer = function() {
                         empties = document.querySelectorAll('.cell');
                         for (let empty of empties) {
                             empty.textContent = "X";
+                            }
+                        for (let empty of empties) {
                             empty.classList.toggle('cell2');
                         }
                         advAI = true;
                         return
                         ///////////////////////////////////////////////
                     }
-                } else if (checkP1.length === 2 && j === 2) {
+                }
+            }
+        }
+        setTimeout(() => {
+            
+        
+        for (let i = 0; i < cons2Win.length; i++) {
+            checkP1 = "";
+            for (let j = 0; j < cons2Win[i].length; j++){
+                if (p1played.includes(cons2Win[i][j])) {
+                    checkP1 = checkP1 + 'W';
+                }
+                if (checkP1.length === 2 && j === 2) {
+                    
+                    if (checkP1.length === 2 && j === 2) {
                    
                     if (document.getElementById(`${cons2Win[i][j-2]}`).getAttribute('class') === 'cell cell2') {
 
@@ -794,6 +877,8 @@ const AIplayer = function() {
                         empties = document.querySelectorAll('.cell');
                         for (let empty of empties) {
                             empty.textContent = "X";
+                            }
+                        for (let empty of empties) {
                             empty.classList.toggle('cell2');
                         }
                         advAI = true;
@@ -815,6 +900,8 @@ const AIplayer = function() {
                         empties = document.querySelectorAll('.cell');
                         for (let empty of empties) {
                             empty.textContent = "X";
+                            }
+                        for (let empty of empties) {
                             empty.classList.toggle('cell2');
                         }
                         advAI = true;
@@ -836,6 +923,8 @@ const AIplayer = function() {
                         empties = document.querySelectorAll('.cell');
                         for (let empty of empties) {
                             empty.textContent = "X";
+                            }
+                        for (let empty of empties) {
                             empty.classList.toggle('cell2');
                         }
                         advAI = true;
@@ -848,14 +937,14 @@ const AIplayer = function() {
             }
         }
 
-        }} catch {}
+        }}, 100);}
         /////////////////////////
 
 
    
 
-
-        cells = document.querySelectorAll('.cell')
+        setTimeout(() => {
+            cells = document.querySelectorAll('.cell')
         if (cells.length != 0) {    
             if (advAI === false && cells[0].textContent === '〇') {
                 let i = Math.floor(Math.random() * cells.length);
@@ -863,15 +952,21 @@ const AIplayer = function() {
                     empties = document.querySelectorAll('.cell');
                     for (let empty of empties) {
                         empty.textContent = "X";
+                        }
+                    for (let empty of empties) {
                         empty.classList.toggle('cell2');
                     }
                 }
+            }
+        }, 150);
+        
+
+        
                     
                     
                     
                     
                 
-        }
        
         
 }
@@ -909,8 +1004,8 @@ reload.addEventListener('click', function() {
 
     p1played = []
     p2played = []
-    intervalMoveTrackingP1 = []
     intervalMoveTrackingP2 = []
+    intervalMoveTrackingP1 = []
     victor = ""
     advAI = false
     timer.textContent = timeLimit
@@ -941,34 +1036,47 @@ reload.addEventListener('click', function() {
 
     
 
-    let storedP1name = window.localStorage.getItem(`storedP1name`)
-    playerNames[0].textContent = storedP1name
+    let storedP1name = window.localStorage.getItem(`storedP1name`);
+    playerNames[0].textContent = storedP1name;
 
     for (let i of characters) {
         if (i.alt === storedP1name) {
-            players[0].src = i.src
+            players[0].src = i.src;
         }
     }
 
-    let storedP2name = window.localStorage.getItem(`storedP2name`)
-    playerNames[1].textContent = storedP2name
-
-    for (let i of characters) {
-        if (i.alt === storedP2name) {
-            players[1].src = i.src
+    let storedP2name = window.localStorage.getItem(`storedP2name`);
+    playerNames[1].textContent = storedP2name;
+    if (storedP2name === 'The Terminator') {
+        players[1].src = "./images/terminator.jpeg";
+    } else {
+        for (let i of characters) {
+            if (i.alt === storedP2name) {
+                players[1].src = i.src;
+            }
         }
     }
+    
      
     let storedP1scores = window.localStorage.getItem('storedP1scores');
     if (storedP1scores === null) {storedP1scores = 0};
     scores[0].textContent = `Wins: ${parseInt(storedP1scores)}`;
+
+    console.log(storedP1scores)
+
 
     let storedP2scores = window.localStorage.getItem('storedP2scores');
     if (storedP2scores === null) {storedP2scores = 0};
     scores[1].textContent = `Wins: ${parseInt(storedP2scores)}`;
   
     let arrXs = window.localStorage.getItem('storedXs').split(',');
+    for (let i of arrXs) {
+        p1played.push(parseInt(i))
+    }
     let arrOs = window.localStorage.getItem('storedOs').split(',');
+    for (let i of arrOs) {
+        p2played.push(parseInt(i))
+    }
     cells = document.querySelectorAll('.cell');
     for (let i of arrXs) {
         cells[parseInt(i)].textContent = 'X';
@@ -987,12 +1095,12 @@ reload.addEventListener('click', function() {
         cells.forEach(target =>
             target.textContent = '〇');
     
-    if (opponents[0].getAttribute('class') === 'opponent selected') {
-        setTimeout(() => {
-            AIplayer() 
-        }, 250);
+    // if (opponents[0].getAttribute('class') != 'opponent selected') {
+    //     setTimeout(() => {
+    //         AIplayer() 
+    //     }, 250);
         
-    }
+    // }
 
 
 
