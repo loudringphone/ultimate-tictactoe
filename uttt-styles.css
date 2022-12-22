@@ -2,7 +2,8 @@
 body {
     margin: 0px;
     height: 100vh;
-    font-family: Arial, Helvetica, sans-serif; 
+    font-family: 'Raleway', Arial, Helvetica, sans-serif;
+    font-weight: bold;
     background-color: beige;
 }
 
@@ -141,6 +142,7 @@ span:active {
     text-align: center;
     position: relative; 
     text-align: center;
+    font-size: 3vh;
 }
 
 .players > img {
@@ -249,6 +251,7 @@ header {
     justify-content: space-between;
     text-align: center;
     font-size: 3vh;
+    text-decoration: underline;
     
 }
 
@@ -336,13 +339,13 @@ ul{
 .sidebar1 {
     grid-column: 1/2;
     grid-row: 2/5; 
-    padding: 6vh 0 0 0;
+    padding: 3vh 0 0 0;
 }
 
 .sidebar2 {
     grid-column: 3/4;
     grid-row: 2/5;
-    padding: 6vh 0 0 0;
+    padding: 3vh 0 0 0;
 }
 
 
@@ -352,18 +355,19 @@ ul{
     grid-row: 2/3;
     display:flex;
     justify-content:space-between;
-    padding: 0 0 20vh 0;
+    padding: 0 0 25vw 0;
+    font-size: 2.2vh;
 
 }
 
 .timer {
-    font-size: 2.5vw;
-    padding: 0 0 15vw 0;
+    font-size: 3.5vw;
+    margin: auto;
     color: gray;
 }
 
 .score {
-    padding: 2vw 0 0 0;
+    padding: 2vw 0 3vh 0;
 }
 
 
