@@ -145,9 +145,17 @@ span:active {
 .players > img {
     height: 400px;
     width: 265px;
-    padding: 40px 0 40px 0;
+    margin: 40px 0 40px 0;
     filter:grayscale();
     
+}
+
+#P1 {
+    border: 5mm double blue;
+}
+
+#P2 {
+    border: 5mm double red;
 }
 
 .sidebar1 > .player {
@@ -239,7 +247,7 @@ header {
     display: flex;
     justify-content: space-between;
     text-align: center;
-    font-size: 2.5vh;
+    font-size: 3vh;
     
 }
 
@@ -343,7 +351,7 @@ ul{
     grid-row: 2/3;
     display:flex;
     justify-content:space-between;
-    padding: 0 0 10vw 0;
+    padding: 0 0 20vh 0;
 
 }
 

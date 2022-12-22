@@ -147,10 +147,21 @@ span:active {
 .players > img {
     height: 400px;
     width: 265px;
-    padding: 40px 0 40px 0;
-    filter:grayscale();
-    
+    margin: 40px 0 40px 0;
+    filter:grayscale(); 
 }
+
+#P1 {
+    border: 5mm double blue;
+}
+
+#P2 {
+    border: 5mm double red;
+}
+
+
+
+
 
 .sidebar1 > .player {
     -webkit-transform: scaleX(-1);
@@ -239,7 +250,8 @@ header {
     display: flex;
     justify-content: space-between;
     text-align: center;
-    font-size: 2.5vh;
+    font-size: 3vh;
+ 
     
 }
 
@@ -275,7 +287,8 @@ header {
     color: black;
     background-color: darkgray;
     font-size: 4vh;
-    width: 45vw;
+    height: 100vh;
+    width: 40vw;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);

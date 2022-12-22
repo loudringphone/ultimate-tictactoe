@@ -12,6 +12,18 @@ const games = document.querySelectorAll('.game')
 const scores = document.querySelectorAll('.score')
 const characters = document.querySelectorAll('.character');
 
+const hista = new Audio("./audio/hasta-la-vista.mp3");
+hista.volume = 0.8
+const click = new Audio("./audio/click.wav");
+const select = new Audio("./audio/select.mp3");
+select.playbackRate = 1.8;
+const sword = new Audio("./audio/sword.wav");
+sword.playbackRate = 2.0;
+const slash = new Audio("./audio/slash.mp3");
+slash.playbackRate = 1.5;
+const plasma = new Audio("./audio/plasma.wav");
+plasma.playbackRate = 2.0;
+
 for (let player of players) {
     let i = Math.floor(Math.random() * characters.length);
             player.src = characters[i].src;
@@ -74,6 +86,7 @@ btnChar.addEventListener('click', function() {
     mainContent.style.visibility = 'hidden';
     charContainer.classList.toggle('change');
     charContainer.style.visibility = 'visible';
+    click.play()
     
 
 })
@@ -94,7 +107,7 @@ const CharSel = function(){
                 player.style.filter = "grayscale(100%)";
             }})
         target.addEventListener('click', function() {
-           
+                select.play()
                 player.src = target.currentSrc;
                 player.style.filter = "brightness()";
                 playerName.textContent = target.getAttribute('alt');
@@ -144,6 +157,7 @@ const CharSel = function(){
     
 
 btnClose.addEventListener('click', function() {
+    click.play()
     startScreen.style.visibility = 'visible';
     mainContent.style.visibility = 'visible';
     btnChar.style.visibility = 'visible';
@@ -179,8 +193,8 @@ congratsBGs.forEach(target =>
 )
     congratsBGs.forEach(target =>  
     target.addEventListener('mouseout', function() {
-        congratsBGs[0].style.opacity = 0.05;
-        congratsBGs[1].style.opacity = 0.25;
+        congratsBGs[0].style.opacity = 0.035;
+        congratsBGs[1].style.opacity = 0.035;
     })
 )
 
@@ -213,6 +227,7 @@ const countDown = function() {
     
     
                 if (cells[i].textContent === 'X') {
+                    sword.play()
                     cells[i].classList.add('markX');
                     cells[i].classList.remove('cell');
                     empties = document.querySelectorAll('.cellNA');
@@ -245,6 +260,7 @@ const countDown = function() {
     
     
                 } else {
+                    slash.play()
                     cells[i].classList.add('markO')
                     cells[i].classList.remove('cell');
                     cells[i].classList.remove('cell2');
@@ -505,6 +521,31 @@ settings.addEventListener('click', function() {
 
 })
 btnCloseOptions.addEventListener('click', function() { 
+    options.style.visibility = 'hidden';
+    UIopacity(1);
+    countDownInt = setInterval(countDown , 1000);
+})
+
+const mute = document.querySelector('.mute')
+const muteSound = function(TorF) {
+    click.muted = TorF
+    select.muted = TorF
+    sword.muted = TorF
+    slash.muted = TorF
+    plasma.muted = TorF
+}
+mute.addEventListener('click', function() {
+    if (mute.textContent === 'Unmute') {
+        mute.textContent = 'Mute';
+        muteSound(false)
+        if (opponents[2].getAttribute('class') === 'opponent selected') {
+            slash.muted = true;
+        } 
+    } else {
+        mute.textContent = 'Unmute';
+        muteSound(true)
+        
+};
     options.style.visibility = 'hidden';
     UIopacity(1);
     countDownInt = setInterval(countDown , 1000);
@@ -785,6 +826,7 @@ const ultimateTTT = function() {
             markOs = document.querySelectorAll('.markO');
 
             if (cell.textContent === 'X') {
+                sword.play()
                 cell.classList.add('markX');
                 cell.classList.remove('cell');
                 empties = document.querySelectorAll('.cell');
@@ -823,6 +865,7 @@ const ultimateTTT = function() {
                 
             }
             else {
+                slash.play()
                 cell.classList.add('markO')
                 cell.classList.remove('cell');
                 cell.classList.remove('cell2');
@@ -857,6 +900,9 @@ const ultimateTTT = function() {
                 
             }
         })
+        cell.addEventListener('dblclick', function(event) {
+            alert("Double-click disabled!");
+            event.preventDefault()})
     }
 }
 
@@ -887,6 +933,7 @@ const AIplayer = function() {
         
 
         if (cells[i].textContent === '〇') {
+            slash.play()
             cells[i].classList.add('markO')
             cells[i].classList.remove('cell');
             cells[i].classList.remove('cell2');
@@ -927,7 +974,7 @@ const AIplayer = function() {
 
             
                 
-        
+        ultiWinCheck()
         drawCheck()
     
     }
