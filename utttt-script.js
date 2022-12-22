@@ -21,8 +21,6 @@ const sword = new Audio("./audio/sword.wav");
 sword.playbackRate = 2.0;
 const slash = new Audio("./audio/slash.mp3");
 slash.playbackRate = 1.5;
-const plasma = new Audio("./audio/plasma.wav");
-plasma.playbackRate = 2.0;
 const closing = new Audio("./audio/closing.mov");
 closing.playbackRate = 2.0;
 closing.volume = 0.4
@@ -554,7 +552,8 @@ const muteSound = function(TorF) {
     select.muted = TorF
     sword.muted = TorF
     slash.muted = TorF
-    plasma.muted = TorF
+    fight.muted = TorF
+    coin.muted = TorF
 }
 mute.addEventListener('click', function() {
     if (mute.textContent === 'Unmute') {
