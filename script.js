@@ -28,6 +28,16 @@ coin.volume = 0.15;
 const fight = new Audio("./audio/fight.mov");
 fight.playbackRate = 1.4;
 fight.volume = 0.35;
+const p1wins = new Audio("./audio/p1wins.mov");
+p1wins.playbackRate = 1.2;
+p1wins.volume = 0.5;
+const p2wins = new Audio("./audio/p2wins.mov");
+p2wins.playbackRate = 1.2;
+p2wins.volume = 0.5;
+const youlose = new Audio("./audio/youlose.mov");
+
+
+
 
 for (let player of players) {
     let i = Math.floor(Math.random() * characters.length);
@@ -273,6 +283,7 @@ const drawCheck = function() {
             players[1].style.filter = "grayscale(100%)";
             window.localStorage.setItem(`storedP1scores`, parseInt(scores[0].textContent.split(" ")[1]));
             window.localStorage.setItem(`storedP2scores`, parseInt(scores[1].textContent.split(" ")[1]));
+            youlose.play()
             congrats()
             victor = playerNames[Math.floor(Math.random()*2)].textContent
             playerNames[0].id = ''
@@ -374,14 +385,6 @@ const tictactoe = function() {
 
 
 
-// p1played
-// p2played
-
-
-let intervalMoveTrackingP2 = []
-let intervalMoveTrackingP1 = []
-
-
 
 const winCheck = function() {
     
@@ -401,6 +404,7 @@ const winCheck = function() {
                         target.classList.remove('cell');
                     });
                     victor = playerNames[1];
+                    p2wins.play()
                     congratsText.textContent = winningText(playerNames[1].textContent)
                     scores[1].textContent = `Wins: ${parseInt(scores[1].textContent.split(" ")[1]) + 1}`
                     players[0].style.filter = "grayscale(100%)";
@@ -421,6 +425,8 @@ const winCheck = function() {
                         target.classList.remove('cell');
                         target.classList.remove('cell2');
                     });
+                    victor = playerNames[0];
+                    p1wins.play()
                     congratsText.textContent = winningText(playerNames[0].textContent)
                     scores[0].textContent = `Wins: ${parseInt(scores[0].textContent.split(" ")[1]) + 1}`
                     players[1].style.filter = "grayscale(100%)";
@@ -525,8 +531,6 @@ const rematch = function() {
    
      
         advAI = false;
-        intervalMoveTrackingP1 = []
-        intervalMoveTrackingP2 = []
         if (opponents[0].getAttribute('class') != 'opponent selected') {
             setTimeout(() => {
                 AIplayer()
@@ -608,6 +612,8 @@ const muteSound = function(TorF) {
     plasma.muted = TorF
     fight.muted = TorF
     coin.muted = TorF
+    p1wins.muted = TorF
+    p2wins.muted = TorF
 }
 mute.addEventListener('click', function() {
     if (mute.textContent === 'Unmute') {
@@ -672,8 +678,6 @@ withdraw.addEventListener('click', function() {
             target.textContent = 'X')
         p1played = []
         p2played = []
-        intervalMoveTrackingP2 = []
-        intervalMoveTrackingP1 = []
         playerNames[0].id = ''
 
         
@@ -1041,15 +1045,13 @@ reload.addEventListener('click', function() {
 
     p1played = []
     p2played = []
-    intervalMoveTrackingP2 = []
-    intervalMoveTrackingP1 = []
     victor = ""
     advAI = false
     timer.textContent = timeLimit
     
     markXs = document.querySelectorAll('.markX');
     markOs = document.querySelectorAll('.markO');
-    cell2s = document.querySelectorAll(".cell2")
+    cell2s = document.querySelectorAll(".cell2");
 
 
     markXs.forEach(target =>
@@ -1099,38 +1101,44 @@ reload.addEventListener('click', function() {
     if (storedP1scores === null) {storedP1scores = 0};
     scores[0].textContent = `Wins: ${parseInt(storedP1scores)}`;
 
-    console.log(storedP1scores)
-
-
     let storedP2scores = window.localStorage.getItem('storedP2scores');
     if (storedP2scores === null) {storedP2scores = 0};
     scores[1].textContent = `Wins: ${parseInt(storedP2scores)}`;
   
+
+
+
+
     let arrXs = window.localStorage.getItem('storedXs').split(',');
-    for (let i of arrXs) {
-        p1played.push(parseInt(i))
-    }
-    let arrOs = window.localStorage.getItem('storedOs').split(',');
-    for (let i of arrOs) {
-        p2played.push(parseInt(i))
-    }
-    cells = document.querySelectorAll('.cell');
-    for (let i of arrXs) {
-        cells[parseInt(i)].textContent = 'X';
-        cells[parseInt(i)].classList.add('markX');
-        cells[parseInt(i)].classList.remove('cell');
-    }
-    for (let i of arrOs) {
-        cells[parseInt(i)].textContent = '〇'
-        cells[parseInt(i)].classList.add('markO');
-        cells[parseInt(i)].classList.remove('cell');
-    }
-    if (arrOs.length < arrXs.length) {
+
+
+
+    if (arrXs.length <= 5) {
+        for (let i of arrXs) {
+            p1played.push(parseInt(i))
+        }
+        let arrOs = window.localStorage.getItem('storedOs').split(',');
+        for (let i of arrOs) {
+            p2played.push(parseInt(i))
+        }
         cells = document.querySelectorAll('.cell');
-        cells.forEach(target =>
-            target.classList.toggle('cell2'));
-        cells.forEach(target =>
-            target.textContent = '〇');
+        for (let i of arrXs) {
+            cells[parseInt(i)].textContent = 'X';
+            cells[parseInt(i)].classList.add('markX');
+            cells[parseInt(i)].classList.remove('cell');
+        }
+        for (let i of arrOs) {
+            cells[parseInt(i)].textContent = '〇'
+            cells[parseInt(i)].classList.add('markO');
+            cells[parseInt(i)].classList.remove('cell');
+        }
+        if (arrOs.length < arrXs.length) {
+            cells = document.querySelectorAll('.cell');
+            cells.forEach(target =>
+                target.classList.toggle('cell2'));
+            cells.forEach(target =>
+                target.textContent = '〇');
+        }
     }
 })
 

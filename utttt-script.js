@@ -30,6 +30,18 @@ coin.volume = 0.15;
 const fight = new Audio("./audio/fight.mov");
 fight.playbackRate = 1.4;
 fight.volume = 0.35;
+const p1wins = new Audio("./audio/p1wins.mov");
+p1wins.playbackRate = 1.2;
+p1wins.volume = 0.5;
+const p2wins = new Audio("./audio/p2wins.mov");
+p2wins.playbackRate = 1.2;
+p2wins.volume = 0.5;
+const youlose = new Audio("./audio/youlose.mov");
+
+
+
+
+
 
 for (let player of players) {
     let i = Math.floor(Math.random() * characters.length);
@@ -61,12 +73,25 @@ for (let opponent of opponents) {
             playerNames[0].id = 'gameStarted'
         }
 
-        let num;
-        do {
-                num = Math.floor(Math.random() * characters.length);
-                players[1].src = characters[num].src;
-            playerNames[1].textContent = characters[num].alt
-        } while(playerNames[1].textContent === playerNames[0].textContent);
+        if (opponentType === 'A.I.') {
+            let num;
+            do {
+                    num = Math.floor(Math.random() * characters.length);
+                    players[1].src = characters[num].src;
+                playerNames[1].textContent = characters[num].alt
+            } while(playerNames[1].textContent === playerNames[0].textContent);
+            window.localStorage.setItem(`storedP2name`, playerNames[1].textContent);
+            if (playerNames[0].id === 'gameStarted' && victor === "") {
+                setTimeout(()=> {
+                    AIplayer()
+                },150)
+            } 
+        }
+
+        
+
+        
+        
     }
         )       
 }
@@ -256,8 +281,8 @@ const countDown = function() {
                     }
                     
                 p1played.push(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])))
+                window.localStorage.setItem(`storedXs`, p1played);
                 let gridNext = String(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])) + 1).substring(1)
-    
                 cells = document.querySelectorAll('.cell')
                 for (let cell of cells) {
                         
@@ -290,6 +315,7 @@ const countDown = function() {
                         empty.classList.add('cell');
                     }
                     p2played.push(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])))
+                    window.localStorage.setItem(`storedOs`, p2played);
                     let gridNext = String(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])) + 1).substring(1)
     
                     cells = document.querySelectorAll('.cell')
@@ -360,6 +386,9 @@ const drawCheck = function() {
             congratsText.textContent = 'Draw!'
             players[0].style.filter = "grayscale(100%)";
             players[1].style.filter = "grayscale(100%)";
+            window.localStorage.setItem(`storedP1scores`, parseInt(scores[0].textContent.split(" ")[1]));
+            window.localStorage.setItem(`storedP2scores`, parseInt(scores[1].textContent.split(" ")[1]));
+            youlose.play()
             congrats()
             victor = playerNames[Math.floor(Math.random()*2)].textContent
             clearInterval(countDownInt)
@@ -554,6 +583,8 @@ const muteSound = function(TorF) {
     slash.muted = TorF
     fight.muted = TorF
     coin.muted = TorF
+    p1wins.muted = TorF
+    p2wins.muted = TorF
 }
 mute.addEventListener('click', function() {
     if (mute.textContent === 'Unmute') {
@@ -758,16 +789,6 @@ cells.forEach(target =>
 const ttts = document.getElementsByClassName('TTT')
 cells = document.querySelectorAll('.cell')
 
-// for (let cell of cells) {
-//     childIndex = Array.from(document.querySelectorAll('div')).indexOf(cell)
-//     console.log(String(childIndex))
-//     }
-
-
-
-
-
-
 
 p1played = []
 p2played = []
@@ -786,6 +807,7 @@ const ultiWinCheck = function() {
                     congratsText.textContent = winningText(playerNames[0].textContent)
                     scores[0].textContent = `Wins: ${parseInt(scores[0].textContent.split(" ")[1]) + 1}`
                     players[1].style.filter = "grayscale(100%)";
+                    p1wins.play()
                     congrats()
                     
                     victor = playerNames[0].textContent
@@ -801,6 +823,7 @@ const ultiWinCheck = function() {
                     congratsText.textContent = winningText(playerNames[1].textContent)
                     scores[1].textContent = `Wins: ${parseInt(scores[1].textContent.split(" ")[1]) + 1}`
                     players[0].style.filter = "grayscale(100%)";
+                    p2wins.play()
                     congrats()
                     
                     victor = playerNames[1].textContent
@@ -812,10 +835,6 @@ const ultiWinCheck = function() {
         drawCheck()
     }
 }
-
-
-
-
 
 
 
@@ -852,12 +871,13 @@ const ultimateTTT = function() {
                     empty.textContent = "〇"
                     empty.classList.toggle('cell2')
                 }
+                //There are 81 cells on the board. Their corresponding index between 10 and 98
                 p1played.push(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cell)))
+                window.localStorage.setItem(`storedXs`, p1played);
+                //to get the index out of the 9 grids
                 let gridNext = String(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cell)) + 1).substring(1)
-
                 cells = document.querySelectorAll('.cell')
                 for (let cell of cells) {
-                    // console.log((parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i]))))
                     let gridIndex = String(Array.from(document.querySelectorAll('div')).indexOf(cell)).charAt(0)
                     if (gridIndex != gridNext) {
                         cell.classList.add('cellNA')
@@ -892,6 +912,9 @@ const ultimateTTT = function() {
                     empty.textContent = "X"
                 }
                 p2played.push(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cell)));
+                window.localStorage.setItem(`storedOs`, p2played);
+
+
                 let gridNext = String(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cell)) + 1).substring(1)
                 cells = document.querySelectorAll('.cell')
                 for (let cell of cells) {
@@ -963,7 +986,6 @@ const AIplayer = function() {
             }} catch {}
             cells[i].id = 'lastMove'
 
-
             empties = document.querySelectorAll('.cell');
             for (let empty of empties) {
                 empty.textContent = "X";
@@ -976,6 +998,7 @@ const AIplayer = function() {
                 empty.classList.add('cell');
             }
             p2played.push(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])))
+            window.localStorage.setItem(`storedOs`, p2played);
             let gridNext = String(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])) + 1).substring(1)
 
             cells = document.querySelectorAll('.cell')
@@ -987,27 +1010,186 @@ const AIplayer = function() {
                     cell.classList.remove('cell')
                 }
             }    
-
-        } 
-
-            
-                
+        }        
         ultiWinCheck()
         drawCheck()
-    
     }
-            
-      
-    
 }
-
-
-const reload = document.querySelector('.reload')
-reload.addEventListener('click', function() {
-    click.play();
-})
 
 games.forEach(target =>
     target.addEventListener('click', function() {
         click.play()
     }))
+
+let lastCell = 0;
+const reload = document.querySelector('.reload')
+reload.addEventListener('click', function() {
+    click.play();
+    btnChar.style.visibility = 'hidden';
+    options.style.visibility = 'hidden';
+    startScreen.style.visibility = 'hidden';
+    UIopacity(1)
+
+    players.forEach(target =>
+        target.style.filter = "brightness()");
+    mainContent.style.visibility = 'visible';
+    playerNames[0].id = 'gameStarted';
+
+    p1played = []
+    p2played = []
+    victor = ""
+    timer.textContent = timeLimit
+
+    markXs = document.querySelectorAll('.markX');
+    markOs = document.querySelectorAll('.markO');
+    cell2s = document.querySelectorAll(".cell2");
+    cellnas = document.querySelectorAll(".cellNA")
+    markXs.forEach(target =>
+        target.classList.add('cell'))
+    markXs.forEach(target =>
+        target.classList.remove('markX'))
+    markOs.forEach(target =>
+        target.classList.add('cell'))
+    markOs.forEach(target =>
+        target.classList.remove('markO'))
+    cell2s.forEach(target =>
+        target.classList.remove('cell2'))
+    cellnas.forEach(target =>
+        target.classList.add('cell'))
+    cellnas.forEach(target =>
+        target.classList.remove('cellNA'))
+    cells = document.querySelectorAll('.cell')
+    cells.forEach(target =>
+        target.textContent = 'X')
+    
+    congratsBGs.forEach(target => {
+        target.style.visibility = 'hidden';
+    })
+
+    let storedP1name = window.localStorage.getItem(`storedP1name`);
+    playerNames[0].textContent = storedP1name;
+
+    for (let i of characters) {
+        if (i.alt === storedP1name) {
+            players[0].src = i.src;
+        }
+    }
+
+    let storedP2name = window.localStorage.getItem(`storedP2name`);
+    playerNames[1].textContent = storedP2name;
+
+    for (let i of characters) {
+        if (i.alt === storedP2name) {
+            players[1].src = i.src;
+        }
+    }
+
+    let storedP1scores = window.localStorage.getItem('storedP1scores');
+    if (storedP1scores === null) {storedP1scores = 0};
+    scores[0].textContent = `Wins: ${parseInt(storedP1scores)}`;
+
+    let storedP2scores = window.localStorage.getItem('storedP2scores');
+    if (storedP2scores === null) {storedP2scores = 0};
+    scores[1].textContent = `Wins: ${parseInt(storedP2scores)}`;
+
+    let arrXs = window.localStorage.getItem('storedXs').split(',');
+    for (let i of arrXs) {
+        p1played.push(parseInt(i))
+    }
+    let arrOs = window.localStorage.getItem('storedOs').split(',');
+    for (let i of arrOs) {
+        p2played.push(parseInt(i))
+    }
+
+    if (arrOs.length < arrXs.length) {
+        let k= 0;
+        let lastCell = arrXs[arrXs.length - 1]
+        for (let j = 18; j < lastCell; j = j + 10) {
+            k++
+        }
+        cells[lastCell - 10 - k].id = 'lastMove'
+    } else {
+        let k= 0;
+        let lastCell = arrOs[arrOs.length - 1]
+        for (let j = 18; j < lastCell; j = j + 10) {
+            k++
+        }
+        cells[lastCell - 10 - k].id = 'lastMove' 
+    }
+
+    for (let i of arrXs) {
+        //There are 81 cells on the board. Their corresponding index between 10 and 98
+        let k = 0;
+        for (let j = 18; j < i; j = j + 10) {
+            k++
+        }
+        cells[i - 10 - k].textContent = 'X';
+        cells[i - 10 - k].classList.add('markX');
+        cells[i - 10 - k].classList.remove('cell');
+    }
+    for (let i of arrOs) {
+        let k = 0;
+        for (let j = 18; j < i; j = j + 10) {
+            k++
+        }
+        cells[i - 10 - k].textContent = '〇';
+        cells[i - 10 - k].classList.add('markO');
+        cells[i - 10 - k].classList.remove('cell');
+    }
+
+    if (arrOs.length < arrXs.length) {
+        cells = document.querySelectorAll('.cell');
+        cells.forEach(target =>
+            target.classList.toggle('cell2'));
+        cells.forEach(target =>
+            target.textContent = '〇');
+    }
+
+
+
+    if (arrOs.length < arrXs.length) {
+        lastCell = arrXs[arrXs.length - 1]
+    } else {lastCell = arrOs[arrOs.length - 1]}
+    let gridNext = String(parseInt(lastCell) + 1).substring(1)
+    cells = document.querySelectorAll('.cell')
+    for (let cell of cells) {
+        let gridIndex = String(Array.from(document.querySelectorAll('div')).indexOf(cell)).charAt(0)
+        if (gridIndex != gridNext) {
+            cell.classList.add('cellNA')
+            cell.classList.remove('cell')
+            cell.classList.toggle('cell2')
+        }
+    }
+    
+
+
+
+
+
+        
+   
+   
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+})
