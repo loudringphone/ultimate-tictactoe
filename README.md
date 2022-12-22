@@ -1,9 +1,9 @@
 # TicTacToe
 
 A class board game to play on browser. You can play with your human friend, a challenging AI or the unbeatable Terminator.
-You can also play the ultimate Tic Tac Toe, but the only AI challenger provided is only a simply one at this stage.
+You can also play the ultimate Tic Tac Toe, but the only AI challenger provided is a simply one at this stage.
 
-The webpage consists of two games at the moment. One is Tic Tac Toe and another one is Ultimate Tic Tac Tao. 
+The webpage consists of two games at the moment. One is Tic Tac Toe and another one is Ultimate Tic Tac Toe. 
 
 The Tic Tac Toe game was made on a 9 by 9 grid and players can choose their favourite characters out of the 12 choices to represent themselves. There are score counters on top of each player's section to record their wins. It is 5 sec per turn and if a move is not made within the timeframe, a random move would be made for the player. In the top right corner, there is a settings buttion. You can choose to set timer for more seconds or disable it. You can also choose to play the game with A.I.s or play the ultimate version of the game.
 

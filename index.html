@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script type="text/javascript">
+		function goURL(url){
+			setTimeout(function(){window.location.href=url},200)
+		}
+	</script>
     <link rel="stylesheet" href="./styles.css" />
     <title>Tic Tac Toe</title>
 </head>
@@ -36,7 +41,7 @@
 			<li>Play with: <span class="opponent selected">Human</span> / <span class="opponent">A.I.</span> / <span class="opponent">Terminator</span></li>
 			<li>Timer: <span class="time">5</span> / <span class="time selected">10</span> / <span class="time">None</span></li>
 			<li><span class="game selected">Tic Tac Toe</span></li>
-			<li><span class="game"><a href="./ultimate-tic-tac-toe.html">Ultimate Tic Tac Toe</a></span></li>
+			<li><span class="game"><a href="./ultimate-tic-tac-toe.html" onclick="goURL(this.href);return false">Ultimate Tic Tac Toe</a></span></li>
 			<li><span class="mute">Mute</span></li>
 			<li><span class="withdraw">Withdraw game</span></li>
 		</ul>

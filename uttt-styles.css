@@ -3,6 +3,7 @@ body {
     margin: 0px;
     height: 100vh;
     font-family: Arial, Helvetica, sans-serif; 
+    background-color: beige;
 }
 
 a {
@@ -36,7 +37,7 @@ a {
     height: 80vh;
     width: 80vh;
     z-index: 6;
-    top: 50%;
+    top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
     outline-offset: 0.5em;  
@@ -151,11 +152,11 @@ span:active {
 }
 
 #P1 {
-    border: 5mm double blue;
+    border: 5mm ridge lightblue;
 }
 
 #P2 {
-    border: 5mm double red;
+    border: 5mm ridge pink;
 }
 
 .sidebar1 > .player {
@@ -381,7 +382,7 @@ ul{
 
 .main-content {
     position: absolute;
-    top: 50%;
+    top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
     display: grid;
@@ -455,7 +456,7 @@ ul{
 }
 
 .cellNA {
-    background-color: lightyellow;
+    background-color: bisque;
     color: white;
     display: flex;
     justify-content: center;

@@ -19,8 +19,15 @@ const slash = new Audio("./audio/slash.mp3");
 slash.playbackRate = 1.5;
 const plasma = new Audio("./audio/plasma.wav");
 plasma.playbackRate = 2.0;
-
-
+const closing = new Audio("./audio/closing.mov");
+closing.playbackRate = 2.0;
+closing.volume = 0.4
+const coin = new Audio("./audio/coin.mov");
+coin.playbackRate = 1.2;
+coin.volume = 0.15;
+const fight = new Audio("./audio/fight.mov");
+fight.playbackRate = 1.4;
+fight.volume = 0.35;
 
 for (let player of players) {
     let i = Math.floor(Math.random() * characters.length);
@@ -63,14 +70,12 @@ let player = players[0]
 let playerName = playerNames[0]
 
 btnChar.addEventListener('click', function() {
+    coin.play();
     startScreen.style.visibility = 'hidden';
     btnChar.style.visibility = 'hidden';
     mainContent.style.visibility = 'hidden';
     charContainer.classList.toggle('change');
     charContainer.style.visibility = 'visible';
-    click.play()
-    
-
 })
 
 //Character selection
@@ -120,6 +125,7 @@ characters.forEach(target => {
                     charContainer.style.visibility = 'hidden';    
                     mainContent.style.visibility = 'visible';
                     playerNames[0].id = 'gameStarted'
+                    fight.play()
                     return
                 }, 500)   
             }   
@@ -140,7 +146,7 @@ characters.forEach(target => {
     
 
 btnClose.addEventListener('click', function() {
-    click.play()
+    closing.play()
     startScreen.style.visibility = 'visible';
     mainContent.style.visibility = 'visible';
     btnChar.style.visibility = 'visible';
@@ -535,7 +541,10 @@ CharSel();
 tictactoe();
 
 const btnRematch = document.querySelector('.btnRematch');
-btnRematch.addEventListener('click', rematch);
+btnRematch.addEventListener('click', function() {
+    coin.play();
+    rematch()
+});
 
 
 
@@ -564,6 +573,7 @@ const options = document.querySelector('.options');
 const btnCloseOptions = document.querySelector('.btnCloseOptions');
 
 settings.addEventListener('click', function() {
+    click.play();
     options.style.visibility = 'visible';
     clearInterval(countDownInt)
     UIopacity(0.3);
@@ -572,21 +582,36 @@ settings.addEventListener('click', function() {
 
 })
 btnCloseOptions.addEventListener('click', function() { 
+    closing.play();
     options.style.visibility = 'hidden';
     UIopacity(1);
     countDownInt = setInterval(countDown , 1000);
+
+    if (opponents[2].getAttribute('class') === 'opponent selected') {
+        setTimeout(() => {
+            console.log('Hasta la vista, baby');
+            hista.play()  
+        }, 600);    
+    }
+
+
+
 })
 
 const mute = document.querySelector('.mute')
 const muteSound = function(TorF) {
+    closing.muted = TorF
     click.muted = TorF
     select.muted = TorF
     sword.muted = TorF
     slash.muted = TorF
     plasma.muted = TorF
+    fight.muted = TorF
+    coin.muted = TorF
 }
 mute.addEventListener('click', function() {
     if (mute.textContent === 'Unmute') {
+        click.play();
         mute.textContent = 'Mute';
         muteSound(false)
         if (opponents[2].getAttribute('class') === 'opponent selected') {
@@ -594,12 +619,8 @@ mute.addEventListener('click', function() {
         } 
     } else {
         mute.textContent = 'Unmute';
-        muteSound(true)
-        
-};
-    options.style.visibility = 'hidden';
-    UIopacity(1);
-    countDownInt = setInterval(countDown , 1000);
+        muteSound(true)    
+    };
 })
 
 //Timer
@@ -607,6 +628,7 @@ const times = document.querySelectorAll('.time')
 let timeLimit = parseInt(timer.textContent)
 for (let time of times) {
     time.addEventListener('click', function() {
+        click.play()
         for (let i = 0; i < times.length; i++) {
             if (times[i].getAttribute('class') === 'time selected') {
                 times[i].classList.remove('selected')
@@ -616,12 +638,7 @@ for (let time of times) {
         timer.textContent = time.textContent
         if (parseInt(time.textContent) > 0) {
             timer.style.visibility = 'visible'
-        } else {timer.style.visibility = 'hidden'}
-        UIopacity(1);
-        countDownInt = setInterval(countDown , 1000);
-        options.style.visibility = 'hidden';
-        
-        
+        } else {timer.style.visibility = 'hidden'}        
     })
         
 }
@@ -630,6 +647,7 @@ for (let time of times) {
 //Withdraw game
 const withdraw = document.querySelector('.withdraw')
 withdraw.addEventListener('click', function() {
+    click.play();
     if (playerNames[0].id === 'gameStarted') {
         mainContent.style.visibility = 'visible';
 
@@ -680,14 +698,14 @@ withdraw.addEventListener('click', function() {
 const opponents = document.querySelectorAll('.opponent');
 for (let opponent of opponents) {
     opponent.addEventListener('click', function() {
+        click.play();
         for (let i = 0; i < opponents.length; i++) {
             if (opponents[i].getAttribute('class') === 'opponent selected') {
                 opponents[i].classList.remove('selected')
             }} 
         slash.muted = false;
         opponent.classList.toggle('selected')
-        UIopacity(1);
-        countDownInt = setInterval(countDown , 1000);
+
         let opponentType = opponent.textContent;
 
 
@@ -697,7 +715,7 @@ for (let opponent of opponents) {
             mainContent.style.visibility = 'visible';
             playerNames[0].id = 'gameStarted';
         }
-        options.style.visibility = 'hidden';
+       
 
 
         if (opponents[2].getAttribute('class') === 'opponent selected') {
@@ -705,11 +723,6 @@ for (let opponent of opponents) {
             players[1].src = "./images/terminator.jpeg";
             playerNames[1].textContent = 'The Terminator';
             window.localStorage.setItem(`storedP2name`, playerNames[1].textContent);
-            setTimeout(() => {
-                console.log('Hasta la vista, baby');
-                hista.play()
-            }, 500);
-            
         }
 
 
@@ -1015,6 +1028,7 @@ const AIplayer = function() {
 let localStorage = []
 const reload = document.querySelector('.reload')
 reload.addEventListener('click', function() {
+    click.play()
     btnChar.style.visibility = 'hidden';
     options.style.visibility = 'hidden';
     startScreen.style.visibility = 'hidden';
@@ -1117,39 +1131,12 @@ reload.addEventListener('click', function() {
             target.classList.toggle('cell2'));
         cells.forEach(target =>
             target.textContent = '〇');
-    
-    // if (opponents[0].getAttribute('class') != 'opponent selected') {
-    //     setTimeout(() => {
-    //         AIplayer() 
-    //     }, 250);
-        
-    // }
-
-
-
-
     }
-
-        
-       
-
-    
-    
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
 })
-// countDownInt = setInterval(countDown , 1000);
+
+const games = document.querySelectorAll('.game')
+games.forEach(target =>
+    target.addEventListener('click', function() {
+        click.play()
+    }))
 
