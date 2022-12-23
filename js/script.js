@@ -202,14 +202,14 @@ const congrats = function() {
 
 congratsBGs.forEach(target =>
     target.addEventListener('mouseover', function() {
-        congratsBGs[0].style.opacity = 0.035;
-        congratsBGs[1].style.opacity = 0.035;
+        congratsBGs[0].style.opacity = 1;
+        congratsBGs[1].style.opacity = 1;
     })
 )
     congratsBGs.forEach(target =>  
     target.addEventListener('mouseout', function() {
-        congratsBGs[0].style.opacity = 1;
-        congratsBGs[1].style.opacity = 1;
+        congratsBGs[0].style.opacity = 0.035;
+        congratsBGs[1].style.opacity = 0.035;
     })
 )
 

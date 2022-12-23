@@ -5,7 +5,7 @@ You can also play the ultimate Tic Tac Toe, but the only AI challenger provided 
 
 The webpage consists of two games at the moment. One is Tic Tac Toe and another one is Ultimate Tic Tac Toe. 
 
-The Tic Tac Toe game was made on a 9 by 9 grid and players can choose their favourite characters out of the 12 choices to represent themselves. There are score counters on top of each player's section to record their wins. It is 5 sec per turn and if a move is not made within the timeframe, a random move would be made for the player. In the top right corner, there is a settings buttion. You can choose to set timer for more seconds or disable it. You can also choose to play the game with A.I.s or play the ultimate version of the game.
+The Tic Tac Toe game was made on a 9 by 9 grid and players can choose their favourite characters out of the 12 choices to represent themselves. There are score counters on top of each player's section to record their wins. It is 5 sec per turn and if a move is not made within the timeframe, a random move would be made for the player. On the top right corner, there is a settings buttion. You can set a different timer or disable it. You can also choose to play the game with A.I.s or play the ultimate version of Tic Tac Toe.
 
 You can play my game on https://loudringphone.github.io/tic-tac-toe/
 
@@ -66,13 +66,13 @@ for (let i = 0; i < cons2Win.length; i++) {
                     if (document.getElementById(`${cons2Win[i][j-2]}`).getAttribute('class') === 'cell cell2') {
                         targetCell = document.getElementById(`${cons2Win[i][j-2]}`)
 ```
-"p2played" is an array to record the moves A.I. has already made in previous turns.
-The game has 8 different winning conditions which are represented as arrays. "checkP2" is to check how many Os A.I. has in each of the 8 arrays. If A.I. needs three more Os to win the game, checkP2 would be "". If two, "W" and if one, "WW".
-Hence if checkP2 is "WW", the algorithm will check whether the last suqare is unoccuplied or if it has been filled by Player1. If it is empty, A.I. will take that square and win the game.
+"p2played" is an array to record the moves that A.I. has already made in previous turns.
+The game has 8 different winning conditions which are represented as arrays. "checkP2" is to check how many Os A.I. has in each of the 8 arrays. If A.I. needs three more Os to win the game in one condition, checkP2 would be "" for that condition. If two more, "W" and if one more, "WW".
+Hence if checkP2 is "WW", the algorithm will check whether the last suqare is still unoccuplied or if it has been filled by Player 1. If it is empty, A.I. will take that square and win the game.
 In the above example, "j-2" means A.I. needs the first position of an array where A.I. has already had two Os in it. If the position is empty, A.I. will take it and win the game.
 
 
-Last but not least, A.I. could make random move after its first move if the algorithm could not any possibility to win in the current turn nor Player 1 will win in the next turn. The line of code is as follows:
+Last but not least, A.I. could make random move after its first move if the algorithm could not find any possibility to win in its current turn nor Player 1 will win in the next turn. The line of code is as follows:
 ```
 let i = Math.floor(Math.random() * cells.length);
                 targetCell = cells[i]
