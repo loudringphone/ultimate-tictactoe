@@ -36,7 +36,7 @@ p1wins.volume = 0.5;
 const p2wins = new Audio("./audio/p2wins.mov");
 p2wins.playbackRate = 1.2;
 p2wins.volume = 0.5;
-const youlose = new Audio("./audio/youlose.mov");
+const drawgame = new Audio("./audio/drawgame.mov");
 
 
 
@@ -261,12 +261,7 @@ const countDown = function() {
                 try {if (lastMove.id != null) {
                     lastMove.id = ''
                 }}catch{}
-    
                 cells[i].id = 'lastMove'
-    
-    
-    
-    
                 if (cells[i].textContent === 'X') {
                     sword.play()
                     cells[i].classList.add('markX');
@@ -280,15 +275,13 @@ const countDown = function() {
                     for (let empty of empties) {
                         empty.textContent = "〇";
                         empty.classList.toggle('cell2');
-                    }
-                    
+                    }            
                 p1played.push(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])))
                 console.log(p1played)
                 window.localStorage.setItem(`UTTTstoredXs`, p1played);
                 let gridNext = String(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])) + 1).substring(1)
                 cells = document.querySelectorAll('.cell')
-                for (let cell of cells) {
-                        
+                for (let cell of cells) {           
                     let gridIndex = String(Array.from(document.querySelectorAll('div')).indexOf(cell)).charAt(0)
                     if (gridIndex != gridNext) {
                         cell.classList.add('cellNA')
@@ -297,10 +290,6 @@ const countDown = function() {
                     }
     
                 }
-                
-    
-    
-    
                 } else {
                     slash.play()
                     cells[i].classList.add('markO')
@@ -334,14 +323,11 @@ const countDown = function() {
             }
             catch {};
             timer.textContent = timeLimit;
-            drawCheck()
-            
+            drawCheck()         
         }
         setTimeout(() => {
             ultiWinCheck()
-        }, 100);
-        
-        
+        }, 100);        
         if (opponents[1].getAttribute('class') === 'opponent selected')
             {setTimeout(() => {
                 if (playerNames[0].id === 'gameStarted') {
@@ -350,56 +336,37 @@ const countDown = function() {
             }, 150);
         };
 
-        
-
-
 
         
 }
-
 let countDownInt = setInterval(countDown , 1000);
 
-
 //Fixed the issue on winning the game on turn 9
-
-
 const drawCheck = function() {
-
     cells = document.querySelectorAll('.cell')
     cellnas = document.querySelectorAll('.cellNA')
     let cell2nas = document.querySelectorAll('.cell2.cellNA')
-
     if (cells.length === 0 && cellnas.length > 0) {
         cellnas.forEach(target =>
             target.classList.add('cell'))
         cellnas.forEach(target =>
             target.classList.remove('cellNA'))
     }
-    
     if (cell2nas.length > 0) {
         cell2nas.forEach(target =>
             target.classList.remove('cell2'))
     }
-
-
-
     cells = document.querySelectorAll('.cell');
-   
         setTimeout(function() {if (cells.length === 0 && victor!= playerNames[0].textContent && victor != playerNames[1].textContent) {
             congratsText.textContent = 'Draw!'
             players[0].style.filter = "grayscale(100%)";
             players[1].style.filter = "grayscale(100%)";
             window.localStorage.setItem(`UTTTstoredP1scores`, parseInt(scores[0].textContent.split(" ")[1]));
             window.localStorage.setItem(`UTTTstoredP2scores`, parseInt(scores[1].textContent.split(" ")[1]));
-            youlose.play()
+            drawgame.play()
             congrats()
-            victor = playerNames[Math.floor(Math.random()*2)].textContent
-            clearInterval(countDownInt)
-            
-
-            
-        }},200)
-    
+            victor = playerNames[Math.floor(Math.random()*2)].textContent        
+        }},200) 
 }
 
 
@@ -428,14 +395,11 @@ const rematch = function() {
         target.textContent = "");
     cellnas.forEach(target =>
             target.textContent = "");
-    
     timer.textContent = timeLimit;
-
     congratsBGs.forEach(target => {
         target.style.visibility = 'hidden';
     })
     mainContent.style.visibility = 'hidden';
-
     let div = document.createElement('div');
     let h1 = document.createElement('h1');
     div.classList.add('restarting');
@@ -459,14 +423,11 @@ const rematch = function() {
     setTimeout(function(){
         div.remove()
     }, 1000)
-
     setTimeout(function(){
         checkP1 = "";
         checkP2 = "";
         p1played = [];
         p2played = [];
-
-
         cell2s.forEach(target =>
             target.classList.add('cell'));
         markXs.forEach(target =>
@@ -484,7 +445,6 @@ const rematch = function() {
             target.classList.remove('markO'));
         cells.forEach(target =>
             target.classList.remove('cellNA'));
-
         if (victor === playerNames[0].textContent) {
             cells.forEach(target =>
                 target.textContent = '〇')
@@ -494,27 +454,21 @@ const rematch = function() {
             cells.forEach(target =>
                 target.textContent = 'X')
         }
-
         lastMove = document.querySelector('#lastMove');
         if (lastMove != null) {
             lastMove.id = ""
         }
-       
         victor = "";
         mainContent.style.visibility = 'visible';
         playerNames[0].id = 'gameStarted';
-
         clearInterval(countDownInt)
-     
         if (opponents[1].getAttribute('class') === 'opponent selected')
             {setTimeout(() => {
                 if (playerNames[0].id === 'gameStarted') {
                 AIplayer()
                 }
             }, 150);
-        };
-        
-
+        };    
         cells.forEach(target => 
             target.classList.remove('disable'))
         countDownInt = setInterval(countDown , 1000);
@@ -814,13 +768,8 @@ const ultiWinCheck = function() {
                     scores[0].textContent = `Wins: ${parseInt(scores[0].textContent.split(" ")[1]) + 1}`
                     players[1].style.filter = "grayscale(100%)";
                     p1wins.play()
-                    congrats()
-                    
-                    victor = playerNames[0].textContent
-                    clearInterval(countDownInt)
-
-                    
-                    
+                    congrats()             
+                    victor = playerNames[0].textContent                         
                 }
                 if (p2played.includes(j)) {
                     checkP2 = checkP2 + 'W'
@@ -830,19 +779,14 @@ const ultiWinCheck = function() {
                     scores[1].textContent = `Wins: ${parseInt(scores[1].textContent.split(" ")[1]) + 1}`
                     players[0].style.filter = "grayscale(100%)";
                     p2wins.play()
-                    congrats()
-                    
+                    congrats()                
                     victor = playerNames[1].textContent
-                    clearInterval(countDownInt)
-
                 }
             }
         } 
         drawCheck()
     }
 }
-
-
 
 cellnas = document.querySelectorAll('.cellna')
 const ultimateTTT = function() {
@@ -856,13 +800,10 @@ const ultimateTTT = function() {
                 cellna.classList.remove('cellNA')
                 cellna.classList.add('cell')
             }
-            
-
             lastMove = document.querySelector('#lastMove');
             try {if (lastMove.id != null) {
                 lastMove.id = ''
             }}catch{}
-
             cell.id = 'lastMove'
 
             markXs = document.querySelectorAll('.markX');

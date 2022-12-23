@@ -34,7 +34,7 @@ p1wins.volume = 0.5;
 const p2wins = new Audio("./audio/p2wins.mov");
 p2wins.playbackRate = 1.2;
 p2wins.volume = 0.5;
-const youlose = new Audio("./audio/youlose.mov");
+const drawgame = new Audio("./audio/drawgame.mov");
 
 
 
@@ -286,7 +286,7 @@ const drawCheck = function() {
             players[1].style.filter = "grayscale(100%)";
             window.localStorage.setItem(`storedP1scores`, parseInt(scores[0].textContent.split(" ")[1]));
             window.localStorage.setItem(`storedP2scores`, parseInt(scores[1].textContent.split(" ")[1]));
-            youlose.play()
+            drawgame.play()
             congrats()
             victor = playerNames[Math.floor(Math.random()*2)].textContent
             playerNames[0].id = ''
@@ -532,11 +532,11 @@ const rematch = function() {
         victor = "";
         mainContent.style.visibility = 'visible';
         playerNames[0].id = 'gameStarted';
-        countDownInt = setInterval(countDown , 1000);
         cells.forEach(target => 
             target.classList.remove('disable'))
      
         advAI = false;
+        countDownInt = setInterval(countDown , 1000);
         if (opponents[0].getAttribute('class') != 'opponent selected') {
             setTimeout(() => {
                 AIplayer()
