@@ -5,15 +5,15 @@ body {
     font-family: 'Raleway', Arial, Helvetica, sans-serif;
     font-weight: bold;
     background-color: beige;
+    
+    
 }
+
 
 a {
     color: inherit; 
     text-decoration: inherit;
   }
-
-
-
 
 .btnChar {
     position: absolute;
@@ -46,8 +46,8 @@ a {
 
 
 
-#lastMove {
-    background-color: yellow;
+.congratsBG:hover {
+    opacity: 0.5; 
 }
 
 
@@ -134,14 +134,15 @@ span:active {
   }
 
 
-
+.character.selected {
+    pointer-events: none;
+}
 
 
 
 .players {
     text-align: center;
-    position: relative; 
-    text-align: center;
+    position:relative; 
     font-size: 3vh;
 }
 
@@ -149,8 +150,7 @@ span:active {
     height: 400px;
     width: 265px;
     margin: 40px 0 40px 0;
-    filter:grayscale();
-    
+    filter:grayscale(); 
 }
 
 #P1 {
@@ -160,6 +160,10 @@ span:active {
 #P2 {
     border: 5mm ridge pink;
 }
+
+
+
+
 
 .sidebar1 > .player {
     -webkit-transform: scaleX(-1);
@@ -223,9 +227,7 @@ span:active {
      filter: brightness();
 }
 
-.character.selected {
-    pointer-events: none;
-}
+
 
 
 
@@ -251,8 +253,7 @@ header {
     justify-content: space-between;
     text-align: center;
     font-size: 3vh;
-    text-decoration: underline;
-    
+    text-decoration: underline; 
 }
 
 
@@ -287,6 +288,8 @@ header {
     color: black;
     background-color: darkgray;
     font-size: 4vh;
+    height: 100vh;
+    width: 40vw;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -400,18 +403,15 @@ ul{
     
 }
 
-
-
 .TTT {
     display: grid;
     background-color: lightgray;
-    grid-gap: 5px;
+    grid-gap: 10px;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    /* grid-column: 1/4;
-    grid-row: 1/4; */
+    grid-column: 1/4;
+    grid-row: 1/4;
 }
-
 
 .cell {
     background-color: white;
@@ -430,7 +430,7 @@ ul{
     background-color: lightblue;
     color: gray;
     cursor: pointer;
-    font-size: 3vh;
+    font-size: 7vh;
     align-items: center;
     line-height: 3vh;
     margin: 0;
@@ -445,7 +445,7 @@ ul{
     justify-content: center;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     line-height: 3vh;
-    font-size: 3vh;
+    font-size: 7vh;
 }
 
 .markO {
@@ -455,19 +455,10 @@ ul{
     align-items: center;
     justify-content: center;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 3vh;
+    font-size: 7vh;
     line-height: 3vh;
 }
 
-.cellNA {
-    background-color: bisque;
-    color: white;
-    display: flex;
-    justify-content: center;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 0;
-    pointer-events: none;
-}
 
 
 
@@ -476,48 +467,64 @@ ul{
     background-color: lightpink;
     color: gray;
     cursor: pointer;
-    font-size: 3vh;
+    font-size: 7vh;
 }
 
 @media screen and (max-width: 1000px) {
 
-    .player {
-        visibility: hidden;
+    .sidebar1, .sidebar2 {
+        display: none;
     }
 
-    .timer {
-        font-size: 5vw;
-        padding: 0 0 28vw 0;
+    body {
+        position: relative;
+        height: 100vh;
+    }
+    
+    .sidebar3 {
+        position: absolute;
+        
+        top: 25%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        
     }
     
     .score {
-        padding: 4.5vw 0 0 0;
+        font-size: 5vw;
+        
     }
     
+ 
+    
     .main-content {
-        position: relative;
-    }
-    .startScreen {
-
+        position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-10%, -20%);
+        transform: translate(-50%, -50%);
+    }
+    .startScreen {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
 
     .btnChar {
-        transform: translate(-10%, -20%);
-
-    }
-}
-
-@media screen and (max-height: 800px) {
-
-
-    .timer {
-        font-size: 8vh;
-        z-index: 6;
         position: absolute;
-        top: 5%;
-        left: 35%;     
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }   
+
+    .charContainer {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
+
+
+  
 }
+

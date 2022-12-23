@@ -80,7 +80,7 @@ for (let opponent of opponents) {
                     players[1].src = characters[num].src;
                 playerNames[1].textContent = characters[num].alt
             } while(playerNames[1].textContent === playerNames[0].textContent);
-            window.localStorage.setItem(`storedP2name`, playerNames[1].textContent);
+            window.localStorage.setItem(`UTTTstoredP2name`, playerNames[1].textContent);
             if (playerNames[0].id === 'gameStarted' && victor === "") {
                 setTimeout(()=> {
                     AIplayer()
@@ -141,7 +141,7 @@ const CharSel = function(){
                 player.src = target.currentSrc;
                 player.style.filter = "brightness()";
                 playerName.textContent = target.getAttribute('alt');
-                window.localStorage.setItem(`storedP1name`, playerNames[0].textContent);
+                window.localStorage.setItem(`UTTTstoredP1name`, playerNames[0].textContent);
                 target.classList.toggle('selected')
                 
                 for (let character of characters) {
@@ -160,7 +160,7 @@ const CharSel = function(){
                 player = players[1];
                 playerName = playerNames[1]
                 if (!playerName.textContent.includes('Player')) {
-                    window.localStorage.setItem(`storedP2name`, playerNames[1].textContent);
+                    window.localStorage.setItem(`UTTTstoredP2name`, playerNames[1].textContent);
                     setTimeout(function() {
                     charContainer.classList.toggle('change');
                     
@@ -281,7 +281,7 @@ const countDown = function() {
                     }
                     
                 p1played.push(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])))
-                window.localStorage.setItem(`storedXs`, p1played);
+                window.localStorage.setItem(`UTTTstoredXs`, p1played);
                 let gridNext = String(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])) + 1).substring(1)
                 cells = document.querySelectorAll('.cell')
                 for (let cell of cells) {
@@ -315,7 +315,7 @@ const countDown = function() {
                         empty.classList.add('cell');
                     }
                     p2played.push(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])))
-                    window.localStorage.setItem(`storedOs`, p2played);
+                    window.localStorage.setItem(`UTTTstoredOs`, p2played);
                     let gridNext = String(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])) + 1).substring(1)
     
                     cells = document.querySelectorAll('.cell')
@@ -386,8 +386,8 @@ const drawCheck = function() {
             congratsText.textContent = 'Draw!'
             players[0].style.filter = "grayscale(100%)";
             players[1].style.filter = "grayscale(100%)";
-            window.localStorage.setItem(`storedP1scores`, parseInt(scores[0].textContent.split(" ")[1]));
-            window.localStorage.setItem(`storedP2scores`, parseInt(scores[1].textContent.split(" ")[1]));
+            window.localStorage.setItem(`UTTTstoredP1scores`, parseInt(scores[0].textContent.split(" ")[1]));
+            window.localStorage.setItem(`UTTTstoredP2scores`, parseInt(scores[1].textContent.split(" ")[1]));
             youlose.play()
             congrats()
             victor = playerNames[Math.floor(Math.random()*2)].textContent
@@ -873,7 +873,7 @@ const ultimateTTT = function() {
                 }
                 //There are 81 cells on the board. Their corresponding index between 10 and 98
                 p1played.push(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cell)))
-                window.localStorage.setItem(`storedXs`, p1played);
+                window.localStorage.setItem(`UTTTstoredXs`, p1played);
                 //to get the index out of the 9 grids
                 let gridNext = String(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cell)) + 1).substring(1)
                 cells = document.querySelectorAll('.cell')
@@ -912,7 +912,7 @@ const ultimateTTT = function() {
                     empty.textContent = "X"
                 }
                 p2played.push(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cell)));
-                window.localStorage.setItem(`storedOs`, p2played);
+                window.localStorage.setItem(`UTTTstoredOs`, p2played);
 
 
                 let gridNext = String(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cell)) + 1).substring(1)
@@ -998,7 +998,7 @@ const AIplayer = function() {
                 empty.classList.add('cell');
             }
             p2played.push(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])))
-            window.localStorage.setItem(`storedOs`, p2played);
+            window.localStorage.setItem(`UTTTstoredOs`, p2played);
             let gridNext = String(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])) + 1).substring(1)
 
             cells = document.querySelectorAll('.cell')
@@ -1066,7 +1066,7 @@ reload.addEventListener('click', function() {
         target.style.visibility = 'hidden';
     })
 
-    let storedP1name = window.localStorage.getItem(`storedP1name`);
+    let storedP1name = window.localStorage.getItem(`UTTTstoredP1name`);
     playerNames[0].textContent = storedP1name;
 
     for (let i of characters) {
@@ -1075,7 +1075,7 @@ reload.addEventListener('click', function() {
         }
     }
 
-    let storedP2name = window.localStorage.getItem(`storedP2name`);
+    let storedP2name = window.localStorage.getItem(`UTTTstoredP2name`);
     playerNames[1].textContent = storedP2name;
 
     for (let i of characters) {
@@ -1084,19 +1084,19 @@ reload.addEventListener('click', function() {
         }
     }
 
-    let storedP1scores = window.localStorage.getItem('storedP1scores');
+    let storedP1scores = window.localStorage.getItem('UTTTstoredP1scores');
     if (storedP1scores === null) {storedP1scores = 0};
     scores[0].textContent = `Wins: ${parseInt(storedP1scores)}`;
 
-    let storedP2scores = window.localStorage.getItem('storedP2scores');
+    let storedP2scores = window.localStorage.getItem('UTTTstoredP2scores');
     if (storedP2scores === null) {storedP2scores = 0};
     scores[1].textContent = `Wins: ${parseInt(storedP2scores)}`;
 
-    let arrXs = window.localStorage.getItem('storedXs').split(',');
+    let arrXs = window.localStorage.getItem('UTTTstoredXs').split(',');
     for (let i of arrXs) {
         p1played.push(parseInt(i))
     }
-    let arrOs = window.localStorage.getItem('storedOs').split(',');
+    let arrOs = window.localStorage.getItem('UTTTstoredOs').split(',');
     for (let i of arrOs) {
         p2played.push(parseInt(i))
     }
