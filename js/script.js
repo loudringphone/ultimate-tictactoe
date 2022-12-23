@@ -76,6 +76,7 @@ const btnChar = document.querySelector('.btnChar');
 const charContainer = document.querySelector('.charContainer')
 const playerNames = document.querySelectorAll('.playerName')
 
+//so that only Player 1's image and name will be changed
 let player = players[0]
 let playerName = playerNames[0]
 
@@ -110,6 +111,7 @@ characters.forEach(target => {
             player.style.filter = "brightness()";
             playerName.textContent = target.getAttribute('alt');
             window.localStorage.setItem(`storedP1name`, playerNames[0].textContent);
+            // so that the character can not be chosen again by Player 2
             target.classList.toggle('selected')
             
             for (let character of characters) {
@@ -124,7 +126,7 @@ characters.forEach(target => {
                 }
             }
 
-
+            //now it is for Player 2' image and name to be changed
             player = players[1];
             playerName = playerNames[1]
             if (!playerName.textContent.includes('Player')) {
@@ -190,6 +192,8 @@ const congrats = function() {
     congratsBGs.forEach(target => {
         target.style.visibility = 'visible';
     })
+    cells.forEach(target => 
+        target.classList.add('disable'))
     startScreen.style.top = '60%';
     startScreen.style.opacity = 1;
     playerNames[0].removeAttribute('id');
@@ -198,14 +202,14 @@ const congrats = function() {
 
 congratsBGs.forEach(target =>
     target.addEventListener('mouseover', function() {
-        congratsBGs[0].style.opacity = 1;
-        congratsBGs[1].style.opacity = 1;
+        congratsBGs[0].style.opacity = 0.035;
+        congratsBGs[1].style.opacity = 0.035;
     })
 )
     congratsBGs.forEach(target =>  
     target.addEventListener('mouseout', function() {
-        congratsBGs[0].style.opacity = 0.035;
-        congratsBGs[1].style.opacity = 0.035;
+        congratsBGs[0].style.opacity = 1;
+        congratsBGs[1].style.opacity = 1;
     })
 )
 
@@ -220,9 +224,10 @@ const winningText = function(winner) {
 
 // Countdown and random move
 const countDown = function() {
+    //this id is to let the countdown only run during a game 
     if (playerNames[0].id === 'gameStarted') {
         timer.textContent = parseInt(timer.textContent) - 1}
-    
+    //Random moves when time is up
     if (parseInt(timer.textContent) <= 0 && victor != playerNames[0].textContent && victor != playerNames[1].textContent) {
         timer.textContent = timeLimit;
         cells = document.querySelectorAll('.cell');
@@ -251,8 +256,6 @@ const countDown = function() {
                 }
                 p2played.push(parseInt(cells[i].id));
                 window.localStorage.setItem(`storedOs`, p2played);
-        
-           
             }
             winCheck()
             drawCheck()
@@ -323,12 +326,15 @@ const tictactoe = function() {
             cell.classList.add('markX');
             cell.classList.remove('cell');
             empties = document.querySelectorAll('.cell');
+            //so that the Player 2 can now play 〇
             for (let empty of empties) {
                 empty.textContent = "〇"
                 empty.classList.toggle('cell2')
             }
+            //to record all the moves Player 1 has made
             p1played.push(parseInt(cell.id))
             window.localStorage.setItem(`storedXs`, p1played);
+            //to reset the timer
             setTimeout(() => {
                 if (victor === "") {
                     clearInterval(countDownInt)
@@ -348,6 +354,7 @@ const tictactoe = function() {
             cell.classList.remove('cell');
             cell.classList.remove('cell2');
             empties = document.querySelectorAll('.cell');
+            //so that the Player 1 can now play X
             for (let empty of empties) {
                 empty.textContent = "X"
                 empty.classList.toggle('cell2')
@@ -372,10 +379,7 @@ const tictactoe = function() {
 }
 }
 
-// let move = 0
-// if (playerNames[0].id === 'gameStarted') {move = 0};
-//     cells = document.querySelectorAll('.cell');
-//     move = 9 - cells.length
+
 
 
 
@@ -393,7 +397,7 @@ const winCheck = function() {
         checkP1 = ""
         checkP2 = ""
         for (let j of cons2Win[i]){
-            
+            //to check the P2's moves against the winning conditions
             if (p2played.includes(j)) {
                 checkP2 = checkP2 + 'W'
                 if (checkP2.length === 3) {
@@ -403,6 +407,7 @@ const winCheck = function() {
                         target.classList.add('markO');
                         target.classList.remove('cell');
                     });
+                    //this variable is to let the loser make a move first in the next game
                     victor = playerNames[1];
                     p2wins.play()
                     congratsText.textContent = winningText(playerNames[1].textContent)
@@ -528,7 +533,8 @@ const rematch = function() {
         mainContent.style.visibility = 'visible';
         playerNames[0].id = 'gameStarted';
         countDownInt = setInterval(countDown , 1000);
-   
+        cells.forEach(target => 
+            target.classList.remove('disable'))
      
         advAI = false;
         if (opponents[0].getAttribute('class') != 'opponent selected') {
@@ -777,255 +783,135 @@ const AImove = function(target, msg) {
     timer.textContent = timeLimit;
     console.log(msg)
 }
+const cells4nextTurn = function() {
+    empties = document.querySelectorAll('.cell');
+    for (let empty of empties) {
+    empty.textContent = "X";
+    }
+    for (let empty of empties) {
+        empty.classList.toggle('cell2');
+    }
+}
 const AIplayer = function() {
-        if (opponents[0].getAttribute('class') === 'opponent selected' || cells.length === 0) {
+    //so that if Player 2 is human, this function will not be triggered
+    if (opponents[0].getAttribute('class') === 'opponent selected' || cells.length === 0) {
+        return
+    }
+    cells = document.querySelectorAll('.cell');   
+    if (cells[0].textContent === '〇') {
+        if (playerNames[1].textContent === 'The Terminator') {
+            plasma.play()
+        } else {slash.play()}
+        advAI = false  
+    ////Hasta la vista, baby//////////////////
+    //taking center
+    if (opponents[2].getAttribute('class') === 'opponent selected') {
+        if (document.getElementById('4').getAttribute('class') === 'cell cell2'){
+            targetCell = document.getElementById('4')
+            AImove(targetCell, 'AI taking center')
+            empties = document.querySelectorAll('.cell');
+            for (let empty of empties) {
+            empty.textContent = "X";
+            }
+            for (let empty of empties) {
+                empty.classList.toggle('cell2');
+            }
+            advAI = true;
             return
         }
-
-        cells = document.querySelectorAll('.cell');
-        
-        
-        
-
-        
-        if (cells[0].textContent === '〇') {
-            if (playerNames[1].textContent === 'The Terminator') {
-                plasma.play()
-            } else {slash.play()}
-            advAI = false
-            
-
-        ////Hasta la vista, baby//////////////////
-        if (opponents[2].getAttribute('class') === 'opponent selected') {
-            if (document.getElementById('4').getAttribute('class') === 'cell cell2'){
-                targetCell = document.getElementById('4')
-                ////////////////////////////////////
-                AImove(targetCell, 'AI taking center')
-                empties = document.querySelectorAll('.cell');
-                for (let empty of empties) {
-                empty.textContent = "X";
-                }
-                for (let empty of empties) {
-                    empty.classList.toggle('cell2');
-                }
-                advAI = true;
-                return
-                ///////////////////////////////////////////////
-            }
-            if (p1played[0] === 4 && p1played.length === 1) {
-                let corner;
-                do {
-                    corner = Math.floor( Math.random() * 10 / 2 ) * 2
-                } while(corner === 4);
-                targetCell = document.getElementById(String(corner))
-                corner = 4
-                ////////////////////////////////////
-                AImove(targetCell, 'AI taking corner')
-                empties = document.querySelectorAll('.cell');
-                for (let empty of empties) {
-                empty.textContent = "X";
-                }
-                for (let empty of empties) {
-                    empty.classList.toggle('cell2');
-                }
-                advAI = true;
-                return
-                ///////////////////////////////////////////////
-            }
+        //taking corners
+        if (p1played[0] === 4 && p1played.length === 1) {
+            let corner;
+            do {
+                corner = Math.floor( Math.random() * 10 / 2 ) * 2
+            } while(corner === 4);
+            targetCell = document.getElementById(String(corner))
+            corner = 4
+            AImove(targetCell, 'AI taking corner')
+            cells4nextTurn()
+            advAI = true;
+            return
         }
-        ////////////////////////////////////////
-        
-        
-        for (let i = 0; i < cons2Win.length; i++) {
-            checkP2 = "";
-            for (let j = 0; j < cons2Win[i].length; j++){
-                if (p2played.includes(cons2Win[i][j])) {
-                    checkP2 = checkP2 + 'W';
-                }
-                if (checkP2.length === 2 && j === 2) {
-                    
-                    if (document.getElementById(`${cons2Win[i][j-2]}`).getAttribute('class') === 'cell cell2') {
-
-                        targetCell = document.getElementById(`${cons2Win[i][j-2]}`)
-
-                        ////////////////////////////////////
-                        AImove(targetCell, 'WinningConditions[i][0]Attack')
-                        empties = document.querySelectorAll('.cell');
-                        for (let empty of empties) {
-                        empty.textContent = "X";
-                        }
-                        for (let empty of empties) {
-                            empty.classList.toggle('cell2');
-                        }
-                        advAI = true;
-                        return
-                        ///////////////////////////////////////////////
-
-
-
-
-                    } else if (document.getElementById(`${cons2Win[i][j-1]}`).getAttribute('class') === 'cell cell2') {
-
-                        targetCell = document.getElementById(`${cons2Win[i][j-1]}`)
-
-                        /////////////////
-                        AImove(targetCell, 'WinningConditions[i][1]Attack')
-                        empties = document.querySelectorAll('.cell');
-                        for (let empty of empties) {
-                            empty.textContent = "X";
-                            }
-                        for (let empty of empties) {
-                            empty.classList.toggle('cell2');
-                        }
-                        advAI = true;
-                        return
-                        ///////////////////////////////////////////////
-
-
-                    } 
-                    else if (document.getElementById(`${cons2Win[i][j]}`).getAttribute('class') === 'cell cell2') {
-
-                        targetCell = document.getElementById(`${cons2Win[i][j]}`)
-
-                        /////////////////
-                        AImove(targetCell, 'WinningConditions[i][2]Attack')
-                        empties = document.querySelectorAll('.cell');
-                        for (let empty of empties) {
-                            empty.textContent = "X";
-                            }
-                        for (let empty of empties) {
-                            empty.classList.toggle('cell2');
-                        }
-                        advAI = true;
-                        return
-                        ///////////////////////////////////////////////
-                    }
+    }
+    //if A.I. is going to win this turn
+    for (let i = 0; i < cons2Win.length; i++) {
+        checkP2 = "";
+        for (let j = 0; j < cons2Win[i].length; j++){
+            if (p2played.includes(cons2Win[i][j])) {
+                checkP2 = checkP2 + 'W';
+            }
+            if (checkP2.length === 2 && j === 2) {
+                if (document.getElementById(`${cons2Win[i][j-2]}`).getAttribute('class') === 'cell cell2') {
+                    targetCell = document.getElementById(`${cons2Win[i][j-2]}`)
+                    AImove(targetCell, 'WinningConditions[i][0]Attack')
+                    cells4nextTurn()
+                    advAI = true;
+                    return
+                } else if (document.getElementById(`${cons2Win[i][j-1]}`).getAttribute('class') === 'cell cell2') {
+                    targetCell = document.getElementById(`${cons2Win[i][j-1]}`)
+                    AImove(targetCell, 'WinningConditions[i][1]Attack')
+                    cells4nextTurn()
+                    advAI = true;
+                    return
+                } 
+                else if (document.getElementById(`${cons2Win[i][j]}`).getAttribute('class') === 'cell cell2') {
+                    targetCell = document.getElementById(`${cons2Win[i][j]}`)
+                    AImove(targetCell, 'WinningConditions[i][2]Attack')
+                    cells4nextTurn()
+                    advAI = true;
+                    return
                 }
             }
         }
-        setTimeout(() => {
-            
-        
-        for (let i = 0; i < cons2Win.length; i++) {
-            checkP1 = "";
-            for (let j = 0; j < cons2Win[i].length; j++){
-                if (p1played.includes(cons2Win[i][j])) {
-                    checkP1 = checkP1 + 'W';
-                }
-                if (checkP1.length === 2 && j === 2) {
-                    
-                    if (checkP1.length === 2 && j === 2) {
-                   
-                    if (document.getElementById(`${cons2Win[i][j-2]}`).getAttribute('class') === 'cell cell2') {
-
-                        targetCell = document.getElementById(`${cons2Win[i][j-2]}`)
-
-                        /////////////////
-                        AImove(targetCell, 'WinningConditions[i][0]Defence')
-                        empties = document.querySelectorAll('.cell');
-                        for (let empty of empties) {
-                            empty.textContent = "X";
-                            }
-                        for (let empty of empties) {
-                            empty.classList.toggle('cell2');
-                        }
-                        advAI = true;
-                        return
-                        ///////////////////////////////////////////////
-
-
-
-                    } else if (document.getElementById(`${cons2Win[i][j-1]}`).getAttribute('class') === 'cell cell2') {
-
-                        targetCell = document.getElementById(`${cons2Win[i][j-1]}`)
-
-                        /////////////////
-                        AImove(targetCell, 'WinningConditions[i][1]Defence')
-                        empties = document.querySelectorAll('.cell');
-                        for (let empty of empties) {
-                            empty.textContent = "X";
-                            }
-                        for (let empty of empties) {
-                            empty.classList.toggle('cell2');
-                        }
-                        advAI = true;
-                        return
-                        ///////////////////////////////////////////////
-
-
-
-
-                    } else if (document.getElementById(`${cons2Win[i][j]}`).getAttribute('class') === 'cell cell2') {
-
-                        targetCell = document.getElementById(`${cons2Win[i][j]}`)
-
-                        /////////////////
-                        AImove(targetCell, 'WinningConditions[i][2]Defence')
-                        empties = document.querySelectorAll('.cell');
-                        for (let empty of empties) {
-                            empty.textContent = "X";
-                            }
-                        for (let empty of empties) {
-                            empty.classList.toggle('cell2');
-                        }
-                        advAI = true;
-                        return
-                        ///////////////////////////////////////////////
-
-
-                    }
+    }
+    //if P1 is going to win next turn
+    setTimeout(() => {       
+    for (let i = 0; i < cons2Win.length; i++) {
+        checkP1 = "";
+        for (let j = 0; j < cons2Win[i].length; j++){
+            if (p1played.includes(cons2Win[i][j])) {
+                checkP1 = checkP1 + 'W';
+            }
+            if (checkP1.length === 2 && j === 2) {           
+                if (checkP1.length === 2 && j === 2) {       
+                if (document.getElementById(`${cons2Win[i][j-2]}`).getAttribute('class') === 'cell cell2') {
+                    targetCell = document.getElementById(`${cons2Win[i][j-2]}`)
+                    AImove(targetCell, 'WinningConditions[i][0]Defence')
+                    cells4nextTurn()
+                    advAI = true;
+                    return
+                } else if (document.getElementById(`${cons2Win[i][j-1]}`).getAttribute('class') === 'cell cell2') {
+                    targetCell = document.getElementById(`${cons2Win[i][j-1]}`)
+                    AImove(targetCell, 'WinningConditions[i][1]Defence')
+                    cells4nextTurn()
+                    advAI = true;
+                    return
+                } else if (document.getElementById(`${cons2Win[i][j]}`).getAttribute('class') === 'cell cell2') {
+                    targetCell = document.getElementById(`${cons2Win[i][j]}`)
+                    AImove(targetCell, 'WinningConditions[i][2]Defence')
+                    cells4nextTurn()
+                    advAI = true;
+                    return
                 }
             }
         }
-
-        }}, 100);}
-        /////////////////////////
-
-
-        setTimeout(() => {
-            cells = document.querySelectorAll('.cell')
-        if (cells.length != 0) {    
-            if (advAI === false && cells[0].textContent === '〇') {
-                let i = Math.floor(Math.random() * cells.length);
-                targetCell = cells[i]
-                    AImove(targetCell, 'simpleAI')
-                    empties = document.querySelectorAll('.cell');
-                    for (let empty of empties) {
-                        empty.textContent = "X";
-                        }
-                    for (let empty of empties) {
-                        empty.classList.toggle('cell2');
-                    }
-                }
+    }
+    }}, 100);}
+    //Simple random move
+    setTimeout(() => {
+        cells = document.querySelectorAll('.cell')
+    if (cells.length != 0) {    
+        if (advAI === false && cells[0].textContent === '〇') {
+            let i = Math.floor(Math.random() * cells.length);
+            targetCell = cells[i]
+                AImove(targetCell, 'simpleAI')
+                cells4nextTurn()
             }
-        }, 150);
-        
-
-        
-                    
-                    
-                    
-                    
-                
-       
-        
+        }
+    }, 150);
 }
 
 
-
-
-
-
-
-
-/////////////////////////////////////////////////////////
-
-
-
-///localStorage move1 to move9  eg window.localStorage.getItem('storedOs');
-
-
-   
 
 
 
@@ -1042,7 +928,8 @@ reload.addEventListener('click', function() {
         target.style.filter = "brightness()");
     mainContent.style.visibility = 'visible';
     playerNames[0].id = 'gameStarted';
-
+    cells.forEach(target => 
+        target.classList.remove('disable'))
     p1played = []
     p2played = []
     victor = ""
@@ -1140,6 +1027,8 @@ reload.addEventListener('click', function() {
                 target.textContent = '〇');
         }
     }
+    winCheck();
+    drawCheck()
 })
 
 const games = document.querySelectorAll('.game')

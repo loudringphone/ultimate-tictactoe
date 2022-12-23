@@ -1,4 +1,3 @@
-
 body {
     margin: 0px;
     height: 100vh;
@@ -6,6 +5,16 @@ body {
     font-weight: bold;
     background-color: beige;
 }
+
+.container {
+    display: grid;
+    
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-gap: 0px; 
+    height: 100vh;
+}
+
 
 a {
     color: inherit; 
@@ -46,7 +55,7 @@ a {
 }
 
 
-.cell.disable {
+.disable {
     pointer-events: none;
 }
 
@@ -242,20 +251,13 @@ span:active {
 
 
 
-.container {
-    display: grid;
-    
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
-    grid-gap: 0px; 
-    height: 100vh;
-}
+
 
 header {
     grid-column: 1/4;
     grid-row: 1/2;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;
     text-align: center;
     font-size: 3vh;
     text-decoration: underline;
@@ -263,7 +265,13 @@ header {
 }
 
 
+header > h1 {
+    grid-column: 2/3;
+}
 
+.settings {
+    grid-column: 3/4;
+}
 
 
 .settings > img {
@@ -271,9 +279,7 @@ header {
     height: 50px;
     left: 95%;
     top: 2%;
-    border-radius: 50%;
-    
-    
+    border-radius: 50%; 
 }
 
 .settings > img:hover {
@@ -360,37 +366,24 @@ ul{
 .sidebar3 {
     grid-column: 2/3;
     grid-row: 2/3;
-    position: relative;
     display:flex;
     justify-content:space-between;
     padding: 0 0 25vw 0;
     font-size: 2.2vh;
-    z-index: -1;
 
 }
 
 .timer {
-    font-size: 8vh;
-    position: absolute;
-    top: -10%;
-    left: 46%;
-    color: gray;  
-}
-
-/* .timer {
-
-    
     font-size: 3.5vw;
-    position: absolute;
-    top: 50%;
-    left: 60%;
-    transform: translate(170%, -90%);
+    margin: auto;
     color: gray;
-} */
+}
 
 .score {
     padding: 2vw 0 3vh 0;
 }
+
+
 
 
 
@@ -504,37 +497,116 @@ ul{
 
 @media screen and (max-width: 1000px) {
 
-    .player {
-        visibility: hidden;
+    .sidebar1, .sidebar2 {
+        display: none;
     }
 
-    .timer {
-        font-size: 5vw;
-        padding: 0 0 28vw 0;
+    body {
+        grid-template-rows: 1fr 1fr 5fr;
+        grid-template-columns: 1fr;
     }
+    
+    header{
+        grid-column: 1/2;
+        grid-row: 1/2;
+        font-size: 2vh;
+    }
+
+    .sidebar3 {
+        grid-column: 1/2;
+        grid-row: 2/3;
+        padding: 0 5vw 0 5vw;
+
+
+    } 
+
+    .main-content {
+        grid-column: 1/2;
+        grid-row: 3/4;
+        top: 55%;
+        width: 80vw;
+        height: 60vh;
+    }
+
     
     .score {
-        padding: 4.5vw 0 0 0;
+        font-size: 5vw;
+        
     }
     
-    .main-content {
-        position: relative;
+    .timer {
+        font-size: 12vw;
+        padding: 0 0 15vh 0;
     }
-    .startScreen {
+ 
+    
+   
+  
 
+      
+
+    .charContainer {
+        position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-10%, -20%);
+        transform: translate(-50%, -50%);
+        width: 80vw;
     }
 
-    .btnChar {
-        transform: translate(-10%, -20%);
-
+    .btnClose {
+        position:absolute;
+        font-size: 3vh;
+        text-shadow: black 2px 0px 3px;
+        top: -5%;
+        left: 85%;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+        line-height: 7vh;
     }
-}
-
-@media screen and (max-height: 800px) {
-
-
+   
     
+    
+    .congratsBG {
+        margin-top: 15vh;
+        margin: auto; 
+        opacity: 0.3
+    }
+    
+    .congratsText {
+        font-size: 4vh;
+        color: white;
+    }
+    
+    .btnRematch {
+        font-size: 4vh;
+        color: white;
+    }
+
+    .restarting {
+        top: 45%;
+        left: 52%
+    }
+
+    .restarting > h1 {
+        font-size: 3vh;
+    }
+
+
+    .options {
+        width: 80vw;
+        height: 60vh;
+        font-size: 5vw;     
+    }
+
+    .options > ul {
+        line-height: 6vh;
+    }
+
+    .settings > img {
+        left: 90%;
+        height:3vh;
+
+
+    }
 }

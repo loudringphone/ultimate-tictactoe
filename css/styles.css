@@ -5,6 +5,10 @@ body {
     font-family: 'Raleway', Arial, Helvetica, sans-serif;
     font-weight: bold;
     background-color: beige;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-gap: 0px; 
     
     
 }
@@ -55,7 +59,7 @@ a {
 .congratsBG {
     visibility: hidden;
     background-color: black;
-    margin: 0 6vw 0 6vw;
+    margin: auto;
     max-height: 40vh;
     opacity: 1;
     ;
@@ -86,14 +90,14 @@ span:active {
 }
 
 
-/* .congratsBG {
+.congratsBG {
     visibility: hidden;
     background-color: black;
     margin: 0 6vw 0 6vw;
     max-height: 40vh;
     opacity: 1;
     ;
-} */
+}
 
 .restarting {
     z-index: 9;
@@ -237,26 +241,26 @@ span:active {
 
 
 
-.container {
-    display: grid;
-    
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
-    grid-gap: 0px; 
-    height: 100vh;
-}
+
 
 header {
     grid-column: 1/4;
     grid-row: 1/2;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
     text-align: center;
     font-size: 3vh;
-    text-decoration: underline; 
+    text-decoration: underline;
 }
 
+header > h1 {
+    grid-column: 2/3;
+}
 
+.setting {
+    grid-column: 3/4;
+    z-index: 9;
+}
 
 
 
@@ -265,9 +269,7 @@ header {
     height: 50px;
     left: 95%;
     top: 2%;
-    border-radius: 50%;
-    
-    
+    border-radius: 50%; 
 }
 
 .settings > img:hover {
@@ -400,6 +402,7 @@ ul{
     grid-gap: 10px;
     min-width: 350px;
     min-height: 400px;
+
     
 }
 
@@ -477,54 +480,111 @@ ul{
     }
 
     body {
-        position: relative;
-        height: 100vh;
+        grid-template-rows: 1fr 1fr 5fr;
+        grid-template-columns: 1fr;
     }
     
-    .sidebar3 {
-        position: absolute;
-        
-        top: 25%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        
+    header{
+        grid-column: 1/2;
+        grid-row: 1/2;
+        font-size: 2vh;
     }
+
+    .sidebar3 {
+        grid-column: 1/2;
+        grid-row: 2/3;
+        width: 95vw;
+
+
+    } 
+
+    .main-content {
+        grid-column: 1/2;
+        grid-row: 3/4;
+        top: 55vh;
+        width: 80vw;
+        height: 60vh;
+    }
+
     
     .score {
         font-size: 5vw;
         
     }
     
+    .timer {
+        font-size: 12vw;
+        padding: 0 0 10vh 0;
+    }
  
     
-    .main-content {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-    .startScreen {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
+   
+  
 
-    .btnChar {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }   
+      
 
     .charContainer {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
+        width: 80vw;
+    }
+
+    .btnClose {
+        position:absolute;
+        font-size: 3vh;
+        text-shadow: black 2px 0px 3px;
+        top: -5%;
+        left: 85%;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+        line-height: 7vh;
+    }
+   
+    
+    
+    .congratsBG {
+        margin-top: 15vh;
+        margin: auto; 
+        opacity: 0.3
+    }
+    
+    .congratsText {
+        font-size: 4vh;
+        color: white;
+    }
+    
+    .btnRematch {
+        font-size: 4vh;
+        color: white;
+    }
+
+    .restarting {
+        top: 45%;
+        left: 52%
+    }
+
+    .restarting > h1 {
+        font-size: 3vh;
     }
 
 
-  
-}
+    .options {
+        width: 80vw;
+        height: 60vh;
+        font-size: 5vw;     
+    }
 
+    .options > ul {
+        line-height: 6vh;
+    }
+
+    .settings > img {
+        left: 90%;
+        height:3vh;
+
+
+    }
+}

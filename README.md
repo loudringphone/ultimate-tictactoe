@@ -1,4 +1,4 @@
-# TicTacToe
+# Tic Tac Toe
 
 A class board game to play on browser. You can play with your human friend, a challenging AI or the unbeatable Terminator.
 You can also play the ultimate Tic Tac Toe, but the only AI challenger provided is a simply one at this stage.

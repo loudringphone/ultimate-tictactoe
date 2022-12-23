@@ -218,6 +218,8 @@ const congrats = function() {
     congratsBGs.forEach(target => {
         target.style.visibility = 'visible';
     })
+    cells.forEach(target => 
+        target.classList.add('disable'))
     startScreen.style.top = '60%';
     startScreen.style.opacity = 1;
     playerNames[0].removeAttribute('id');
@@ -281,6 +283,7 @@ const countDown = function() {
                     }
                     
                 p1played.push(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])))
+                console.log(p1played)
                 window.localStorage.setItem(`UTTTstoredXs`, p1played);
                 let gridNext = String(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])) + 1).substring(1)
                 cells = document.querySelectorAll('.cell')
@@ -512,7 +515,8 @@ const rematch = function() {
         };
         
 
-
+        cells.forEach(target => 
+            target.classList.remove('disable'))
         countDownInt = setInterval(countDown , 1000);
         AdvAI = false;
         P1played = []
@@ -631,29 +635,31 @@ withdraw.addEventListener('click', function() {
     click.play()
     if (playerNames[0].id === 'gameStarted') {
         mainContent.style.visibility = 'visible';
-        p1played = []
-        p2played = []
-        gridNext = ""
-        gridIndex = ""
-        markXs = document.querySelectorAll('.markX')
-        markOs = document.querySelectorAll('.markO')
-        let cell2s = document.querySelectorAll('.cell2')
+        // cells.forEach(target => 
+        //     target.classList.remove('disable'))
+        // p1played = []
+        // p2played = []
+        // gridNext = ""
+        // gridIndex = ""
+        // markXs = document.querySelectorAll('.markX')
+        // markOs = document.querySelectorAll('.markO')
+        // let cell2s = document.querySelectorAll('.cell2')
 
-        for (let markX of markXs) {
-            markX.classList.remove('markX')
-            markX.classList.add('cell')
-        }
-        for (let markO of markOs) {
-            markO.classList.remove('markO')
-            markO.classList.add('cell')
-        }
-        for (let cell2 of cell2s) {
-            cell2.classList.remove('cell2')
-        }
+        // for (let markX of markXs) {
+        //     markX.classList.remove('markX')
+        //     markX.classList.add('cell')
+        // }
+        // for (let markO of markOs) {
+        //     markO.classList.remove('markO')
+        //     markO.classList.add('cell')
+        // }
+        // for (let cell2 of cell2s) {
+        //     cell2.classList.remove('cell2')
+        // }
 
-        cells = document.querySelectorAll('.cell')
-        cells.forEach(target =>
-            target.textContent = 'X')
+        // cells = document.querySelectorAll('.cell')
+        // cells.forEach(target =>
+        //     target.textContent = 'X')
 
 
         
@@ -873,6 +879,7 @@ const ultimateTTT = function() {
                 }
                 //There are 81 cells on the board. Their corresponding index between 10 and 98
                 p1played.push(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cell)))
+                console.log(p1played)
                 window.localStorage.setItem(`UTTTstoredXs`, p1played);
                 //to get the index out of the 9 grids
                 let gridNext = String(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cell)) + 1).substring(1)
@@ -1034,11 +1041,17 @@ reload.addEventListener('click', function() {
         target.style.filter = "brightness()");
     mainContent.style.visibility = 'visible';
     playerNames[0].id = 'gameStarted';
-
+    cells.forEach(target => 
+        target.classList.remove('disable'))
     p1played = []
     p2played = []
     victor = ""
     timer.textContent = timeLimit
+
+    lastMove = document.querySelector('#lastMove');
+        if (lastMove != null) {
+            lastMove.id = ""
+        }
 
     markXs = document.querySelectorAll('.markX');
     markOs = document.querySelectorAll('.markO');
@@ -1160,4 +1173,5 @@ reload.addEventListener('click', function() {
             cell.classList.toggle('cell2')
         }
     }
+    ultiWinCheck()
 })
