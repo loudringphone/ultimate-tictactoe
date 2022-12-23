@@ -7,6 +7,8 @@ The webpage consists of two games at the moment. One is Tic Tac Toe and another 
 
 The Tic Tac Toe game was made on a 9 by 9 grid and players can choose their favourite characters out of the 12 choices to represent themselves. There are score counters on top of each player's section to record their wins. It is 5 sec per turn and if a move is not made within the timeframe, a random move would be made for the player. In the top right corner, there is a settings buttion. You can choose to set timer for more seconds or disable it. You can also choose to play the game with A.I.s or play the ultimate version of the game.
 
+You can play my game on https://loudringphone.github.io/tic-tac-toe/
+
 <br />
 
 ### Game rules
