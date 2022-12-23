@@ -42,7 +42,14 @@ a {
     left: 50%;
     transform: translate(-50%, -50%);
     outline-offset: 0.5em;  
+    
 }
+
+
+.cell.disable {
+    pointer-events: none;
+}
+
 
 
 
@@ -358,17 +365,28 @@ ul{
     justify-content:space-between;
     padding: 0 0 25vw 0;
     font-size: 2.2vh;
+    z-index: -1;
 
 }
 
 .timer {
+    font-size: 8vh;
+    position: absolute;
+    top: -10%;
+    left: 46%;
+    color: gray;  
+}
+
+/* .timer {
+
+    
     font-size: 3.5vw;
     position: absolute;
     top: 50%;
     left: 60%;
     transform: translate(170%, -90%);
     color: gray;
-}
+} */
 
 .score {
     padding: 2vw 0 3vh 0;
@@ -401,6 +419,7 @@ ul{
     grid-gap: 10px;
     min-width: 350px;
     min-height: 400px;
+    /* z-index: 3; */
     
 }
 
@@ -517,11 +536,5 @@ ul{
 @media screen and (max-height: 800px) {
 
 
-    .timer {
-        font-size: 8vh;
-        z-index: 6;
-        position: absolute;
-        top: 5%;
-        left: 35%;     
-    }
+    
 }
