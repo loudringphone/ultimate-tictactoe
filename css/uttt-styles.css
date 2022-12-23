@@ -510,34 +510,41 @@ ul{
         grid-column: 1/2;
         grid-row: 1/2;
         font-size: 2vh;
+        height:2vh;
     }
 
     .sidebar3 {
         grid-column: 1/2;
         grid-row: 2/3;
-        padding: 0 5vw 0 5vw;
+        width: 95vw;
+        height: inherit;
+        margin-top: 10%;
+        justify-content: space-between;
 
 
     } 
 
+    .score {
+        font-size: 3.5vw;
+        padding-left: 10%;
+        
+    }
+    
+    .timer {
+        font-size: 6.5vw;
+        height: inherit;
+    }
+
     .main-content {
         grid-column: 1/2;
         grid-row: 3/4;
-        top: 55%;
+        top: 50%;
         width: 80vw;
         height: 60vh;
     }
 
     
-    .score {
-        font-size: 5vw;
-        
-    }
     
-    .timer {
-        font-size: 12vw;
-        padding: 0 0 15vh 0;
-    }
  
     
    
