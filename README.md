@@ -21,7 +21,7 @@ Tic-tac-toe is a game for two players who take turns marking the spaces in a thr
 #### Ultimate Tic Tac Toe
 The game starts with X playing wherever they want in any of the 81 empty spots. This move "sends" their opponent to its relative location. For example, if X played in the top right square of their local board, then O needs to play next in the local board at the top right of the global board. O can then play in any one of the nine available spots in that local board, each move sending X to a different local board.
 
-Each small 3 × 3 tic-tac-toe board is referred to as a local board, and the larger 3 × 3 board is referred to as the global board. Once a local board is filled completely, no more moves may be played in that board. If a player is sent to such a board, then that player may play in any other board. Game play ends when either a player wins one of the local board or there are no legal moves remaining, in which case the game is a draw.
+Each small 3 × 3 tic-tac-toe board is referred to as a local board, and the larger 3 × 3 board as the global board. Once a local board is filled completely, no more moves may be played in that board. If a player is sent to such a board, then that player may play in any other board. Game play ends when either a player wins three of the local boards in a row or there are no legal moves remaining, in which case the game is a draw.
 
 <br />
 

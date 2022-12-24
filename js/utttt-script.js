@@ -14,6 +14,7 @@ const games = document.querySelectorAll('.game')
 const scores = document.querySelectorAll('.score')
 const characters = document.querySelectorAll('.character');
 const ttts = document.getElementsByClassName('TTT')
+const divs = document.querySelectorAll('div')
 
 
 
@@ -85,6 +86,7 @@ for (let opponent of opponents) {
             do {
                     num = Math.floor(Math.random() * characters.length);
                     players[1].src = characters[num].src;
+                    players[1].style.filter = 'brightness()'
                 playerNames[1].textContent = characters[num].alt
             } while(playerNames[1].textContent === playerNames[0].textContent);
             window.localStorage.setItem(`UTTTstoredP2name`, playerNames[1].textContent);
@@ -497,7 +499,7 @@ const rematch = function() {
             cells.forEach(target =>
                 target.textContent = '〇')
             cells.forEach(target =>
-                target.classList.toggle('cell2'))    
+                target.classList.add('cell2'))    
         } else {
             cells.forEach(target =>
                 target.textContent = 'X')
@@ -797,11 +799,28 @@ const cons2Win = [
         [91, 94, 97],
         [92, 95, 98],
         [90, 94, 98],
-        [92, 94, 96],
-
-    
+        [92, 94, 96], 
 ]
-// tictactoe();
+
+
+//123 132 213 231 312 321
+
+Cons2WinReversed = [];
+for (let i of cons2Win) {
+    Cons2WinReversed.push(i.reversed)
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 cells.forEach(target =>
     target.textContent = 'X');
@@ -1086,58 +1105,239 @@ ultimateTTT()
 
 
 //Basic A.I.
+let localP1played = [];
+let localP2played = [];
+let advCheckP1 = "";
+let advCheckP2 = "";
 const AIplayer = function() {
-    if (opponents[0].getAttribute('class') === 'opponent selected') {
+    if (opponents[0].getAttribute('class') === 'opponent selected' || cells.length === 0 ) {
         return
-    }  
+    }
+
+    for (let i = 0; i < divs.length ; i++) {
+                    if (divs[i].id != 'lastMove') {
+                        divs[i].id = "";
+                    }
+                }
+                setTimeout(() => {
     cells = document.querySelectorAll('.cell');
-    if (cells.length > 0) { 
-        let i = Math.floor(Math.random() * cells.length);
-        
+    if (cells[0].textContent === '〇') {
+        localP1played = [];
+        localP2played = [];
+        targetCell = "";
+        advAI = false;
 
-        if (cells[i].textContent === '〇') {
-            slash.play()
-            cells[i].classList.add('markO')
-            cells[i].classList.remove('cell');
-            cells[i].classList.remove('cell2');
-            
-            lastMove = document.querySelector('#lastMove');
-            try{
-            if (lastMove.id != null) {
-                lastMove.id = ''
-            }} catch {}
-            cells[i].id = 'lastMove'
 
-            empties = document.querySelectorAll('.cell');
-            for (let empty of empties) {
-                empty.textContent = "X";
-                empty.classList.toggle('cell2');
-            }
-            empties = document.querySelectorAll('.cellNA');
-            for (let empty of empties) {
-                empty.classList.remove('cellNA');
-                empty.textContent = "X";
-                empty.classList.add('cell');
-            }
-            p2played.push(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])))
-            window.localStorage.setItem(`UTTTstoredOs`, p2played);
-            let gridNext = String(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])) + 1).substring(1)
 
             cells = document.querySelectorAll('.cell')
-            for (let cell of cells) {
-                
-                let gridIndex = String(Array.from(document.querySelectorAll('div')).indexOf(cell)).charAt(0)
-                if (gridIndex != gridNext) {
-                    cell.classList.add('cellNA')
-                    cell.classList.remove('cell')
+            // if (cells.length > 9) {
+
+            // }
+
+
+
+            
+            let localBoard = cells[0].parentElement.children
+            for (let i = 0; i < localBoard.length; i++){
+                // console.log(cells[0].parentElement.children[i].className)
+                if (localBoard[i].className === 'markX') {
+                    localP1played.push(i)
                 }
-            }    
-        }        
-        WinCheck()
-        ultiWinCheck()
-        drawCheck()
-    }
-}
+                if (localBoard[i].className === 'markO') {
+                    localP2played.push(i)
+                }
+            }
+
+
+
+
+            if (localP1played.length + localP2played.length === 9){
+               
+                console.log('random move')
+                cells = document.querySelectorAll('.cell')
+                let i = Math.floor(Math.random() * cells.length);
+                targetCell = cells[i]
+            }
+
+
+
+
+
+
+
+
+
+
+            //taking either center or corners for the first or second move in the local board
+            else if (localP1played.length + localP2played.length <= 1) {
+                if (localP1played.length === 1 && localP2played.length === 0){
+                    let num;
+                do {
+                    num = Math.floor(Math.random() * 10 / 2 ) * 2;
+                    targetCell = localBoard[num]
+                    console.log(`taking corners or center (defence) ${num}`)
+                } while(num === localP1played[0]);};
+                if (localP2played.length === 1 && localP1played.length === 0){
+                    let num;
+                    do {
+                        num = Math.floor(Math.random() * 10 / 2 ) * 2;             
+                        targetCell = localBoard[num]
+                        console.log(`taking corners or center (further attack) ${num}`)
+                    } while(num === localP2played[0]);};
+                    
+                if (localP1played.length + localP2played.length <= 0) {
+                    num = Math.floor(Math.random() * 10 / 2 ) * 2
+                    targetCell = localBoard[num];
+                    console.log(`taking corners or center (further attack) ${num}`)
+                }
+            } else if (localP1played.length + localP2played.length > 1 && localP1played.length + localP2played.length <= 8) {
+            
+                //if A.I. is going to win the local board this turn
+                for (let i = 0; i < ultiCons2Win.length; i++) {
+                    advCheckP2 = "";
+                    for (let j = 0; j < ultiCons2Win[i].length; j++){
+                        if (localP2played.includes(ultiCons2Win[i][j])) {
+                            advCheckP2 = advCheckP2 + 'W';
+                        }
+                        if (advCheckP2.length === 2 && j === 2) {
+                            if (localBoard[ultiCons2Win[i][j-2]].getAttribute('class') === 'cell cell2') {
+                                console.log('WinningConditions[i][0]Attack')
+                                targetCell = localBoard[ultiCons2Win[i][j-2]]
+                                // AImove(targetCell, 'WinningConditions[i][0]Attack')
+                                // cells4nextTurn()
+                                advAI = true;
+                                // return
+                            } else if (localBoard[ultiCons2Win[i][j-1]].getAttribute('class') === 'cell cell2') {
+                                console.log('WinningConditions[i][1]Attack')
+                                targetCell = localBoard[ultiCons2Win[i][j-1]]
+                                // AImove(targetCell, 'WinningConditions[i][1]Attack')
+                                // cells4nextTurn()
+                                advAI = true;
+                                // return
+                            } 
+                            else if (localBoard[ultiCons2Win[i][j]].getAttribute('class') === 'cell cell2') {
+                                console.log('WinningConditions[i][2]Attack')
+                                targetCell = localBoard[ultiCons2Win[i][j]]
+                                // AImove(targetCell, 'WinningConditions[i][2]Attack')
+                                // cells4nextTurn()
+                                advAI = true;
+                                // return
+                            } 
+                        } 
+                    }
+                } 
+
+                
+
+
+
+
+
+                setTimeout(() => {       
+                    for (let i = 0; i < ultiCons2Win.length; i++) {
+                        advCheckP1 = "";
+                        for (let j = 0; j < ultiCons2Win[i].length; j++){
+                            if (localP1played.includes(ultiCons2Win[i][j])) {
+                                advCheckP1 = advCheckP1 + 'W';
+                            }
+                            if (advCheckP1.length === 2 && j === 2) {           
+                                if (advCheckP1.length === 2 && j === 2) {       
+                                if (localBoard[ultiCons2Win[i][j-2]].getAttribute('class') === 'cell cell2') {
+                                    console.log('WinningConditions[i][0]Defence')
+                                    targetCell = localBoard[ultiCons2Win[i][j-2]]
+                                    // AImove(targetCell, 'WinningConditions[i][0]Defence')
+                                    // cells4nextTurn()
+                                    advAI = true;
+                                    // return
+                                } else if (localBoard[ultiCons2Win[i][j-1]].getAttribute('class') === 'cell cell2') {
+                                    console.log('WinningConditions[i][1]Defence')
+                                    targetCell = localBoard[ultiCons2Win[i][j-1]]
+                                    // AImove(targetCell, 'WinningConditions[i][1]Defence')
+                                    // cells4nextTurn()
+                                    advAI = true;
+                                    // return
+                                } else if (localBoard[ultiCons2Win[i][j]].getAttribute('class') === 'cell cell2') {
+                                    console.log('WinningConditions[i][2]Defence')
+                                    targetCell = localBoard[ultiCons2Win[i][j]]
+                                    // AImove(targetCell, 'WinningConditions[i][0]Defence')
+                                    // cells4nextTurn()
+                                    advAI = true;
+                                    // return
+                                }
+                            }
+                        }
+                    }
+                    }}, 100)
+
+
+
+
+
+
+
+
+
+                setTimeout(() => { 
+                if (targetCell === "" && advAI === false) {
+                    console.log('random move')
+                    cells = document.querySelectorAll('.cell')
+                    let i = Math.floor(Math.random() * cells.length);
+                    targetCell = cells[i]}
+                },170)       
+            }
+
+        
+                
+
+        
+        setTimeout(() => {
+            if (targetCell.textContent === '〇') {
+                slash.play()
+                targetCell.classList.add('markO')
+                targetCell.classList.remove('cell');
+                targetCell.classList.remove('cell2');
+                
+                lastMove = document.querySelector('#lastMove');
+                try{
+                if (lastMove.id != null) {
+                    lastMove.id = ''
+                }} catch {}
+                targetCell.id = 'lastMove'
+    
+                empties = document.querySelectorAll('.cell');
+                for (let empty of empties) {
+                    empty.textContent = "X";
+                    empty.classList.toggle('cell2');
+                }
+                empties = document.querySelectorAll('.cellNA');
+                for (let empty of empties) {
+                    empty.classList.remove('cellNA');
+                    empty.textContent = "X";
+                    empty.classList.add('cell');
+                }
+                p2played.push(parseInt(Array.from(document.querySelectorAll('div')).indexOf(targetCell)))
+                window.localStorage.setItem(`UTTTstoredOs`, p2played);
+                let gridNext = String(parseInt(Array.from(document.querySelectorAll('div')).indexOf(targetCell)) + 1).substring(1)
+    
+                cells = document.querySelectorAll('.cell')
+                for (let cell of cells) {
+                    
+                    let gridIndex = String(Array.from(document.querySelectorAll('div')).indexOf(cell)).charAt(0)
+                    if (gridIndex != gridNext) {
+                        cell.classList.add('cellNA')
+                        cell.classList.remove('cell')
+                    }
+                }    
+            }        
+            WinCheck()
+            ultiWinCheck()
+            drawCheck()
+            toggleCell2()
+            
+        }, 175);
+        
+    
+}}, 50)}
 
 games.forEach(target =>
     target.addEventListener('click', function() {
