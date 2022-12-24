@@ -440,9 +440,68 @@ ul{
 
 
 
+.markX.cellW {
+    background-color: lightblue;
+    pointer-events: none;
+    color: blue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    line-height: 3vh;
+    font-size: 3vh;
+}
 
-.cell:hover
-{
+.markX.cell2W {
+    background-color: lightpink;
+    pointer-events: none;
+    color: blue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    line-height: 3vh;
+    font-size: 3vh;
+
+}
+
+.markO.cellW {
+    background-color: lightblue;
+    pointer-events: none;
+    color: red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    line-height: 3vh;
+    font-size: 3vh;
+}
+
+.markO.cell2W {
+    background-color: lightpink;
+    pointer-events: none;
+    color: red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 3vh;
+    line-height: 3vh;
+}
+
+.cellW {
+    background-color: lightblue;
+    pointer-events: none;
+    font-size: 0;
+}
+
+.cell2W {
+    background-color: lightpink;
+    pointer-events: none;
+    font-size: 0;
+}
+
+.cell:hover {
     background-color: lightblue;
     color: gray;
     cursor: pointer;

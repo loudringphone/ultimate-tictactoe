@@ -2,7 +2,9 @@ let cells = document.querySelectorAll('.cell');
 let cell2s = document.querySelectorAll('.cell2');
 let markXs = document.querySelectorAll('.markX');
 let markOs = document.querySelectorAll('.markO');
-let cellnas = document.querySelectorAll('.cellna')
+let cellNAs = document.querySelectorAll('.cellNA')
+let cellWs = document.querySelectorAll('.cellW');
+let cell2Ws = document.querySelectorAll('.cell2W');
 const body = document.querySelector('body');
 let timer = document.querySelector('.timer');
 const players = document.querySelectorAll('.player');
@@ -11,6 +13,11 @@ const mainContent = document.querySelector('.main-content');
 const games = document.querySelectorAll('.game')
 const scores = document.querySelectorAll('.score')
 const characters = document.querySelectorAll('.character');
+const ttts = document.getElementsByClassName('TTT')
+
+
+
+
 
 const hista = new Audio("./audio/hasta-la-vista.mp3");
 hista.volume = 0.8
@@ -255,7 +262,10 @@ const countDown = function() {
         if (parseInt(timer.textContent) < 0 && victor != playerNames[0].textContent && victor != playerNames[1].textContent) {
             timer.textContent = timeLimit;
             cells = document.querySelectorAll('.cell');
-            let i = Math.floor(Math.random() * cells.length);
+            // let i
+            // do {
+                i = Math.floor(Math.random() * cells.length);
+            // } while(cells[i].classList.contains('cellW') === true || cells[i].classList.contains('cell2W') === true);
             try {
                 lastMove = document.querySelector('#lastMove');
                 try {if (lastMove.id != null) {
@@ -269,15 +279,14 @@ const countDown = function() {
                     empties = document.querySelectorAll('.cellNA');
                     for (let empty of empties) {
                         empty.classList.remove('cellNA');
-                        empty.classList.add('cell');     
+                        empty.classList.add('cell');   
                     }
                     empties = document.querySelectorAll('.cell');
                     for (let empty of empties) {
                         empty.textContent = "〇";
-                        empty.classList.toggle('cell2');
-                    }            
+                        // empty.classList.toggle('cell2')  
+                    }        
                 p1played.push(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])))
-                console.log(p1played)
                 window.localStorage.setItem(`UTTTstoredXs`, p1played);
                 let gridNext = String(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])) + 1).substring(1)
                 cells = document.querySelectorAll('.cell')
@@ -286,26 +295,35 @@ const countDown = function() {
                     if (gridIndex != gridNext) {
                         cell.classList.add('cellNA')
                         cell.classList.remove('cell')
-                        cell.classList.toggle('cell2')
                     }
-    
                 }
+                cells = document.querySelectorAll('.cell')
+                for (let cell of cells) {
+                    let gridIndex = String(Array.from(document.querySelectorAll('div')).indexOf(cell)).charAt(0)
+                    if (gridIndex === gridNext && (cell.classList.contains('cellW') === true || cell.classList.contains('cell2W') === true)) {
+                        cellNAs = document.querySelectorAll('.cellNA')
+                        for (let cellna of cellNAs) {
+                            cellna.classList.remove('cellNA')
+                            cellna.classList.add('cell')
+                        }}}
                 } else {
                     slash.play()
                     cells[i].classList.add('markO')
                     cells[i].classList.remove('cell');
                     cells[i].classList.remove('cell2');
-                    empties = document.querySelectorAll('.cell');
-                    for (let empty of empties) {
-                        empty.textContent = "X";
-                        empty.classList.toggle('cell2');
-                    }
+                    
+                    
                     empties = document.querySelectorAll('.cellNA');
                     for (let empty of empties) {
                         empty.classList.remove('cellNA');
-                        empty.textContent = "X";
                         empty.classList.add('cell');
+                        
                     }
+                    empties = document.querySelectorAll('.cell');
+                    for (let empty of empties) {
+                        empty.textContent = "X"
+                        // empty.classList.toggle('cell2')
+                }
                     p2played.push(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])))
                     window.localStorage.setItem(`UTTTstoredOs`, p2played);
                     let gridNext = String(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i])) + 1).substring(1)
@@ -318,22 +336,35 @@ const countDown = function() {
                             cell.classList.add('cellNA')
                             cell.classList.remove('cell')
                         }
-                    }    
+                    } 
+                    cells = document.querySelectorAll('.cell')
+                    for (let cell of cells) {
+                    let gridIndex = String(Array.from(document.querySelectorAll('div')).indexOf(cell)).charAt(0)
+                    if (gridIndex === gridNext && (cell.classList.contains('cellW') === true || cell.classList.contains('cell2W') === true)) {
+                        cellNAs = document.querySelectorAll('.cellNA')
+                        for (let cellna of cellNAs) {
+                            cellna.classList.remove('cellNA')
+                            cellna.classList.add('cell')
+                        }}}   
                 }
             }
             catch {};
-            timer.textContent = timeLimit;
-            drawCheck()         
-        }
-        setTimeout(() => {
-            ultiWinCheck()
-        }, 100);        
-        if (opponents[1].getAttribute('class') === 'opponent selected')
+            timer.textContent = timeLimit;   
+            setTimeout(() => {
+                WinCheck()
+                ultiWinCheck
+                toggleCell2()
+                drawCheck()  
+            }, 150);   
+
+            if (opponents[1].getAttribute('class') === 'opponent selected')
             {setTimeout(() => {
                 if (playerNames[0].id === 'gameStarted') {
                 AIplayer()
                 }
             }, 150);
+        }
+        
         };
 
 
@@ -344,12 +375,12 @@ let countDownInt = setInterval(countDown , 1000);
 //Fixed the issue on winning the game on turn 9
 const drawCheck = function() {
     cells = document.querySelectorAll('.cell')
-    cellnas = document.querySelectorAll('.cellNA')
+    cellNAs = document.querySelectorAll('.cellNA')
     let cell2nas = document.querySelectorAll('.cell2.cellNA')
-    if (cells.length === 0 && cellnas.length > 0) {
-        cellnas.forEach(target =>
+    if (cells.length === 0 && cellNAs.length > 0) {
+        cellNAs.forEach(target =>
             target.classList.add('cell'))
-        cellnas.forEach(target =>
+        cellNAs.forEach(target =>
             target.classList.remove('cellNA'))
     }
     if (cell2nas.length > 0) {
@@ -378,23 +409,36 @@ const drawCheck = function() {
 
 
 //Rematch
-
 const rematch = function() {
     for (let i of players) {
         i.style.filter = "brightness()";
     }
+    ultiCheckP1 = "";
+    ultiCheckP2 = "";
+    checkP1 = "";
+    checkP2 = "";
+    ultiP1played =[];
+    ultiP2played = [];
+    p1played = [];
+    p2played = [];
     cell2s = document.querySelectorAll('.cell2');
     markXs = document.querySelectorAll('.markX');
     markOs = document.querySelectorAll('.markO');
-    cellnas = document.querySelectorAll('.cellNA');
+    cellNAs = document.querySelectorAll('.cellNA');
+    cellWs = document.querySelectorAll('.cellW');
+    cell2Ws = document.querySelectorAll('.cell2W');
     cell2s.forEach(target =>
         target.textContent = "")
     markXs.forEach(target =>
         target.textContent = "")
     markOs.forEach(target =>
         target.textContent = "");
-    cellnas.forEach(target =>
+    cellNAs.forEach(target =>
             target.textContent = "");
+    cellWs.forEach(target =>
+        target.textContent = "");
+    cell2Ws.forEach(target =>
+        target.textContent = "");
     timer.textContent = timeLimit;
     congratsBGs.forEach(target => {
         target.style.visibility = 'hidden';
@@ -424,17 +468,17 @@ const rematch = function() {
         div.remove()
     }, 1000)
     setTimeout(function(){
-        checkP1 = "";
-        checkP2 = "";
-        p1played = [];
-        p2played = [];
         cell2s.forEach(target =>
             target.classList.add('cell'));
         markXs.forEach(target =>
             target.classList.add('cell'));
         markOs.forEach(target =>
             target.classList.add('cell'));
-        cellnas.forEach(target =>
+        cellNAs.forEach(target =>
+            target.classList.add('cell'));
+        cellWs.forEach(target =>
+            target.classList.add('cell'));
+        cell2Ws.forEach(target =>
             target.classList.add('cell'));
         cells = document.querySelectorAll('.cell');
         cells.forEach(target =>
@@ -445,6 +489,10 @@ const rematch = function() {
             target.classList.remove('markO'));
         cells.forEach(target =>
             target.classList.remove('cellNA'));
+        cellWs.forEach(target =>
+            target.classList.remove('cellW'));
+        cell2Ws.forEach(target =>
+            target.classList.remove('cell2W'));
         if (victor === playerNames[0].textContent) {
             cells.forEach(target =>
                 target.textContent = '〇')
@@ -472,7 +520,6 @@ const rematch = function() {
         cells.forEach(target => 
             target.classList.remove('disable'))
         countDownInt = setInterval(countDown , 1000);
-        AdvAI = false;
         P1played = []
         P2played = []
         gridNext = ""
@@ -654,8 +701,22 @@ withdraw.addEventListener('click', function() {
 
 
 //Ultimate Tic Tac Toe!
+const ultiCons2Win = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+    ]
 
-const Ulticons2Win = [
+
+
+
+
+const cons2Win = [
     
         [10, 11, 12],
         [13, 14, 15],
@@ -745,36 +806,40 @@ const Ulticons2Win = [
 cells.forEach(target =>
     target.textContent = 'X');
 
-
-const ttts = document.getElementsByClassName('TTT')
 cells = document.querySelectorAll('.cell')
 
 
-p1played = []
-p2played = []
+let p1played = []
+let p2played = []
+let ultiP1played = []
+let ultiP2played = []
+
+
 
 const ultiWinCheck = function() {
     if (victor === "") {
-        for (let i = 0; i < Ulticons2Win.length; i++) {
-            checkP1 = ""
-            checkP2 = ""
-            for (let j of Ulticons2Win[i]){
+        for (let i = 0; i < ultiCons2Win.length; i++) {
+            ultiCheckP1 = ""
+            ultiCheckP2 = ""
+            for (let j of ultiCons2Win[i]){
                 
-                if (p1played.includes(j)) {
-                    checkP1 = checkP1 + 'W'
+                if (ultiP1played.includes(j)) {
+                    ultiCheckP1 = ultiCheckP1 + 'W'
                 }
-                if (checkP1.length === 3) {
+                if (ultiCheckP1.length === 3) {
                     congratsText.textContent = winningText(playerNames[0].textContent)
                     scores[0].textContent = `Wins: ${parseInt(scores[0].textContent.split(" ")[1]) + 1}`
                     players[1].style.filter = "grayscale(100%)";
                     p1wins.play()
                     congrats()             
-                    victor = playerNames[0].textContent                         
+                    victor = playerNames[0].textContent
                 }
-                if (p2played.includes(j)) {
-                    checkP2 = checkP2 + 'W'
+                                             
+                
+                if (ultiP2played.includes(j)) {
+                    ultiCheckP2 = ultiCheckP2 + 'W'
                 }
-                if (checkP2.length === 3) {
+                if (ultiCheckP2.length === 3) {
                     congratsText.textContent = winningText(playerNames[1].textContent)
                     scores[1].textContent = `Wins: ${parseInt(scores[1].textContent.split(" ")[1]) + 1}`
                     players[0].style.filter = "grayscale(100%)";
@@ -784,19 +849,103 @@ const ultiWinCheck = function() {
                 }
             }
         } 
-        drawCheck()
     }
 }
 
-cellnas = document.querySelectorAll('.cellna')
+const WinCheck = function() {
+    if (victor === "") {
+        for (let i = 0; i < cons2Win.length; i++) {
+            checkP1 = ""
+            checkP2 = ""
+            for (let j of cons2Win[i]){
+                
+                if (p1played.includes(j)) {
+                    checkP1 = checkP1 + 'W'
+                }
+                if (checkP1.length === 3) {
+
+                    for (let i = 0; i < 9; i++) {
+                        ttts[parseInt(String(j)[0])-1].children[i].classList.remove('cell')
+                        ttts[parseInt(String(j)[0])-1].children[i].classList.remove('cell2')
+                        ttts[parseInt(String(j)[0])-1].children[i].classList.remove('cellNA')
+                        ttts[parseInt(String(j)[0])-1].children[i].classList.add('cellW')
+                    }
+                    ultiP1played.push(parseInt(String(j)[0])-1)
+                    ultiP1played = [...new Set(ultiP1played)];
+                    break
+                }
+                    // congratsText.textContent = winningText(playerNames[0].textContent)
+                    // scores[0].textContent = `Wins: ${parseInt(scores[0].textContent.split(" ")[1]) + 1}`
+                    // players[1].style.filter = "grayscale(100%)";
+                    // p1wins.play()
+                    // congrats()             
+                    // victor = playerNames[0].textContent                         
+                
+                if (p2played.includes(j)) {
+                    checkP2 = checkP2 + 'W'
+                }
+                if (checkP2.length === 3) {
+                    for (let i = 0; i < 9; i++) {
+                        ttts[parseInt(String(j)[0])-1].children[i].classList.remove('cell')
+                        ttts[parseInt(String(j)[0])-1].children[i].classList.remove('cell2')
+                        ttts[parseInt(String(j)[0])-1].children[i].classList.remove('cellNA')
+                        ttts[parseInt(String(j)[0])-1].children[i].classList.add('cell2W')       
+                    }
+                    ultiP2played.push(parseInt(String(j)[0])-1)
+                    ultiP2played = [...new Set(ultiP2played)];
+                    break
+                }
+            }
+        } 
+    }
+    ultiWinCheck()
+}
+
+
+
+
+
+
+
+
+
+const toggleCell2 = function() {
+    cells = document.querySelectorAll('.cell')
+    cellNAs = document.querySelectorAll('.cellNA')
+    if (p1played.length > p2played.length) {
+    cellNAs.forEach(target =>
+        target.classList.add('cell2'))
+    cells.forEach(target =>
+        target.classList.add('cell2'))
+    } else {
+        cellNAs.forEach(target =>
+        target.classList.remove('cell2'))
+    cells.forEach(target =>
+        target.classList.remove('cell2'))
+    }
+}
+
+
+
+
+
+
+const noCellNA = function() {
+    cellNAs = document.querySelectorAll('.cellNA')
+        cellNAs.forEach(target =>
+            target.classList.add('cell'))
+        cellNAs.forEach(target =>
+            target.classList.remove('cellNA'))
+}
+
 const ultimateTTT = function() {
     for (let cell of cells) {
         cell.addEventListener('click', function() {
             if (cell.className === 'markX' || cell.className === 'markO') {
                 return
             }
-            cellnas =  document.querySelectorAll('.cellNA')
-            for (let cellna of cellnas) {
+            cellNAs =  document.querySelectorAll('.cellNA')
+            for (let cellna of cellNAs) {
                 cellna.classList.remove('cellNA')
                 cellna.classList.add('cell')
             }
@@ -805,7 +954,6 @@ const ultimateTTT = function() {
                 lastMove.id = ''
             }}catch{}
             cell.id = 'lastMove'
-
             markXs = document.querySelectorAll('.markX');
             markOs = document.querySelectorAll('.markO');
 
@@ -815,12 +963,12 @@ const ultimateTTT = function() {
                 cell.classList.remove('cell');
                 empties = document.querySelectorAll('.cell');
                 for (let empty of empties) {
+                    if (empty.id === "") {
                     empty.textContent = "〇"
-                    empty.classList.toggle('cell2')
+                    }
                 }
                 //There are 81 cells on the board. Their corresponding index between 10 and 98
                 p1played.push(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cell)))
-                console.log(p1played)
                 window.localStorage.setItem(`UTTTstoredXs`, p1played);
                 //to get the index out of the 9 grids
                 let gridNext = String(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cell)) + 1).substring(1)
@@ -830,23 +978,22 @@ const ultimateTTT = function() {
                     if (gridIndex != gridNext) {
                         cell.classList.add('cellNA')
                         cell.classList.remove('cell')
-                        cell.classList.toggle('cell2')
                     }
-
                 }
-                
+                WinCheck()
+                if (ttts[gridNext - 1].firstElementChild.classList.contains('cellW') || ttts[gridNext - 1].firstElementChild.classList.contains('cell2W')) {
+                    cellNAs = document.querySelectorAll('.cellNA')
+                    for (let cellna of cellNAs) {
+                        cellna.classList.remove('cellNA')
+                        cellna.classList.add('cell')
+                    }}
+                    
                 setTimeout(() => {
-                    ultiWinCheck()
-                }, 100);
-
-                setTimeout(() => {
-                    clearInterval(countDownInt)
-                    timer.textContent = timeLimit;
-                    countDownInt = setInterval(countDown , 1000);
+                 
                     if (opponents[1].getAttribute('class') === 'opponent selected') {
                         AIplayer()
                     }
-                }, 150);
+                }, 100);
 
                 
             }
@@ -857,7 +1004,9 @@ const ultimateTTT = function() {
                 cell.classList.remove('cell2');
                 empties = document.querySelectorAll('.cell');
                 for (let empty of empties) {
-                    empty.textContent = "X"
+                    if (empty.id === "") {
+                        empty.textContent = "X"
+                    }
                 }
                 p2played.push(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cell)));
                 window.localStorage.setItem(`UTTTstoredOs`, p2played);
@@ -865,34 +1014,63 @@ const ultimateTTT = function() {
 
                 let gridNext = String(parseInt(Array.from(document.querySelectorAll('div')).indexOf(cell)) + 1).substring(1)
                 cells = document.querySelectorAll('.cell')
+
                 for (let cell of cells) {
                     // console.log((parseInt(Array.from(document.querySelectorAll('div')).indexOf(cells[i]))))
                     let gridIndex = String(Array.from(document.querySelectorAll('div')).indexOf(cell)).charAt(0)
-                
                     if (gridIndex != gridNext) {
                         cell.classList.add('cellNA')
                         cell.classList.remove('cell')
-                        cell.classList.toggle('cell2')
                     }
                 }
 
-                setTimeout(() => {
-                    ultiWinCheck()
-                }, 100);
+                WinCheck()
+                if (ttts[gridNext - 1].firstElementChild.classList.contains('cellW') || ttts[gridNext - 1].firstElementChild.classList.contains('cell2W')) {
+                    cellNAs = document.querySelectorAll('.cellNA')
+                    for (let cellna of cellNAs) {
+                        cellna.classList.remove('cellNA')
+                        cellna.classList.add('cell')
+                    }}
+                
+              
+                
+     
+                
+                
+               
+                
+              
 
-                setTimeout(() => {
-                    clearInterval(countDownInt)
-                    timer.textContent = timeLimit;
-                    countDownInt = setInterval(countDown , 1000);
-                    
-                }, 150);
+                
                 
             }
+            setTimeout(() => {
+                WinCheck()
+                clearInterval(countDownInt)
+                timer.textContent = timeLimit;
+                countDownInt = setInterval(countDown , 1000);     
+            }, 100);
+
+            setTimeout(() => {
+                lastMove = document.querySelector('#lastMove');
+                if (lastMove === null) {noCellNA()}
+                toggleCell2()
+                ultiWinCheck()
+
+
+
+
+            },150);
         })
         cell.addEventListener('dblclick', function(event) {
             alert("Double-click disabled!");
             event.preventDefault()})
     }
+
+
+
+
+
 }
 
 
@@ -908,16 +1086,12 @@ ultimateTTT()
 
 
 //Basic A.I.
-let AdvAI = false
 const AIplayer = function() {
     if (opponents[0].getAttribute('class') === 'opponent selected') {
         return
     }  
     cells = document.querySelectorAll('.cell');
-
-
-
-    if (AdvAI === false) {
+    if (cells.length > 0) { 
         let i = Math.floor(Math.random() * cells.length);
         
 
@@ -959,6 +1133,7 @@ const AIplayer = function() {
                 }
             }    
         }        
+        WinCheck()
         ultiWinCheck()
         drawCheck()
     }
@@ -997,7 +1172,10 @@ reload.addEventListener('click', function() {
     markXs = document.querySelectorAll('.markX');
     markOs = document.querySelectorAll('.markO');
     cell2s = document.querySelectorAll(".cell2");
-    cellnas = document.querySelectorAll(".cellNA")
+    cellNAs = document.querySelectorAll(".cellNA")
+    cellWs = document.querySelectorAll('.cellW');
+    cell2Ws = document.querySelectorAll('.cell2W');
+    
     markXs.forEach(target =>
         target.classList.add('cell'))
     markXs.forEach(target =>
@@ -1008,10 +1186,18 @@ reload.addEventListener('click', function() {
         target.classList.remove('markO'))
     cell2s.forEach(target =>
         target.classList.remove('cell2'))
-    cellnas.forEach(target =>
+    cellNAs.forEach(target =>
         target.classList.add('cell'))
-    cellnas.forEach(target =>
+    cellNAs.forEach(target =>
         target.classList.remove('cellNA'))
+    cellWs.forEach(target =>
+        target.classList.add('cell'))
+    cellWs.forEach(target =>
+        target.classList.remove('cellW'))
+    cell2Ws.forEach(target =>
+        target.classList.add('cell'))
+    cell2Ws.forEach(target =>
+        target.classList.remove('cell2W'))
     cells = document.querySelectorAll('.cell')
     cells.forEach(target =>
         target.textContent = 'X')
@@ -1114,5 +1300,6 @@ reload.addEventListener('click', function() {
             cell.classList.toggle('cell2')
         }
     }
+    WinCheck()
     ultiWinCheck()
 })
