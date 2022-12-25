@@ -1,13 +1,13 @@
 # Tic Tac Toe
 
-A class board game to play on browser. You can play with your human friend, a challenging AI or the unbeatable Terminator.
+A classic board game to play in the browser. You can play with your human friend, a challenging AI or the unbeatable Terminator.
 You can also play the ultimate Tic Tac Toe, but the only AI challenger provided is a simply one at this stage.
 
 The webpage consists of two games at the moment. One is Tic Tac Toe and another one is Ultimate Tic Tac Toe. 
 
 The Tic Tac Toe game was made on a 9 by 9 grid and players can choose their favourite characters out of the 12 choices to represent themselves. There are score counters on top of each player's section to record their wins. It is 5 sec per turn and if a move is not made within the timeframe, a random move would be made for the player. On the top right corner, there is a settings buttion. You can set a different timer or disable it. You can also choose to play the game with A.I.s or play the ultimate version of Tic Tac Toe.
 
-You can play my game on https://loudringphone.github.io/tic-tac-toe/
+You can play my game on https://loudringphone.github.io/tic-tac-toe/tic-tac-toe.html
 
 <br />
 
@@ -36,7 +36,7 @@ Firstly A.I. must find out which square to play in for their first move.
 if (document.getElementById('4').getAttribute('class') === 'cell cell2'){
                 targetCell = document.getElementById('4')
 ```
-All the nine squares are first allocated a class called 'cell' when the game starts. This class mean that the square is avilable for Player 1 to play in. And after the player 1 has made a move, the corresponding square will be reallocated another class called 'MarkX' and it can not be refilled anymore in the game, while other squares will get a new class called 'cell2', which mean Player 2 or A.I. can fill in one of those squares.
+All the nine squares are first allocated a class called 'cell' when the game starts. This class means that the square is avilable for Player 1 to play in. And after the player 1 has made a move, the corresponding square will be reallocated another class called 'MarkX' and it can not be refilled anymore in the game, while other squares will get a new class called 'cell2', which mean Player 2 or A.I. can fill in one of those squares.
 
 Since the best square to first fill in is the center one in my opinon, I have written the code above to let AI take the center if it has not yet been occupied by Player 1.
 
@@ -77,10 +77,28 @@ Last but not least, A.I. could make random move after its first move if the algo
 let i = Math.floor(Math.random() * cells.length);
                 targetCell = cells[i]
 ```
-I ackownledge that the algorithm is not perfect as I have not used minimax, but at least it is still unbeatable in Tic Tac Toe.
+I ackownledge that the algorithm is not as pretty as minimax, but at least the AI is still unbeatable in Tic Tac Toe.
+
+<br />
+
+### Work on Ultimate Tic Tac Toe
+The Ultimate Tic Tac Toe I have built has the same rules as what you read on the wikipage of Ultimate Tic Tac Toe (https://en.wikipedia.org/wiki/Ultimate_tic-tac-toe). The A.I use the similar algorithm I made for the original version of the game, but since the Ultimate one is more complex, I could not make a unbeatable A.I. at the moment. However, it is still fun and challenging especially when you set the timer per turn as only 5 sec! If you like my two games, I would be very happy. Any feedback and comment is welcome :)
+
+<br />
+
+### Game settings
+1. Character seleciton
+2. Two difficulty levels of the A.I. opponent (for Tic Tac Toe)
+3. Timer setting
+4. Reload save from local stoarge function
+5. Win counters
+6. Withdraw from game function
+7. Sound effect
+8. Mute function
 
 <br />
 <br />
 <br />
+
 © 2022 Wing Fung Lau
 

@@ -73,7 +73,6 @@ a {
     background-color: black;
     margin: 0 6vw 0 6vw;
     max-height: 40vh;
-    opacity: 1;
     ;
 }
 
@@ -635,8 +634,7 @@ ul{
     
     .congratsBG {
         margin-top: 15vh;
-        margin: auto; 
-        opacity: 0.3
+        margin: auto;
     }
     
     .congratsText {

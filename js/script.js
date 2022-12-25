@@ -9,7 +9,7 @@ const scoreInfo = document.querySelector('.scoreInfo');
 const mainContent = document.querySelector('.main-content');
 const characters = document.querySelectorAll('.character');
 const hista = new Audio("./audio/hasta-la-vista.mp3");
-hista.volume = 0.8
+hista.volume = 1
 const click = new Audio("./audio/click.wav");
 const select = new Audio("./audio/select.mp3");
 select.playbackRate = 1.8;
@@ -208,8 +208,13 @@ congratsBGs.forEach(target =>
 )
     congratsBGs.forEach(target =>  
     target.addEventListener('mouseout', function() {
-        congratsBGs[0].style.opacity = 0.035;
-        congratsBGs[1].style.opacity = 0.035;
+        if (window.innerWidth <= 1000) {
+            congratsBGs[0].style.opacity = 0.15;
+            congratsBGs[1].style.opacity = 0.15;
+
+        } else {
+        congratsBGs[0].style.opacity = 0.05;
+        congratsBGs[1].style.opacity = 0.05;}
     })
 )
 
