@@ -96,6 +96,7 @@ The Ultimate Tic Tac Toe I have built has the same rules as what you read on the
 7. Sound effect
 8. Mute function
 
+# The Game is mobile friendly!
 <br />
 <br />
 <br />
