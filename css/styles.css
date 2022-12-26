@@ -19,28 +19,6 @@ a {
     text-decoration: inherit;
   }
 
-  .btnChar.AI {
-    position: absolute;
-    text-align: center;
-    cursor: pointer;
-    background-color: white;
-    font-size: 3.5vh;
-    padding: 12.5px;
-    border-radius: 12px;
-    top: 44%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 7;
-    background-color: lightslategray;
-    border-color: bisque;
-    color: lightgoldenrodyellow;
-    border-width: thick;
-    outline-style: solid;
-    outline-color: black;
-
-}
-
-
 .btnChar {
     position: absolute;
     text-align: center;
@@ -57,8 +35,11 @@ a {
     border-color: bisque;
     color: lightgoldenrodyellow;
     border-width: thick;
-    outline-style: solid;
-    outline-color: black;
+    box-shadow: 0 0 10px 3px black;
+}
+
+.btnChar.AI {
+    top: 44%;
 }
 
 .startScreen {
