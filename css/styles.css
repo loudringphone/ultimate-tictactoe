@@ -19,20 +19,48 @@ a {
     text-decoration: inherit;
   }
 
+  .btnChar.AI {
+    position: absolute;
+    text-align: center;
+    cursor: pointer;
+    background-color: white;
+    font-size: 3.5vh;
+    padding: 12.5px;
+    border-radius: 12px;
+    top: 44%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 7;
+    background-color: lightslategray;
+    border-color: bisque;
+    color: lightgoldenrodyellow;
+    border-width: thick;
+    outline-style: solid;
+    outline-color: black;
+
+}
+
+
 .btnChar {
     position: absolute;
     text-align: center;
     cursor: pointer;
     background-color: white;
-    font-size: 4vh;
-    padding: 15px;
+    font-size: 3.5vh;
+    padding: 12.5px;
     border-radius: 12px;
-    top: 50%;
+    top: 56%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 7;
-
+    background-color: lightslategray;
+    border-color: bisque;
+    color: lightgoldenrodyellow;
+    border-width: thick;
+    outline-style: solid;
+    outline-color: black;
 }
+
 .startScreen {
     visibility: visible;
     position: absolute;

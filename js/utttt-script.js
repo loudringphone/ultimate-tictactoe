@@ -1,3 +1,23 @@
+
+let globalBoard = [
+    [0, 1, 2, 3, 4, 5, 6, 7, 8], [0, 1, 2, 3, 4, 5, 6, 7, 8], [0, 1, 2, 3, 4, 5, 6, 7, 8], 
+    [0, 1, 2, 3, 4, 5, 6, 7, 8], [0, 1, 2, 3, 4, 5, 6, 7, 8], [0, 1, 2, 3, 4, 5, 6, 7, 8], 
+    [0, 1, 2, 3, 4, 5, 6, 7, 8], [0, 1, 2, 3, 4, 5, 6, 7, 8], [0, 1, 2, 3, 4, 5, 6, 7, 8]
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 let cells = document.querySelectorAll('.cell');
 let cell2s = document.querySelectorAll('.cell2');
 let markXs = document.querySelectorAll('.markX');
@@ -62,6 +82,30 @@ if (document.querySelector('.time.selected').textContent > 0) {
 }
 
 //Opponent selector
+const AIasOpponent = function() {
+    if (opponents[1].getAttribute('class') === 'opponent selected' && charContainer.style.visibility === 'visible' && !playerNames[0].textContent.includes('Player')) {
+        charContainer.classList.toggle('change');
+        charContainer.style.visibility = 'hidden'
+        mainContent.style.visibility = 'visible';
+        playerNames[0].id = 'gameStarted'
+    }
+
+    if (opponents[1].getAttribute('class') === 'opponent selected' ) {
+        let num;
+        do {
+                num = Math.floor(Math.random() * characters.length);
+                players[1].src = characters[num].src;
+                players[1].style.filter = 'brightness()'
+            playerNames[1].textContent = characters[num].alt
+        } while(playerNames[1].textContent === playerNames[0].textContent);
+        window.localStorage.setItem(`UTTTstoredP2name`, playerNames[1].textContent);
+        if (playerNames[0].id === 'gameStarted' && victor === "") {
+            setTimeout(()=> {
+                AIplayer()
+            },150)
+        } 
+    }
+}
 const opponents = document.querySelectorAll('.opponent');
 for (let opponent of opponents) {
     opponent.addEventListener('click', function() {
@@ -74,28 +118,7 @@ for (let opponent of opponents) {
         let opponentType = opponent.textContent;
 
 
-        if (opponentType === 'A.I.' && charContainer.style.visibility === 'visible' && !playerNames[0].textContent.includes('Player')) {
-            charContainer.classList.toggle('change');
-            charContainer.style.visibility = 'hidden'
-            mainContent.style.visibility = 'visible';
-            playerNames[0].id = 'gameStarted'
-        }
-
-        if (opponentType === 'A.I.') {
-            let num;
-            do {
-                    num = Math.floor(Math.random() * characters.length);
-                    players[1].src = characters[num].src;
-                    players[1].style.filter = 'brightness()'
-                playerNames[1].textContent = characters[num].alt
-            } while(playerNames[1].textContent === playerNames[0].textContent);
-            window.localStorage.setItem(`UTTTstoredP2name`, playerNames[1].textContent);
-            if (playerNames[0].id === 'gameStarted' && victor === "") {
-                setTimeout(()=> {
-                    AIplayer()
-                },150)
-            } 
-        }
+        AIasOpponent()
 
         
 
@@ -112,23 +135,42 @@ const congratsBGs = document.querySelectorAll('.congratsBG')
 //Character selector
 const preview = document.querySelector('.preview');
 const btnClose = document.querySelector('.btnClose');
-const btnChar = document.querySelector('.btnChar');
+const btnChars = document.querySelectorAll('.btnChar');
 const charContainer = document.querySelector('.charContainer')
 const playerNames = document.querySelectorAll('.playerName')
 
 let player = players[0]
 let playerName = playerNames[0]
 
-btnChar.addEventListener('click', function() {
-    coin.play();
-    startScreen.style.visibility = 'hidden';
-    btnChar.style.visibility = 'hidden';
-    mainContent.style.visibility = 'hidden';
-    charContainer.classList.toggle('change');
-    charContainer.style.visibility = 'visible';
-    
-
+btnChars[0].addEventListener('click', function() {
+    opponents[1].classList.add('selected')
+    opponents[0].classList.remove('selected')
+    AIasOpponent()
 })
+
+btnChars[1].addEventListener('click', function() {
+
+    if (opponents[0].getAttribute('class') != 'opponent selected') {
+        opponents[0].classList.add('selected')
+        opponents[1].classList.remove('selected')
+        playerNames[1].textContent = 'Player 2';
+        players[1].style.filter = "grayscale(100%)";
+    } 
+})
+
+btnChars.forEach(target =>
+    
+        target.addEventListener('click', function() {
+        coin.play();
+        startScreen.style.visibility = 'hidden';
+        btnChars[0].style.visibility = 'hidden';
+        btnChars[1].style.visibility = 'hidden';
+        mainContent.style.visibility = 'hidden';
+        charContainer.classList.toggle('change');
+        charContainer.style.visibility = 'visible';
+}))
+
+
 
 const CharSel = function(){
     characters.forEach(target => {
@@ -169,6 +211,8 @@ const CharSel = function(){
                 player = players[1];
                 playerName = playerNames[1]
                 if (!playerName.textContent.includes('Player')) {
+                    characters.forEach(target => 
+                        target.classList.add('selected'))
                     window.localStorage.setItem(`UTTTstoredP2name`, playerNames[1].textContent);
                     setTimeout(function() {
                     charContainer.classList.toggle('change');
@@ -200,7 +244,8 @@ const CharSel = function(){
         closing.play()
         startScreen.style.visibility = 'visible';
         mainContent.style.visibility = 'visible';
-        btnChar.style.visibility = 'visible';
+        btnChars[0].style.visibility = 'visible';
+        btnChars[1].style.visibility = 'visible';
     
         for (let character of characters) {
             character.style.filter = "grayscale(100%)";
@@ -1527,7 +1572,8 @@ let lastCell = 0;
 const reload = document.querySelector('.reload')
 reload.addEventListener('click', function() {
     click.play();
-    btnChar.style.visibility = 'hidden';
+    btnChars[0].style.visibility = 'visible';
+    btnChars[1].style.visibility = 'visible';
     options.style.visibility = 'hidden';
     startScreen.style.visibility = 'hidden';
     UIopacity(1)
