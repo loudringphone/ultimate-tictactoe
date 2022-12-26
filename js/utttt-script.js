@@ -1311,35 +1311,71 @@ const AIplayer = function() {
                 cell2Ws = document.querySelectorAll('.cell2W');
                 
                 if (localP1played.length <= 1 && localP2played.length <= 1) {
-                    if (cellWs.length < 9 && cell2Ws.length < 9) {
-                    if (localP1played.length + localP2played.length >= 1){
-                        if (localBoard[4].getAttribute('class') === 'cell cell2'){
+                    markXs = document.querySelectorAll('.markX')
+                    if (localP1played.length + localP2played.length >= 1 && markXs.length <=5){
+                        if (localBoard[4].getAttribute('class') === 'cell cell2' && ttts[4].querySelectorAll('.markX').length < 2){
                             targetCell = localBoard[4] 
                             targetMove(targetCell, `taking center`)
                             return
                         } else {
                         let num = localP1played[0]
-                        while (num === localP1played[0] || num === localP2played[0]) {
+                        let run = 0
+                        while ((num === localP1played[0] || num === localP2played[0] || ttts[num].querySelectorAll('.markX').length >= 2|| ttts[num].querySelectorAll('.markO').length > ttts[num].querySelectorAll('.markX').length + 1) && run < 10) {
                         num = Math.floor(Math.random() * 10 / 2 ) * 2;
+                        run++
                         }
+                        if (run < 10) {
                         targetCell = localBoard[num]
                         targetMove(targetCell, `taking corners or center (followup move) ${num}`)
-                        return}
+                        return} else {
+                            console.log(`run1 ${run}`)
+                            cells = document.querySelectorAll('.cell')
+                            let i = Math.floor(Math.random() * cells.length);
+                            targetCell = cells[i]
+                            targetMove(targetCell, 'random move 1')
+                            return
+                        }}
                     };
-                    if (localP1played.length + localP2played.length <= 0) {
+                    if (localP1played.length + localP2played.length <= 0 && markXs.length <=5) {
+                        let num = localP1played[0]
+                        let run = 0
+                        while ((num === localP1played[0] || num === localP2played[0] || ttts[num].querySelectorAll('.markX').length >= 2|| ttts[num].querySelectorAll('.markO').length > ttts[num].querySelectorAll('.markX').length + 1) && run < 10) {
                         num = Math.floor(Math.random() * 10 / 2 ) * 2
+                        run++
+                        }
+                        if (run < 10) {
                         targetCell = localBoard[num];
                         targetMove(targetCell, `taking corners or center (initiate move) ${num}`)
-                        return
-                    }} else {
+                        return} else {
+                            console.log(`run1 ${run}`)
+                            cells = document.querySelectorAll('.cell')
+                            let i = Math.floor(Math.random() * cells.length);
+                            targetCell = cells[i]
+                            targetMove(targetCell, 'random move 1')
+                            return}
+                    } else {
                         let num = 0;
                         let run = 0;
-                        while (((!localBoard[num].classList.contains('cell') || run === 0 || (ttts[num].firstElementChild.classList.contains('cell2W') || ttts[num].firstElementChild.classList.contains('cellW')) || ttts[num].querySelectorAll('.markX').length > ttts[num].querySelectorAll('.markO').length + 1) && run < 15)) {
+                        while ((!localBoard[num].classList.contains('cell') || run === 0 || ttts[num].querySelectorAll('.markX').length > 0|| ttts[num].querySelectorAll('.markO').length > 0) && run < 15) {
+                            num = Math.floor(Math.random() * 9)
+                            console.log(`run2 ${run} ${num}`)
+                            run++
+                        }
+
+                        if (run < 15) {
+                            targetCell = localBoard[num]
+                            targetMove(targetCell, `Sending P1 to a less intense local board1 ${num}`)
+                            return
+                        } 
+
+
+
+                        while (((!localBoard[num].classList.contains('cell') || run === 15 || (ttts[num].firstElementChild.classList.contains('cell2W') || ttts[num].firstElementChild.classList.contains('cellW')) || ttts[num].querySelectorAll('.markX').length >= 2|| ttts[num].querySelectorAll('.markO').length > ttts[num].querySelectorAll('.markX').length + 1) && run < 30)) {
                             num = Math.floor(Math.random() * 9)
                             console.log(`run1 ${run} ${num}`)
                             run++
                         }
-                        if (run < 15) {
+                        if (run < 30) {
                             targetCell = localBoard[num]
                             targetMove(targetCell, `avoid won local board 1 ${num}`)
                             return
@@ -1424,12 +1460,23 @@ const AIplayer = function() {
                             localBoard = cells[0].parentElement.children
                             let num = 0;
                             let run = 0;
-                            while (((!localBoard[num].classList.contains('cell') || run === 0 || (ttts[num].firstElementChild.classList.contains('cell2W') || ttts[num].firstElementChild.classList.contains('cellW')) || ttts[num].querySelectorAll('.markX').length > ttts[num].querySelectorAll('.markO').length + 1) && run < 15)) {
+                            while ((!localBoard[num].classList.contains('cell') || run === 0 || ttts[num].querySelectorAll('.markX').length > 1|| ttts[num].querySelectorAll('.markO').length > 1) && run < 15) {
                                 num = Math.floor(Math.random() * 9)
                                 console.log(`run2 ${run} ${num}`)
                                 run++
                             }
+
                             if (run < 15) {
+                                targetCell = localBoard[num]
+                                targetMove(targetCell, `Sending P1 to a less intense local board2 ${num}`)
+                                return
+                            } 
+                            while (((!localBoard[num].classList.contains('cell') || run === 15 || (ttts[num].firstElementChild.classList.contains('cell2W') || ttts[num].firstElementChild.classList.contains('cellW')) || ttts[num].querySelectorAll('.markX').length > ttts[num].querySelectorAll('.markO').length + 1|| (ttts[num].querySelectorAll('.markX').length === 3 && ttts[num].querySelectorAll('.markO').length === 2) || (ttts[num].querySelectorAll('.markO').length === 3 && ttts[num].querySelectorAll('.markX').length === 2)) && run < 30)) {
+                                num = Math.floor(Math.random() * 9)
+                                console.log(`run2 ${run} ${num}`)
+                                run++
+                            }
+                            if (run < 30) {
                                 targetCell = localBoard[num]
                                 targetMove(targetCell, `avoid won local board 2 ${num}`)
                                 return
