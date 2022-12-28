@@ -9,7 +9,7 @@ const scoreInfo = document.querySelector('.scoreInfo');
 const mainContent = document.querySelector('.main-content');
 const characters = document.querySelectorAll('.character');
 const hista = new Audio("./audio/hasta-la-vista.mp3");
-hista.volume = 1
+const tanker = new Audio("./audio/drive-that-tanker.mp4")
 const click = new Audio("./audio/click.wav");
 const select = new Audio("./audio/select.mp3");
 select.playbackRate = 1.8;
@@ -19,6 +19,8 @@ const slash = new Audio("./audio/slash.mp3");
 slash.playbackRate = 1.5;
 const plasma = new Audio("./audio/plasma.wav");
 plasma.playbackRate = 2.0;
+const shotgun = new Audio("./audio/shotgun.mov");
+shotgun.playbackRate = 1.1;
 const closing = new Audio("./audio/closing.mov");
 closing.playbackRate = 2.0;
 closing.volume = 0.4
@@ -639,11 +641,14 @@ btnCloseOptions.addEventListener('click', function() {
         setTimeout(() => {
             console.log('Hasta la vista, baby');
             hista.play()  
-        }, 600);    
+        }, 600);
+    }  
+    if (opponents[3].getAttribute('class') === 'opponent selected') {
+        setTimeout(() => {
+            console.log("I'll drive that tanker");
+            tanker.play()  
+        }, 600); 
     }
-
-
-
 })
 
 const mute = document.querySelector('.mute')
@@ -789,7 +794,12 @@ for (let opponent of opponents) {
             playerNames[0].id = 'gameStarted';
         }
        
-
+        if (opponents[3].getAttribute('class') === 'opponent selected') {
+            // slash.muted = true;
+            players[1].src = "./images/mad-max.jpeg";
+            playerNames[1].textContent = 'Mad Max';
+            window.localStorage.setItem(`storedP2name`, playerNames[1].textContent);
+        }
 
         if (opponents[2].getAttribute('class') === 'opponent selected') {
             // slash.muted = true;
@@ -831,6 +841,117 @@ for (let opponent of opponents) {
 
 
 //A.I.
+
+/////////////////////////////////// Minimax
+let comPlayer = 'O';
+let humPlayer = 'X';
+
+
+// returns list of the indexes of empty spots on the board
+const emptyIndices = function(board) {
+    return board.filter (s => s != 'X' && s != 'O')
+}
+
+// winning combinations using the board indices
+const localWinning = function(board, player) {
+    if (
+    (board[0] == player && board[1] == player && board[2] == player) ||
+    (board[3] == player && board[4] == player && board[5] == player) ||
+    (board[6] == player && board[7] == player && board[8] == player) ||
+    (board[0] == player && board[3] == player && board[6] == player) ||
+    (board[1] == player && board[4] == player && board[7] == player) ||
+    (board[2] == player && board[5] == player && board[8] == player) ||
+    (board[0] == player && board[4] == player && board[8] == player) ||
+    (board[2] == player && board[4] == player && board[6] == player)
+    ) {
+    return true;
+    } else {
+    return false;
+    }
+}
+
+
+let bestAImove;
+const minimax = function(targetBoard, player, depth) {
+    
+    let emptySpots = emptyIndices(targetBoard);
+
+    if (localWinning(targetBoard, comPlayer)){
+        return {score: depth -10};
+     }
+       else if (localWinning(targetBoard, humPlayer)){
+       return {score:10 - depth};
+       }
+     else if (emptySpots.length === 0){
+         return {score:0};
+     }
+
+     // an array to collect all the objects
+     
+    let moves = [];
+    
+    // loop through available spots
+    for (let i = 0; i < emptySpots.length; i++){
+    //create an object for each and store the index of that spot 
+    let move = {};
+  	move.index = targetBoard[emptySpots[i]];
+        
+    // set the empty spot to the current player
+    targetBoard[emptySpots[i]] = player;
+
+    if (player == humPlayer){
+        let result = minimax(targetBoard, comPlayer, depth + 1); 
+        move.score = result.score;
+        
+    }
+    else{
+        let result = minimax(targetBoard, humPlayer, depth + 1);
+        move.score = result.score;
+    }
+
+    // console.log(depth)
+
+    // reset the spot to empty
+    targetBoard[emptySpots[i]] = move.index;
+  
+    // push the object to the array
+    moves.push(move)
+    
+    }
+    
+    // if it is the computer's turn loop over the moves and choose the move with the highest score
+  let bestMove;
+  if(player === humPlayer){
+    let bestScore = -10000;
+    for(let i = 0; i < moves.length; i++){
+      if(moves[i].score > bestScore){
+        bestScore = moves[i].score;
+        bestMove = i;
+      }
+    }
+  }else{
+
+// else loop over the moves and choose the move with the lowest score
+    let bestScore = 10000;
+    for(let i = 0; i < moves.length; i++){
+      if(moves[i].score < bestScore){
+        bestScore = moves[i].score;
+        bestMove = i;
+      }
+    }
+  }
+
+// return the chosen move (object) from the moves array
+  return moves[bestMove];
+}
+
+
+
+const ttt = document.querySelector('.TTT')
+
+//////////////////////////////////
+
+
 let advAI = false;
 let targetCell = "";
 const AImove = function(target, msg) {
@@ -862,116 +983,159 @@ const AIplayer = function() {
     }
     cells = document.querySelectorAll('.cell');   
     if (cells[0].textContent === '〇') {
-        if (playerNames[1].textContent === 'The Terminator') {
-            plasma.play()
-        } else {slash.play()}
-        advAI = false  
-    ////Hasta la vista, baby//////////////////
-    //taking center
-    if (opponents[2].getAttribute('class') === 'opponent selected') {
-        if (document.getElementById('4').getAttribute('class') === 'cell cell2'){
-            targetCell = document.getElementById('4')
-            AImove(targetCell, 'AI taking center')
-            empties = document.querySelectorAll('.cell');
-            for (let empty of empties) {
-            empty.textContent = "X";
-            }
-            for (let empty of empties) {
-                empty.classList.toggle('cell2');
-            }
-            advAI = true;
-            return
-        }
-        //taking corners
-        if (p1played[0] === 4 && p1played.length === 1) {
-            let corner;
-            do {
-                corner = Math.floor( Math.random() * 10 / 2 ) * 2
-            } while(corner === 4);
-            targetCell = document.getElementById(String(corner))
-            corner = 4
-            AImove(targetCell, 'AI taking corner')
-            cells4nextTurn()
-            advAI = true;
-            return
-        }
-    }
-    //if A.I. is going to win this turn
-    for (let i = 0; i < cons2Win.length; i++) {
-        checkP2 = "";
-        for (let j = 0; j < cons2Win[i].length; j++){
-            if (p2played.includes(cons2Win[i][j])) {
-                checkP2 = checkP2 + 'W';
-            }
-            if (checkP2.length === 2 && j === 2) {
-                if (document.getElementById(`${cons2Win[i][j-2]}`).getAttribute('class') === 'cell cell2') {
-                    targetCell = document.getElementById(`${cons2Win[i][j-2]}`)
-                    AImove(targetCell, 'WinningConditions[i][0]Attack')
-                    cells4nextTurn()
+        if (opponents[2].getAttribute('class') === 'opponent selected' || opponents[1].getAttribute('class') === 'opponent selected' ) {
+            if (playerNames[1].textContent === 'The Terminator') {
+                plasma.play()
+            } else {slash.play()}
+            advAI = false  
+            ////Hasta la vista, baby//////////////////
+            //taking center
+            if (opponents[2].getAttribute('class') === 'opponent selected') {
+                if (document.getElementById('4').getAttribute('class') === 'cell cell2'){
+                    targetCell = document.getElementById('4')
+                    AImove(targetCell, 'AI taking center')
+                    empties = document.querySelectorAll('.cell');
+                    for (let empty of empties) {
+                    empty.textContent = "X";
+                    }
+                    for (let empty of empties) {
+                        empty.classList.toggle('cell2');
+                    }
                     advAI = true;
                     return
-                } else if (document.getElementById(`${cons2Win[i][j-1]}`).getAttribute('class') === 'cell cell2') {
-                    targetCell = document.getElementById(`${cons2Win[i][j-1]}`)
-                    AImove(targetCell, 'WinningConditions[i][1]Attack')
-                    cells4nextTurn()
-                    advAI = true;
-                    return
-                } 
-                else if (document.getElementById(`${cons2Win[i][j]}`).getAttribute('class') === 'cell cell2') {
-                    targetCell = document.getElementById(`${cons2Win[i][j]}`)
-                    AImove(targetCell, 'WinningConditions[i][2]Attack')
+                }
+                //taking corners
+                if (p1played[0] === 4 && p1played.length === 1) {
+                    let corner;
+                    do {
+                        corner = Math.floor( Math.random() * 10 / 2 ) * 2
+                    } while(corner === 4);
+                    targetCell = document.getElementById(String(corner))
+                    corner = 4
+                    AImove(targetCell, 'AI taking corner')
                     cells4nextTurn()
                     advAI = true;
                     return
                 }
             }
-        }
-    }
-    //if P1 is going to win next turn
-    setTimeout(() => {       
-    for (let i = 0; i < cons2Win.length; i++) {
-        checkP1 = "";
-        for (let j = 0; j < cons2Win[i].length; j++){
-            if (p1played.includes(cons2Win[i][j])) {
-                checkP1 = checkP1 + 'W';
-            }
-            if (checkP1.length === 2 && j === 2) {           
-                if (checkP1.length === 2 && j === 2) {       
-                if (document.getElementById(`${cons2Win[i][j-2]}`).getAttribute('class') === 'cell cell2') {
-                    targetCell = document.getElementById(`${cons2Win[i][j-2]}`)
-                    AImove(targetCell, 'WinningConditions[i][0]Defence')
-                    cells4nextTurn()
-                    advAI = true;
-                    return
-                } else if (document.getElementById(`${cons2Win[i][j-1]}`).getAttribute('class') === 'cell cell2') {
-                    targetCell = document.getElementById(`${cons2Win[i][j-1]}`)
-                    AImove(targetCell, 'WinningConditions[i][1]Defence')
-                    cells4nextTurn()
-                    advAI = true;
-                    return
-                } else if (document.getElementById(`${cons2Win[i][j]}`).getAttribute('class') === 'cell cell2') {
-                    targetCell = document.getElementById(`${cons2Win[i][j]}`)
-                    AImove(targetCell, 'WinningConditions[i][2]Defence')
-                    cells4nextTurn()
-                    advAI = true;
-                    return
+            //if A.I. is going to win this turn
+            for (let i = 0; i < cons2Win.length; i++) {
+                checkP2 = "";
+                for (let j = 0; j < cons2Win[i].length; j++){
+                    if (p2played.includes(cons2Win[i][j])) {
+                        checkP2 = checkP2 + 'W';
+                    }
+                    if (checkP2.length === 2 && j === 2) {
+                        if (document.getElementById(`${cons2Win[i][j-2]}`).getAttribute('class') === 'cell cell2') {
+                            targetCell = document.getElementById(`${cons2Win[i][j-2]}`)
+                            AImove(targetCell, 'WinningConditions[i][0]Attack')
+                            cells4nextTurn()
+                            advAI = true;
+                            return
+                        } else if (document.getElementById(`${cons2Win[i][j-1]}`).getAttribute('class') === 'cell cell2') {
+                            targetCell = document.getElementById(`${cons2Win[i][j-1]}`)
+                            AImove(targetCell, 'WinningConditions[i][1]Attack')
+                            cells4nextTurn()
+                            advAI = true;
+                            return
+                        } 
+                        else if (document.getElementById(`${cons2Win[i][j]}`).getAttribute('class') === 'cell cell2') {
+                            targetCell = document.getElementById(`${cons2Win[i][j]}`)
+                            AImove(targetCell, 'WinningConditions[i][2]Attack')
+                            cells4nextTurn()
+                            advAI = true;
+                            return
+                        }
+                    }
                 }
             }
-        }
-    }
-    }}, 100);}
-    //Simple random move
-    setTimeout(() => {
-        cells = document.querySelectorAll('.cell')
-    if (cells.length != 0) {    
-        if (advAI === false && cells[0].textContent === '〇') {
-            let i = Math.floor(Math.random() * cells.length);
-            targetCell = cells[i]
-                AImove(targetCell, 'simpleAI')
-                cells4nextTurn()
+            //if P1 is going to win next turn
+            setTimeout(() => {       
+            for (let i = 0; i < cons2Win.length; i++) {
+                checkP1 = "";
+                for (let j = 0; j < cons2Win[i].length; j++){
+                    if (p1played.includes(cons2Win[i][j])) {
+                        checkP1 = checkP1 + 'W';
+                    }
+                    if (checkP1.length === 2 && j === 2) {           
+                        if (checkP1.length === 2 && j === 2) {       
+                        if (document.getElementById(`${cons2Win[i][j-2]}`).getAttribute('class') === 'cell cell2') {
+                            targetCell = document.getElementById(`${cons2Win[i][j-2]}`)
+                            AImove(targetCell, 'WinningConditions[i][0]Defence')
+                            cells4nextTurn()
+                            advAI = true;
+                            return
+                        } else if (document.getElementById(`${cons2Win[i][j-1]}`).getAttribute('class') === 'cell cell2') {
+                            targetCell = document.getElementById(`${cons2Win[i][j-1]}`)
+                            AImove(targetCell, 'WinningConditions[i][1]Defence')
+                            cells4nextTurn()
+                            advAI = true;
+                            return
+                        } else if (document.getElementById(`${cons2Win[i][j]}`).getAttribute('class') === 'cell cell2') {
+                            targetCell = document.getElementById(`${cons2Win[i][j]}`)
+                            AImove(targetCell, 'WinningConditions[i][2]Defence')
+                            cells4nextTurn()
+                            advAI = true;
+                            return
+                        }
+                    }
+                }
             }
-        }
-    }, 150);
+            }}, 100);
+            //Simple random move
+            setTimeout(() => {
+                cells = document.querySelectorAll('.cell')
+            if (cells.length != 0) {    
+                if (advAI === false && cells[0].textContent === '〇') {
+                    let i = Math.floor(Math.random() * cells.length);
+                    targetCell = cells[i]
+                        AImove(targetCell, 'simpleAI')
+                        cells4nextTurn()
+                    }
+                }
+            }, 150);
+
+
+    }
+
+    else {
+
+        cells = document.querySelectorAll('.cell');   
+    
+            let board = [0 , 1, 2, 3, 4, 5, 6, 7, 8]
+            for (let i = 0; i < ttt.children.length; i++) {
+                if (ttt.children[i].classList.contains('markX')) {
+                    board[i] = 'X';
+                };
+                if (ttt.children[i].classList.contains('markO')) {
+                    board[i] = 'O'
+                }
+            }
+
+            
+
+        let bestMove = minimax(board, comPlayer, 0)
+        console.log(bestMove)
+        targetCell = document.getElementById(`${bestMove.index}`)
+        shotgun.play()
+        AImove(targetCell, 'Minimax')
+        cells4nextTurn()
+
+    }
+
+
+
+
+   
+
+}
+
+
+
+
+
+
+
 }
 
 
