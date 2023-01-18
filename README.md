@@ -123,7 +123,7 @@ The Ultimate Tic Tac Toe I have built has the same rules as what you read on the
 ### Game settings
 ---
 1. Character seleciton
-2. Two difficulty levels of the A.I. opponent (for Tic Tac Toe)
+2. Three difficulty levels of the A.I. opponent (for Tic Tac Toe)
 3. Timer setting
 4. Reload save from local stoarge function
 5. Win counters
@@ -141,10 +141,10 @@ The Ultimate Tic Tac Toe I have built has the same rules as what you read on the
 - Basic JavaScript AI Algorithm
 
 <br />
+<br />
 
 ## The Game is mobile friendly!
 
-<br />
 <br />
 <br />
 
