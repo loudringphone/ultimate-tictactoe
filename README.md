@@ -29,7 +29,7 @@ Each small 3 × 3 tic-tac-toe board is referred to as a local board, and the lar
 ---
 I applied what I have learnt in the GA classes and I just learnt what minimax algorithm is recently after finishing this project, so the functions and methods I use would all have been covered in the first two weeks in the GA course without using minimax.
 
-(Update: I have learnt basic Minimax and it is now applied to the A.I. in Tic Tac Toe now. Please choose Minimax on Settings.)
+(Update: I have learnt basic Minimax and it is now applied to the A.I. in Tic Tac Toe. Please choose Minimax on Settings.)
 
 I will explain how the unbeatable A.I. works below.
 
@@ -84,7 +84,7 @@ I ackownledge that the algorithm is not as pretty as minimax, but at least the A
 <br />
 
 ### Minimax in Tic Tac Toe
-
+---
 Finally I have learnt basic Minimax and it has been implemented in my Tic Tac Toe. At the beginning, I could not figure out there actually should be 3 parameters if you want the A.I. to act smart enough. The study resources I found on Google provide the basic formula of getting an unbeatable A.I. in Tic Tac Toe. Yes the A.I. is unbeatable but you may soon discover that if the A.I. can forsee it is going to win eventually anyway, it will just simply choose the first available move instead of getting a quicker win, or if it knows that it is going to lose no matter what, it will just give up instead of trying its best to prolong the game. Fortunately hard work paid off. The last parameter needed is depth, which mean fewer moves to win get more scores when Minimax decides which move should go next.
 
 ```
@@ -115,11 +115,13 @@ Depth is the parameter we need so that the A.I. can play smart.
 <br />
 
 ### Work on Ultimate Tic Tac Toe
+---
 The Ultimate Tic Tac Toe I have built has the same rules as what you read on the wikipage of Ultimate Tic Tac Toe (https://en.wikipedia.org/wiki/Ultimate_tic-tac-toe). The A.Is use the similar algorithm I made for the original version of the game, but since the Ultimate one is more complex, I could not make a unbeatable A.I. at the moment. However, it is still fun and challenging especially when you set the timer per turn as only 5 sec! If you like my two games, I would be very happy. Any feedback and comment is welcome :)
 
 <br />
 
 ### Game settings
+---
 1. Character seleciton
 2. Two difficulty levels of the A.I. opponent (for Tic Tac Toe)
 3. Timer setting
@@ -129,22 +131,26 @@ The Ultimate Tic Tac Toe I have built has the same rules as what you read on the
 7. Sound effect
 8. Mute function
 
-# The Game is mobile friendly!
-
 <br />
 
 ### Learnings
+---
 - DOM manipulation
 - Object and array manipulation
 - Creating hover and animation effects
 - Basic JavaScript AI Algorithm
 
 <br />
+
+## The Game is mobile friendly!
+
+<br />
 <br />
 <br />
 
 
-## Resources:
+### Resources:
+---
 https://www.freecodecamp.org/news/minimax-algorithm-guide-how-to-create-an-unbeatable-ai/
 https://www.neverstopbuilding.com/blog/minimax
 
