@@ -20,6 +20,7 @@ slash.playbackRate = 1.5;
 const plasma = new Audio("./audio/plasma.wav");
 plasma.playbackRate = 2.0;
 const shotgun = new Audio("./audio/shotgun.mov");
+shotgun.volume = 0.2;
 shotgun.playbackRate = 1.1;
 const closing = new Audio("./audio/closing.mov");
 closing.playbackRate = 2.0;
@@ -84,9 +85,17 @@ let playerName = playerNames[0]
 
 btnChars[0].addEventListener('click', function() {
 
-    if (opponents[2].getAttribute('class') != 'opponent selected') {
-        opponents[1].classList.add('selected')
+    if (opponents[2].getAttribute('class') == 'opponent selected') {
         opponents[0].classList.remove('selected')
+        opponents[3].classList.remove('selected')
+    }
+    else if (opponents[3].getAttribute('class') == 'opponent selected') {
+        opponents[0].classList.remove('selected')
+        opponents[2].classList.remove('selected')
+    }
+    else {
+        opponents[1].classList.add('selected')
+        opponents[0].classList.remove('selected') 
     }
     AIasOpponent()
 })
