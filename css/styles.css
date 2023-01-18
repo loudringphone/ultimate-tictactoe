@@ -241,6 +241,9 @@ span:active {
 }
 
 
+.disable{
+    pointer-events: none;
+}
 
 
 
