@@ -839,13 +839,11 @@ for (let opponent of opponents) {
         )       
 }
 
-
 //A.I.
 
 /////////////////////////////////// Minimax
 let comPlayer = 'O';
 let humPlayer = 'X';
-
 
 // returns list of the indexes of empty spots on the board
 const emptyIndices = function(board) {
@@ -945,12 +943,9 @@ const minimax = function(targetBoard, player, depth) {
   return moves[bestMove];
 }
 
-
-
 const ttt = document.querySelector('.TTT')
 
 //////////////////////////////////
-
 
 let advAI = false;
 let targetCell = "";
@@ -1094,52 +1089,33 @@ const AIplayer = function() {
                     }
                 }
             }, 150);
+        }
 
+        else {
 
-    }
-
-    else {
-
-        cells = document.querySelectorAll('.cell');   
-    
-            let board = [0 , 1, 2, 3, 4, 5, 6, 7, 8]
-            for (let i = 0; i < ttt.children.length; i++) {
-                if (ttt.children[i].classList.contains('markX')) {
-                    board[i] = 'X';
-                };
-                if (ttt.children[i].classList.contains('markO')) {
-                    board[i] = 'O'
+            cells = document.querySelectorAll('.cell');   
+        
+                let board = [0 , 1, 2, 3, 4, 5, 6, 7, 8]
+                for (let i = 0; i < ttt.children.length; i++) {
+                    if (ttt.children[i].classList.contains('markX')) {
+                        board[i] = 'X';
+                    };
+                    if (ttt.children[i].classList.contains('markO')) {
+                        board[i] = 'O'
+                    }
                 }
-            }
 
-            
+                
+            let bestMove = minimax(board, comPlayer, 0)
+            console.log(bestMove)
+            targetCell = document.getElementById(`${bestMove.index}`)
+            shotgun.play()
+            AImove(targetCell, 'Minimax')
+            cells4nextTurn()
 
-        let bestMove = minimax(board, comPlayer, 0)
-        console.log(bestMove)
-        targetCell = document.getElementById(`${bestMove.index}`)
-        shotgun.play()
-        AImove(targetCell, 'Minimax')
-        cells4nextTurn()
-
+        }  
     }
-
-
-
-
-   
-
 }
-
-
-
-
-
-
-
-}
-
-
-
 
 
 let localStorage = []
@@ -1187,9 +1163,6 @@ reload.addEventListener('click', function() {
         target.style.visibility = 'hidden';
     })
     
-
-    
-
     let storedP1name = window.localStorage.getItem(`storedP1name`);
     playerNames[0].textContent = storedP1name;
 
@@ -1211,7 +1184,6 @@ reload.addEventListener('click', function() {
         }
     }
     
-     
     let storedP1scores = window.localStorage.getItem('storedP1scores');
     if (storedP1scores === null) {storedP1scores = 0};
     scores[0].textContent = `Wins: ${parseInt(storedP1scores)}`;
@@ -1220,13 +1192,7 @@ reload.addEventListener('click', function() {
     if (storedP2scores === null) {storedP2scores = 0};
     scores[1].textContent = `Wins: ${parseInt(storedP2scores)}`;
   
-
-
-
-
     let arrXs = window.localStorage.getItem('storedXs').split(',');
-
-
 
     if (arrXs.length <= 5) {
         for (let i of arrXs) {
@@ -1264,4 +1230,3 @@ games.forEach(target =>
     target.addEventListener('click', function() {
         click.play()
     }))
-
