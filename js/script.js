@@ -137,13 +137,17 @@ characters.forEach(target => {
             preview.style.backgroundImage = `url(${target.currentSrc})`;
             preview.style.filter = "brightness()";
             player.style.filter = "brightness()";
+            target.style.filter = "brightness()";
             }
         })
-    target.addEventListener('mouseout', function() {
+    function mouseOutHandler() {
         if (playerName.textContent.includes('Player')) {
             preview.style.filter = "grayscale(100%)";
             player.style.filter = "grayscale(100%)";
-        }})
+            this.style.filter = "grayscale(100%)";
+        }
+    }
+    target.addEventListener('mouseout', mouseOutHandler)
     target.addEventListener('click', function() {
             select.play()
             player.src = target.currentSrc;
@@ -151,7 +155,9 @@ characters.forEach(target => {
             playerName.textContent = target.getAttribute('alt');
             window.localStorage.setItem(`storedP1name`, playerNames[0].textContent);
             // so that the character can not be chosen again by Player 2
-            target.classList.toggle('selected')
+            target.classList.toggle('selected');
+            target.removeEventListener('mouseout', mouseOutHandler);
+            target.style.filter = "brightness()";
             
             for (let character of characters) {
                 if (player === players[0] && character.getAttribute('alt') === target.getAttribute('alt') ) {
@@ -212,10 +218,19 @@ btnClose.addEventListener('click', function() {
         character.style.outline = 'none';
         character.style.outlineOffset = 'none';
         character.classList.remove('selected')
+        function mouseOutHandler() {
+            if (playerName.textContent.includes('Player')) {
+                preview.style.filter = "grayscale(100%)";
+                player.style.filter = "grayscale(100%)";
+                this.style.filter = "grayscale(100%)";
+            }
+        }
+        character.addEventListener('mouseout', mouseOutHandler)
+        character.addEventListener('click', function() {
+            character.removeEventListener('mouseout', mouseOutHandler);
+        })
     }
     
-
-
 
 
     player = players[0];
