@@ -161,7 +161,7 @@ span:active {
 .players > img {
     height: 400px;
     width: 265px;
-    margin: 40px 0 40px 0;
+    margin-top: 40px;
     filter:grayscale();
     
 }
