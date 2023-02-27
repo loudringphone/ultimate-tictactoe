@@ -34,6 +34,7 @@ a {
     background-color: lightslategray;
     border-color: bisque;
     color: lightgoldenrodyellow;
+    width: 200px;
     border-width: thick;
     box-shadow: 0 0 10px 3px black;
 }
