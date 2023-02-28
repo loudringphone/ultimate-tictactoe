@@ -696,34 +696,6 @@ withdraw.addEventListener('click', function() {
     click.play()
     if (playerNames[0].id === 'gameStarted') {
         mainContent.style.visibility = 'visible';
-        // cells.forEach(target => 
-        //     target.classList.remove('disable'))
-        // p1played = []
-        // p2played = []
-        // gridNext = ""
-        // gridIndex = ""
-        // markXs = document.querySelectorAll('.markX')
-        // markOs = document.querySelectorAll('.markO')
-        // let cell2s = document.querySelectorAll('.cell2')
-
-        // for (let markX of markXs) {
-        //     markX.classList.remove('markX')
-        //     markX.classList.add('cell')
-        // }
-        // for (let markO of markOs) {
-        //     markO.classList.remove('markO')
-        //     markO.classList.add('cell')
-        // }
-        // for (let cell2 of cell2s) {
-        //     cell2.classList.remove('cell2')
-        // }
-
-        // cells = document.querySelectorAll('.cell')
-        // cells.forEach(target =>
-        //     target.textContent = 'X')
-
-
-        
         congratsText.textContent = 'Withdraw!'
         players[0].style.filter = "brightness()";
         players[1].style.filter = "brightness()";
@@ -860,13 +832,16 @@ const cons2Win = [
         [92, 94, 96], 
 ]
 
+const permutatedCons = []
+for (let con of ultiCons2Win) {
+  permutatedCons.push(con)
+  permutatedCons.push([con[0],con[2],con[1]])
+  permutatedCons.push([con[1],con[0],con[2]])
+  permutatedCons.push([con[1],con[2],con[0]])
+  permutatedCons.push([con[2],con[0],con[1]])
+  permutatedCons.push([con[2],con[1],con[0]])
+}
 
-
-
-// let ultiCons2WinReversed = [];
-// for (let i of ultiCons2Win) {
-//     ultiCons2WinReversed.push(i.reverse())
-// }
 
 
 
@@ -1238,7 +1213,71 @@ const AIaction = function(i1, i2, msg) {
 }
 
 
+const AIattack = function(ttt, attack) {
+    if (ttt.querySelectorAll('.cell').length > 0) {
+        localChildrenPlayed(ttt.children)
+        //if A.I. is going to win the local board this turn
+        for (let i = 0; i < ultiCons2Win.length; i++) {
+            advCheckP2 = "";
+            for (let j = 0; j < 3; j++){
+                if (localP2played.includes(ultiCons2Win[i][j])) {
+                    advCheckP2 = advCheckP2 + 'W';
+                }
+                if (advCheckP2.length === 2 && j === 2) {
+                    if (ttt.children[ultiCons2Win[i][j-2]].getAttribute('class') === 'cell cell2') {
+                        targetCell = ttt.children[ultiCons2Win[i][j-2]]
+                        targetMove(targetCell, `[${i}][${j-2}]${attack}`)
+                        return
+                    } else if (ttt.children[ultiCons2Win[i][j-1]].getAttribute('class') === 'cell cell2') {
+                        targetCell = ttt.children[ultiCons2Win[i][j-1]]
+                        targetMove(targetCell, `[${i}][${j-1}]${attack}`)
+                        return
+                    } 
+                    else if (ttt.children[ultiCons2Win[i][j]].getAttribute('class') === 'cell cell2') {
 
+                        targetCell = ttt.children[ultiCons2Win[i][j]]
+                        targetMove(targetCell, `[${i}][${j}]${attack}`)
+                        return
+                    }
+                        
+                } 
+            }
+        
+        }
+    } 
+}
+
+const AIdefence = function(ttt, defence) {
+    if (ttt.querySelectorAll('.cell').length > 0) {
+        localChildrenPlayed(ttt.children)
+   
+        for (let i = 0; i < ultiCons2Win.length; i++) {
+            advCheckP1 = "";
+            for (let j = 0; j < ultiCons2Win[i].length; j++){
+                if (localP1played.includes(ultiCons2Win[i][j])) {
+                    advCheckP1 = advCheckP1 + 'W';
+                }
+                if (advCheckP1.length === 2 && j === 2) {                
+                    if (ttt.children[ultiCons2Win[i][j-2]].getAttribute('class') === 'cell cell2') {
+                        targetCell = ttt.children[ultiCons2Win[i][j-2]]
+                        targetMove(targetCell, `[${i}][0]${defence}`)
+                        return
+                    } else if (ttt.children[ultiCons2Win[i][j-1]].getAttribute('class') === 'cell cell2') {
+                        targetCell = ttt.children[ultiCons2Win[i][j-1]]
+                        targetMove(targetCell, `[${i}][1]${defence}`)
+                        return
+                    } else if (ttt.children[ultiCons2Win[i][j]].getAttribute('class') === 'cell cell2') {
+                        targetCell = ttt.children[ultiCons2Win[i][j]]
+                        targetMove(targetCell, `[${i}][2]${defence}`)
+                        return
+                    } 
+                
+                }   
+            }      
+        }
+    } 
+
+}
 
 
 
@@ -1273,82 +1312,47 @@ const AIplayer = function() {
     cells = document.querySelectorAll('.cell');
     if (cells[0].textContent === '〇') {
         
-
-
             cells = document.querySelectorAll('.cell')
-         
 
             setTimeout(() => {
+
+
+                for (let con of permutatedCons) {
+                    if (ttts[con[0]].children[0].classList.contains('cellW') && ttts[con[1]].children[0].classList.contains('cellW')) {
+                        AIdefence(ttts[con[2]], 'Final Defence')
+                    }
+                }
+
+                for (let con of permutatedCons) {
+                    if (ttts[con[0]].children[0].classList.contains('cell2W') && ttts[con[1]].children[0].classList.contains('cell2W')) {
+                        AIattack(ttts[con[2]], 'Final Attack')
+                    }
+                }
+
+
+
+
+
+
+
+
+
+
+
                 
-            let checkpoint1 = 0
             for (let k = 0; k < ttts.length; k++) {
-                if (ttts[k].querySelectorAll('.cell').length > 0) {
-                    localChildrenPlayed(ttts[k].children)
-                    //if A.I. is going to win the local board this turn
-                    for (let i = 0; i < ultiCons2Win.length; i++) {
-                        advCheckP2 = "";
-                        for (let j = 0; j < 3; j++){
-                            if (localP2played.includes(ultiCons2Win[i][j])) {
-                                advCheckP2 = advCheckP2 + 'W';
-                            }
-                            if (advCheckP2.length === 2 && j === 2) {
-                                if (ttts[k].children[ultiCons2Win[i][j-2]].getAttribute('class') === 'cell cell2') {
-                                    targetCell = ttts[k].children[ultiCons2Win[i][j-2]]
-                                    targetMove(targetCell, `[${i}][${j-2}]Final Attack`)
-                                    return
-                                } else if (ttts[k].children[ultiCons2Win[i][j-1]].getAttribute('class') === 'cell cell2') {
-                                    targetCell = ttts[k].children[ultiCons2Win[i][j-1]]
-                                    targetMove(targetCell, `[${i}][${j-1}]Final Attack`)
-                                    return
-                                } 
-                                else if (ttts[k].children[ultiCons2Win[i][j]].getAttribute('class') === 'cell cell2') {
+                
+                AIattack(ttts[k], 'Local Board Attack')
 
-                                    targetCell = ttts[k].children[ultiCons2Win[i][j]]
-                                    targetMove(targetCell, `[${i}][${j}]Final Attack`)
-                                    return
-                                }
-                                
-                            } 
-                        }
-                     
+
+            }}, 50);
+
+            setTimeout(() => {
+
+                for (let k = 0; k < ttts.length; k++) {
+                    AIdefence(ttts[k], 'Local Board Defence')
                     
-                    } } if (k === 8) {checkpoint1 = k; console.log(checkpoint1)};
-                }}, 50);
-
-                    setTimeout(() => {
-
-                        let checkpoint2 = 0
-                        for (let k = 0; k < ttts.length; k++) {
-                            if (ttts[k].querySelectorAll('.cell').length > 0) {
-                                localChildrenPlayed(ttts[k].children)
-                           
-                                for (let i = 0; i < ultiCons2Win.length; i++) {
-                                    advCheckP1 = "";
-                                    for (let j = 0; j < ultiCons2Win[i].length; j++){
-                                        if (localP1played.includes(ultiCons2Win[i][j])) {
-                                            advCheckP1 = advCheckP1 + 'W';
-                                        }
-                                        if (advCheckP1.length === 2 && j === 2) {                
-                                            if (ttts[k].children[ultiCons2Win[i][j-2]].getAttribute('class') === 'cell cell2') {
-                                                targetCell = ttts[k].children[ultiCons2Win[i][j-2]]
-                                                targetMove(targetCell, `[${i}][0]Final Defence`)
-                                                return
-                                            } else if (ttts[k].children[ultiCons2Win[i][j-1]].getAttribute('class') === 'cell cell2') {
-                                                targetCell = ttts[k].children[ultiCons2Win[i][j-1]]
-                                                targetMove(targetCell, `[${i}][1]Final Defence`)
-                                                return
-                                            } else if (ttts[k].children[ultiCons2Win[i][j]].getAttribute('class') === 'cell cell2') {
-                                                targetCell = ttts[k].children[ultiCons2Win[i][j]]
-                                                targetMove(targetCell, `[${i}][2]Final Defence`)
-                                                return
-                                            } 
-                                        
-                                        }   
-                                    }      
-                                }
-                            } 
-                            if (k === 8) {checkpoint2 = k; console.log(checkpoint2)};
-                    }}, 100)
+            }}, 100)
                         
                 
                   
@@ -1411,7 +1415,6 @@ const AIplayer = function() {
                         let run = 0;
                         while ((!localBoard[num].classList.contains('cell') || run === 0 || ttts[num].querySelectorAll('.markX').length > 0|| ttts[num].querySelectorAll('.markO').length > 0) && run < 15) {
                             num = Math.floor(Math.random() * 9)
-                            console.log(`run2 ${run} ${num}`)
                             run++
                         }
 
