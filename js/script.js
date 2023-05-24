@@ -655,47 +655,53 @@ settings.addEventListener('click', function() {
 
 
 })
+let terminator = 0;
+let madMax = 0;
 btnCloseOptions.addEventListener('click', function() { 
     closing.play();
     options.style.visibility = 'hidden';
     UIopacity(1);
     countDownInt = setInterval(countDown , 1000);
 
-    if (opponents[2].getAttribute('class') === 'opponent selected') {
+    if (opponents[2].getAttribute('class') === 'opponent selected' && terminator == 0) {
         setTimeout(() => {
             console.log('Hasta la vista, baby');
-            hista.play()  
+            hista.play()
+            terminator = 1  
         }, 600);
     }  
-    if (opponents[3].getAttribute('class') === 'opponent selected') {
+    if (opponents[3].getAttribute('class') === 'opponent selected' && madMax == 0) {
         setTimeout(() => {
             console.log("I'll drive that tanker");
             tanker.play()  
+            madMax = 1
         }, 600); 
     }
 })
 
 const mute = document.querySelector('.mute')
-const muteSound = function(TorF) {
-    closing.muted = TorF
-    click.muted = TorF
-    select.muted = TorF
-    sword.muted = TorF
-    slash.muted = TorF
-    plasma.muted = TorF
-    fight.muted = TorF
-    coin.muted = TorF
-    p1wins.muted = TorF
-    p2wins.muted = TorF
+const muteSound = function(boolean) {
+    closing.muted = boolean
+    click.muted = boolean
+    select.muted = boolean
+    sword.muted = boolean
+    slash.muted = boolean
+    plasma.muted = boolean
+    fight.muted = boolean
+    coin.muted = boolean
+    p1wins.muted = boolean
+    p2wins.muted = boolean
+    drawgame.muted = boolean
+    shotgun.muted = boolean
+    slash.muted = boolean
+    hista.muted = boolean
+    tanker.muted = boolean
 }
 mute.addEventListener('click', function() {
     if (mute.textContent === 'Unmute') {
         click.play();
         mute.textContent = 'Mute';
         muteSound(false)
-        if (opponents[2].getAttribute('class') === 'opponent selected') {
-            slash.muted = true;
-        } 
     } else {
         mute.textContent = 'Unmute';
         muteSound(true)    
