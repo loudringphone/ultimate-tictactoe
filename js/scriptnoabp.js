@@ -894,7 +894,7 @@ const winning = function(board, player) {
 
 
 let bestAImove;
-const minimax = function(targetBoard, player, depth, alpha, beta) {
+const minimax = function(targetBoard, player, depth) {
     let emptySpots = emptyIndices(targetBoard);
 
     // move ordering
@@ -929,60 +929,45 @@ const minimax = function(targetBoard, player, depth, alpha, beta) {
         targetBoard[emptySpots[i]] = player;
 
         if (player == humPlayer){
-            let result = minimax(targetBoard, comPlayer, depth + 1, alpha, beta); 
-            if (result) {
-                move.score = result.score;
-                alpha = Math.max(alpha, move.score);
-            } else {
-                move.score = null
-            }
+            let result = minimax(targetBoard, comPlayer, depth + 1); 
+            move.score = result.score;
         }
-        else {
-            let result = minimax(targetBoard, humPlayer, depth + 1, alpha, beta);
-            if (result) {
-                move.score = result.score;
-                beta = Math.min(beta, move.score);
-            } else {
-                move.score = null
-            }
+        else{
+            let result = minimax(targetBoard, humPlayer, depth + 1);
+            move.score = result.score;
         }
-
 
         // reset the spot to empty
         targetBoard[emptySpots[i]] = move.index;
-        
-        if (beta < alpha) {
-            // console.log(move, 'branch pruned')
-            break
-        } 
+       
         // push the object to the array
-        if (move.score != null) {
-            moves.push(move)
-        }
+        moves.push(move)
     }
-    // if it is the human player's turn, loop over the moves and choose the move with the highest score
-    let bestMove;
-    if(player === humPlayer){
-        for(let i = 0; i < moves.length; i++){
-        if(moves[i].score == alpha){
-            bestMove = i;
-            break
-        }
-        }
-    }else{
+    // if it is the computer's turn loop over the moves and choose the move with the highest score
+  let bestMove;
+  if(player === humPlayer){
+    let bestScore = -10000;
+    for(let i = 0; i < moves.length; i++){
+      if(moves[i].score > bestScore){
+        bestScore = moves[i].score;
+        bestMove = i;
+      }
+    }
+  }else{
 
-// else if computer's turn, loop over the moves and choose the move with the lowest score
-        for(let i = 0; i < moves.length; i++){
-        if(moves[i].score == beta){
-            bestMove = i;
-            break
-        }
-        }
+// else loop over the moves and choose the move with the lowest score
+    let bestScore = 10000;
+    for(let i = 0; i < moves.length; i++){
+      if(moves[i].score < bestScore){
+        bestScore = moves[i].score;
+        bestMove = i;
+      }
     }
+  }
 
 // return the chosen move (object) from the moves array
-    console.log(moves)
-    return moves[bestMove];
+console.log(moves)
+  return moves[bestMove];
 }
 
 const ttt = document.querySelector('.TTT')
@@ -1148,7 +1133,7 @@ const AIplayer = function() {
                 }
 
                 
-            let bestMove = minimax(board, comPlayer, 0, -Infinity, Infinity)
+            let bestMove = minimax(board, comPlayer, 0)
             console.log(bestMove)
             targetCell = document.getElementById(`${bestMove.index}`)
             shotgun.play()
