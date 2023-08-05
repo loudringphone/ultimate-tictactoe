@@ -40,6 +40,7 @@ p2wins.volume = 0.5;
 const drawgame = new Audio("./audio/drawgame.mov");
 
 
+let board = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 
 
 for (let player of players) {
@@ -397,6 +398,8 @@ const tictactoe = function() {
             }
             //to record all the moves Player 1 has made
             p1played.push(parseInt(cell.id))
+            board[cell.id] = 'X'
+            console.log(evalBoard(board, humPlayer))
             window.localStorage.setItem(`storedXs`, p1played);
             //to reset the timer
             setTimeout(() => {
@@ -424,6 +427,9 @@ const tictactoe = function() {
                 empty.classList.toggle('cell2')
             }
             p2played.push(parseInt(cell.id))
+            board[cell.id] = 'O'
+            console.log(evalBoard(board, comPlayer))
+
             window.localStorage.setItem(`storedOs`, p2played);
             setTimeout(() => {
                     if (victor === "") {
@@ -553,6 +559,7 @@ const rematch = function() {
         div.style.outline = "thick solid black";
         h1.textContent = `${playerNames[0].textContent} will start first!`;
     }
+    board = [0, 1, 2, 3, 4, 5, 6, 7, 8]
     div.appendChild(h1);
     body.appendChild(div);
 //Durration of msg shown up about which player's gonna play first in the next game
@@ -874,7 +881,6 @@ for (let opponent of opponents) {
 /////////////////////////////////// Minimax
 let comPlayer = 'O';
 let humPlayer = 'X';
-
 // returns list of the indexes of empty spots on the board
 const emptyIndices = function(board) {
     return board.filter (s => s != 'X' && s != 'O')
@@ -900,8 +906,29 @@ const winning = function(board, player) {
 
 
 let bestAImove;
-const minimax = function(targetBoard, player, depth, alpha, beta) {
+const minimax = function(targetBoard, player, depth, alpha, beta, maxDepth) {
     let emptySpots = emptyIndices(targetBoard);
+    let score
+    if (player == comPlayer) {
+        score = evalBoard(targetBoard, humPlayer)
+    } else {
+        score = evalBoard(targetBoard, comPlayer)
+    }
+    
+    if (winning(targetBoard, comPlayer)){
+        return {score: depth - 50};
+     }
+       else if (winning(targetBoard, humPlayer)){
+       return {score: 50 - depth};
+       }
+     else if (emptySpots.length === 0){
+         return {score: 0};
+     }
+
+    if (depth == maxDepth) {
+        
+        return {score: score};
+    }
 
     // move ordering
     // if (emptySpots.length >= 8 && emptySpots.includes(4)) {
@@ -911,15 +938,7 @@ const minimax = function(targetBoard, player, depth, alpha, beta) {
     // }
 
 
-    if (winning(targetBoard, comPlayer)){
-        return {score: depth -10};
-     }
-       else if (winning(targetBoard, humPlayer)){
-       return {score:10 - depth};
-       }
-     else if (emptySpots.length === 0){
-         return {score:0};
-     }
+   
 
      // an array to collect all the objects
      
@@ -935,7 +954,7 @@ const minimax = function(targetBoard, player, depth, alpha, beta) {
         targetBoard[emptySpots[i]] = player;
 
         if (player == humPlayer){
-            let result = minimax(targetBoard, comPlayer, depth + 1, alpha, beta); 
+            let result = minimax(targetBoard, comPlayer, depth + 1, alpha, beta, maxDepth); 
             if (result) {
                 move.score = result.score;
                 alpha = Math.max(alpha, move.score);
@@ -944,7 +963,7 @@ const minimax = function(targetBoard, player, depth, alpha, beta) {
             }
         }
         else {
-            let result = minimax(targetBoard, humPlayer, depth + 1, alpha, beta);
+            let result = minimax(targetBoard, humPlayer, depth + 1, alpha, beta, maxDepth);
             if (result) {
                 move.score = result.score;
                 beta = Math.min(beta, move.score);
@@ -987,10 +1006,151 @@ const minimax = function(targetBoard, player, depth, alpha, beta) {
     }
 
 // return the chosen move (object) from the moves array
-    console.log(moves)
+console.log(player, moves) 
+console.log(player, moves[bestMove]) 
     return moves[bestMove];
 }
 
+const evalBoard = function(targetBoard, player) {
+    const allWinningCombos = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+    let positionScores = [3, 2, 3, 2, 4, 2, 3, 2, 3]
+    if (player == comPlayer) {
+        positionScores = [-3, -2, -3, -2, -4, -2, -3, -2, -3]
+    }
+    function boardScore(targetBoard, arr, player) {
+        
+        let oCount = 0;
+        let xCount = 0;
+        let numCount = 0;
+        let pos = ['','','']
+        for (let i = 0; i < arr.length; i++) {
+            
+          if (arr[i] === 'O') {
+            oCount++;
+            pos[i] = 'O'
+          }
+          else if (arr[i] === 'X') {
+            xCount++;
+            pos[i] = 'X'
+          }
+          else {
+            numCount++;
+            pos[i] = ''
+          }
+        }
+        if (pos[0] == 'O' && pos[1] == '' && pos[2] == 'X' || pos[0] == 'X' && pos[1] == '' && pos[2] == 'O') {
+            let oCountBoard = 0
+            let xCountBoard = 0
+            for (let i = 0; i < 9; i++) {
+                if (targetBoard[i] === 'O') {
+                    oCountBoard++
+                }
+                if (targetBoard[i] === 'X') {
+                    xCountBoard++
+                }
+            }
+            if (player === comPlayer) {
+                if (targetBoard[4] != 'O') {
+                    if (oCountBoard <= xCountBoard) {
+                        return 1500
+                    }
+                }
+                
+            } else {
+                if (targetBoard[4] != 'X') {
+                    if (xCountBoard <= oCountBoard) {
+                        return -1500
+                    }
+                }
+            }
+        }
+        if (player === comPlayer) {
+            if (pos[0] == 'O' && pos[1] == '' && pos[2] == 'O') {
+                return -12.5
+            }
+        } else {
+            if (pos[0] == 'X' && pos[1] == '' && pos[2] == 'X') {
+                return 12.5
+            }
+        }
+        if (player === comPlayer) {
+            
+            if (oCount === 2 && numCount === 1) {
+                return -10
+            }
+            if (xCount === 2 && numCount === 1) {
+                return 20
+            }
+            if (xCount === 2 && oCount === 1) {
+                return -6
+            }
+            // if (xCount === 1 && oCount === 1) {
+            //     return -3
+            // }
+            else {
+                return 0
+            }
+        }
+        else {
+            if (xCount === 2 && numCount === 1) {
+                return 10
+            }
+            if (oCount === 2 && numCount === 1) {
+                return -20
+            }
+            if (oCount === 2 && xCount === 1) {
+                return 6
+            }
+            
+             else {
+                return 0
+            }
+        }
+        
+    }
+    let score = 0
+
+    if (winning(targetBoard, comPlayer)){
+        score = score - 50
+     }
+       else if (winning(targetBoard, humPlayer)){
+        score = score + 50
+    }
+   
+    
+    for (let i = 0; i < 9; i++) {
+        if(targetBoard[i] == player) {
+            score = score + positionScores[i]
+        }
+    }
+    
+       
+        let pairs = 0
+        for (let combo of allWinningCombos) {
+            let boardArr = [targetBoard[combo[0]], targetBoard[combo[1]], targetBoard[combo[2]]]
+            if (player == comPlayer) {
+                if (boardScore(targetBoard, boardArr, player) == -10) {
+                    pairs++
+                    if (pairs > 1) {
+                        score = score + 10
+                    }
+                }
+            } else {
+                if (boardScore(targetBoard, boardArr, player) == 10) {
+                    pairs++
+                    if (pairs > 1) {
+                        score = score - 10
+                    }
+                }
+            }
+            score = score + boardScore(targetBoard, boardArr, player)
+        }
+        
+        
+    return score
+
+
+}
 const ttt = document.querySelector('.TTT')
 
 //////////////////////////////////
@@ -1003,6 +1163,7 @@ const AImove = function(target, msg) {
             target.classList.remove('cell');
             target.classList.remove('cell2');
             p2played.push(parseInt(target.id));
+            board[target.id] = 'O'
             window.localStorage.setItem(`storedOs`, p2played);
             winCheck()
             drawCheck()
@@ -1143,7 +1304,7 @@ const AIplayer = function() {
 
             cells = document.querySelectorAll('.cell');   
         
-                let board = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                
                 for (let i = 0; i < ttt.children.length; i++) {
                     if (ttt.children[i].classList.contains('markX')) {
                         board[i] = 'X';
@@ -1154,9 +1315,10 @@ const AIplayer = function() {
                 }
 
                 
-            let bestMove = minimax(board, comPlayer, 0, -Infinity, Infinity)
+            let bestMove = minimax(board, comPlayer, 0, -Infinity, Infinity, 4)
             console.log(bestMove)
             targetCell = document.getElementById(`${bestMove.index}`)
+            board[bestMove.index] = 'O'
             shotgun.play()
             AImove(targetCell, 'Minimax')
             cells4nextTurn()
