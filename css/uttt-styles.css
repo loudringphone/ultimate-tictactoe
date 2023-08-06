@@ -674,3 +674,13 @@ ul{
 
     }
 }
+
+@media screen and (max-height: 600px) {
+    .startScreen, .main-content, .btnChar {
+        top: 80%;
+    }
+    .btnChar.AI {
+        top: 60%;
+    }
+
+}
