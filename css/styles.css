@@ -602,3 +602,12 @@ ul{
 
     }
 }
+
+@media (max-height: 380px) and (max-width: 600px) {
+    .main-content, .charContainer {
+        top: 90%;
+    }
+    .btnChar {
+        top: 65%;
+    }
+}

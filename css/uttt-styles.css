@@ -675,7 +675,7 @@ ul{
     }
 }
 
-@media screen and (max-height: 600px) {
+@media (max-height: 600px) {
     .startScreen, .main-content, .btnChar {
         top: 80%;
     }
@@ -683,4 +683,16 @@ ul{
         top: 60%;
     }
 
+}
+
+@media (max-height: 380px) and (max-width: 600px) {
+    .main-content, .charContainer {
+        top: 90%;
+    }
+}
+
+@media (max-width: 380px) {
+    .main-content {
+        min-width: 97.5vw;
+    }
 }
